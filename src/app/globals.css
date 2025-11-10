@@ -2,8 +2,9 @@
 
 :root {
   /* --background: #E5F8F4; */
-  --background: linear-gradient(to top, #ffffff, #cffff5);
-  --foreground: #171717;
+  --background: linear-gradient(to top, #eaf4ff, #cffff5);
+  --foreground: #1c1c1c;
+
 }
 
 html {
@@ -18,9 +19,12 @@ body {
 
 @theme {
   --color-primary: #20847c;
+  --color-primary-light: #0FC7B8;
+
   --color-secondary: #7a9976;
   --color-tertiary: #429da8;
 
   --color-background: #eaf4ff;
-  --color-foreground: #171717;
+  --color-background-gradient: linear-gradient(to top, #eaf4ff, #cffff5);
+  --color-foreground: #1c1c1c;
 }
