@@ -1,4 +1,4 @@
-import { CategoriesCard } from "./components/categories/categories_card";
+import { CategoriesCard } from "./components/categories_card";
 
 export const Home = () => {
   return (
