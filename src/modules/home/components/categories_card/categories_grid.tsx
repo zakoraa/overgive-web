@@ -6,22 +6,22 @@ const categories = [
   {
     name: "Pendidikan",
     background: "/icons/categories/backgrounds/bg-education.svg",
-    icon: "/icons/categories/icons/ic-education9.png",
+    icon: "/icons/categories/icons/ic-education.png",
   },
   {
     name: "Lingkungan",
     background: "/icons/categories/backgrounds/bg-environment.svg",
-    icon: "/icons/categories/icons/ic-environment9.png",
+    icon: "/icons/categories/icons/ic-environment.png",
   },
   {
     name: "Bencana Alam",
     background: "/icons/categories/backgrounds/bg-natural-disaster.svg",
-    icon: "/icons/categories/icons/ic-natural-disaster0.png",
+    icon: "/icons/categories/icons/ic-natural-disaster.png",
   },
   {
     name: "Kesehatan",
     background: "/icons/categories/backgrounds/bg-health.svg",
-    icon: "/icons/categories/icons/ic-health0.png",
+    icon: "/icons/categories/icons/ic-health.png",
   },
   {
     name: "Panti Asuhan",
