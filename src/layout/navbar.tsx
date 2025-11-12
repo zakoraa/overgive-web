@@ -11,10 +11,10 @@ const Navbar = async () => {
       <Card className="flex h-12 px-7">
         <Image
           className="min-w-26"
-          src={"/images/app-logo.svg"}
-          alt="app-logo"
-          height={100}
-          width={100}
+          src={"/images/overgive-logo.svg"}
+          alt="overgive-logo"
+          height={1000}
+          width={1000}
         />
       </Card>
 
