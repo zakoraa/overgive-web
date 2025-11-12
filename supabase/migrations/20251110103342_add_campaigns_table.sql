@@ -1,8 +1,19 @@
+create type campaign_category as enum (
+  'education',
+  'natural_disaster',
+  'health',
+  'orphanage',
+  'worship_place',
+  'disability',
+  'environment',
+  'others'
+);
+
 create table public.campaigns (
   id uuid primary key default gen_random_uuid(),
   title text not null,
   description text,
-  category varchar,
+  category campaign_category not null,
   target_amount numeric,
   collected_amount numeric default 0,
   currency varchar,
