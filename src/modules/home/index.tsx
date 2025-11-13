@@ -1,4 +1,5 @@
 import { CategoriesCard } from "./components/categories_card";
+import { CurrentCampaignsCard } from "./components/current_campaigns_card";
 import { CurrentPriorityCard } from "./components/current_priority_card";
 
 export const Home = () => {
@@ -6,6 +7,7 @@ export const Home = () => {
     <section className="container mx-auto flex flex-col items-center justify-center space-y-2 md:max-w-[600px]">
       <CategoriesCard />
       <CurrentPriorityCard />
+      <CurrentCampaignsCard />
     </section>
   );
 };

@@ -10,7 +10,7 @@ interface TitleProps extends HTMLAttributes<HTMLHeadingElement> {
 export const Title: React.FC<TitleProps> = ({
   text,
   size = "md",
-  className,
+  className = "line-clamp-2",
   ...props
 }) => {
   const sizeStyles = {

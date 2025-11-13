@@ -12,7 +12,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <div
-      className={`bg-background rounded-2xl border overflow-hidden border-zinc-300 ${className}`}
+      className={`bg-card-background rounded-2xl border overflow-hidden border-zinc-300 ${className}`}
       {...props}
     >
       {children}

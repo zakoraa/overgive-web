@@ -18,7 +18,7 @@ const Navbar = async () => {
         />
       </Card>
 
-      <Dock className="bg-background text-foreground hidden flex-row items-center space-x-16 rounded-2xl border border-gray-300 px-12 text-sm font-semibold whitespace-nowrap md:flex">
+      <Dock className="bg-card-background text-foreground hidden flex-row items-center space-x-16 rounded-2xl border border-gray-300 px-12 text-sm font-semibold whitespace-nowrap md:flex">
         <DockIcon className="hover:text-primary">
           <Link href="/">Beranda</Link>
         </DockIcon>

@@ -1,21 +1,23 @@
 import { Card } from "@/components/ui/card";
-import { CampaignCard } from "../donation_campaigns_card/campaign_horizontal_card";
+import { CampaignHorizontalCard } from "../donation_campaign_card/campaign-horizontal-card";
 import { Label } from "@/components/text/label";
 
 export const CurrentPriorityCard = () => {
   return (
-    <Card className="w-full px-10 py-8">
-      <Card className="bg-primary w-fit rounded-lg border-none px-3 py-1">
+    <Card className="w-full px-10 py-6">
+      <Card className="to-primary from-primary-dark w-fit rounded-lg border-none bg-linear-to-tr px-3 py-1">
         <Label
-          size="lg"
+          size="md"
           text="Prioritas Saat Ini"
-          className="text-background"
+          className="text-background font-bold"
         />
       </Card>
 
-      {[1, 2, 3].map((_) => (
-        <CampaignCard />
-      ))}
+      <div className="mt-4 space-y-3">
+        {[1, 2, 3].map((i) => (
+          <CampaignHorizontalCard key={i}/>
+        ))}
+      </div>
     </Card>
   );
 };

@@ -1,9 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #DFF8FB;
-  /* --background: linear-gradient(to top, #eaf4ff, #cffff5); */
+  --primary: #0fc7b8;
+  --primary-dark: #20847c;
+  --primary-faded: #cffff5;
+
+  --secondary: #10a8e5;
+  --tertiary: #429da8;
+
+  --hover: #dbeafe;
+
+  --background: #dff8fb;
+  --card-background: #eaf4ff;
+  --background-gradient: linear-gradient(to top, #eaf4ff, #cffff5);
   --foreground: #313131;
+
+  --gray-light: #e5e7eb;
 }
 
 html {
@@ -17,14 +29,51 @@ body {
 }
 
 @theme {
-  --color-primary: #20847c;
-  --color-primary-light: #0FC7B8;
-  --color-primary-faded: #cffff5;
+  --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-faded: var(--primary-faded);
 
-  --color-secondary: #10A8E5;
-  --color-tertiary: #429da8;
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
 
-  --color-background: #eaf4ff;
-  --color-background-gradient: linear-gradient(to top, #eaf4ff, #cffff5);
-  --color-foreground: #313131;
+  --color-hover: var(--hover);
+
+  --color-background: var(--background);
+  --color-card-background: var(--card-background);
+
+  --color-foreground: var(--foreground);
+
+  --color-gray-light: var(--gray-light);
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
+/* Custom scrollbar for Webkit browsers (Chrome, Safari, etc.) */
+::-webkit-scrollbar {
+  width: 15px; /* Scrollbar width */
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-light); /* Track background color */
+  border-radius: 8px; /* Make thumb more rounded */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary); /* Thumb color */
+  border-radius: 8px; /* Make thumb more rounded */
+  border: 2px solid transparent; /* Add spacing */
+}
+::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
 }

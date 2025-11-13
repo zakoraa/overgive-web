@@ -14,13 +14,13 @@ export const Label: React.FC<LabelProps> = ({
   ...props
 }) => {
   const sizeStyles = {
-    sm: "text-xs font-medium",
-    md: "text-sm font-semibold",
+    sm: "text-xs font-bold",
+    md: "text-sm font-bold",
     lg: "text-base font-bold",
   };
 
   return (
-    <h3 className={cn("text-center", sizeStyles[size], className)} {...props}>
+    <h3 className={cn("text-center line-clamp-2", sizeStyles[size], className)} {...props}>
       {text}
     </h3>
   );

@@ -1,6 +1,6 @@
 export const LoginButton = () => {
   return (
-    <button className="from-primary to-primary-light text-background hover:from-primary-light hover:to-primary mx-0 hidden h-12 cursor-pointer items-center justify-center space-x-1 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 transition-colors duration-300 md:flex">
+    <button className="from-primary-dark to-primary text-background hover:from-primary hover:to-primary mx-0 hidden h-12 cursor-pointer items-center justify-center space-x-1 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 transition-colors duration-300 md:flex">
       <p className="text-sm font-medium">Login</p>
       <svg
         width="20"
