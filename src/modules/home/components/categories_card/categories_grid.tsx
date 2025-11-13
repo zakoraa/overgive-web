@@ -67,8 +67,8 @@ export const CategoriesGrid = () => {
               {/* Icon */}
               <Image
                 src={cat.icon}
-                height={50}
-                width={50}
+                height={45}
+                width={45}
                 alt={`${cat.name}-icon`}
                 className="relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
               />

@@ -18,15 +18,15 @@ const Navbar = async () => {
         />
       </Card>
 
-      <Dock className="bg-background text-foreground font-semibold hidden flex-row items-center space-x-16 rounded-2xl border border-gray-300 px-12 text-sm whitespace-nowrap md:flex">
-        <DockIcon className="hover:text-primary ">
+      <Dock className="bg-background text-foreground hidden flex-row items-center space-x-16 rounded-2xl border border-gray-300 px-12 text-sm font-semibold whitespace-nowrap md:flex">
+        <DockIcon className="hover:text-primary">
           <Link href="/">Beranda</Link>
         </DockIcon>
         <DockIcon className="hover:text-primary">
-          <Link href="about-us">Tentang Kami</Link>
+          <Link href="my-donations">Donasi Saya</Link>
         </DockIcon>
         <DockIcon className="hover:text-primary">
-          <Link href="my-donations">Donasi Saya</Link>
+          <Link href="about-us">Tentang Kami</Link>
         </DockIcon>
       </Dock>
 

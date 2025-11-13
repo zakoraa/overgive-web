@@ -4,7 +4,6 @@
   --background: #DFF8FB;
   /* --background: linear-gradient(to top, #eaf4ff, #cffff5); */
   --foreground: #313131;
-
 }
 
 html {
@@ -22,7 +21,7 @@ body {
   --color-primary-light: #0FC7B8;
   --color-primary-faded: #cffff5;
 
-  --color-secondary: #7a9976;
+  --color-secondary: #10A8E5;
   --color-tertiary: #429da8;
 
   --color-background: #eaf4ff;
