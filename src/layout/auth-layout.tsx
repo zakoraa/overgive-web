@@ -8,11 +8,11 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-background gap-10 relative container mx-auto flex min-h-screen md:w-[80%] w-[90%] flex-col items-center justify-center lg:flex-row">
-      <div className="flex w-full items-center justify-center  lg:w-1/2">
+    <div className="bg-background relative container mx-auto flex min-h-screen w-[90%] flex-col items-center justify-center gap-10 md:w-[80%] lg:flex-row">
+      <div className="flex w-full items-center justify-center lg:w-1/2">
         {children}
       </div>
-      <div className="hidden h-full w-full items-center  md:block lg:w-1/2">
+      <div className="hidden h-full w-full items-center md:block lg:w-1/2">
         <div className="relative z-1 flex items-center justify-center">
           {/* <!-- ===== Common Grid Shape Start ===== --> */}
           <GridShape />

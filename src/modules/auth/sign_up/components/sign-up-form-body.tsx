@@ -12,7 +12,7 @@ interface FormState {
   password: string;
 }
 
-export default function LoginFormBody() {
+export default function SignUpFormBody() {
   // const { form, setForm, errors, validate } = useLoginForm();
   const router = useRouter();
   const [form, setForm] = useState<FormState>({
@@ -39,6 +39,15 @@ export default function LoginFormBody() {
   return (
     <form className="space-y-3">
       <AppInput
+        label="Nama"
+        hint="Nama anda"
+        value={form.email}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setForm((prev) => ({ ...prev, email: e.target.value }))
+        }
+        // error={errors.email}
+      />
+      <AppInput
         label="Email"
         hint="contoh@gmail.com"
         value={form.email}
@@ -62,13 +71,13 @@ export default function LoginFormBody() {
       <AppButton
         width="100%"
         className="my-5"
-        text="Login"
+        text="Daftar"
         //  isLoading={loading}
       />
       <p className="text-center text-sm">
-        Belum punya akun?{" "}
+        Sudah punya akun?{" "}
         <span className="text-primary font-bold">
-          <Link href={"/sign-up"}>Daftar</Link>{" "}
+          <Link href={"/login"}>Login</Link>{" "}
         </span>
       </p>
       {showLoginErrorAlert && (
