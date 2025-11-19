@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { CampaignHorizontalCard } from "../donation_campaign_card/campaign-horizontal-card";
+import { CampaignHorizontalCard } from "../../../../components/donation_campaign_card/campaign-horizontal-card";
 import { Label } from "@/components/text/label";
 
 export const CurrentPriorityCard = () => {
@@ -15,7 +15,7 @@ export const CurrentPriorityCard = () => {
 
       <div className="mt-4 space-y-3">
         {[1, 2, 3].map((i) => (
-          <CampaignHorizontalCard key={i}/>
+          <CampaignHorizontalCard key={i} />
         ))}
       </div>
     </Card>

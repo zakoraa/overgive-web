@@ -5,17 +5,17 @@ import { DonationProgressIndicator } from "@/components/ui/donation-progress-ind
 export const CampaignVerticalCard = () => {
   const percentage = 65;
   return (
-    <Card className="hover:bg-hover mt-3 flex h-64 w-40 cursor-pointer flex-col transition-colors duration-300">
+    <Card className="hover:bg-hover mt-3 flex h-72 w-56 cursor-pointer flex-col transition-colors duration-300">
       <img
         src={
           "https://www.jagaindonesia.com/wp-content/uploads/2023/03/Papua.jpg"
         }
         height={60}
-        width={200}
+        width={250}
         alt="campaign-image"
         className="h-full rounded-t-2xl object-cover"
       />
-      <div className="m-3 flex flex-col justify-between">
+      <div className="m-3 flex flex-col justify-between space-y-2">
         <Label
           size="sm"
           className="text-start font-bold"
@@ -28,7 +28,7 @@ export const CampaignVerticalCard = () => {
               Rp 200.000.000
             </span>
           </p>
-          <DonationProgressIndicator percentage={percentage} className="h-1" />
+          <DonationProgressIndicator percentage={percentage} />
           <p className="mt-3 text-end text-[10px]">
             Target Donasi{"  "}
             <span className="font-black">Rp 1.000.000.000</span>

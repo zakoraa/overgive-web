@@ -7,10 +7,10 @@ interface DonationProgressIndicatorProps {
 
 export const DonationProgressIndicator: React.FC<
   DonationProgressIndicatorProps
-> = ({ percentage, className = "" }) => {
+> = ({ percentage, className }) => {
   return (
     <div
-      className={`h-2 w-full overflow-hidden rounded-full bg-gray-200 ${className}`}
+      className={`h-[5px] w-full overflow-hidden rounded-full bg-gray-200 ${className}`}
     >
       <div
         className="to-primary from-primary-dark h-full bg-linear-to-r transition-all duration-500"

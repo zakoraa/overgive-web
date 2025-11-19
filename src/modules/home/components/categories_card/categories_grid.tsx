@@ -1,6 +1,8 @@
+"use client"
 import { Label } from "@/components/text/label";
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const categories = [
   {
@@ -46,6 +48,7 @@ const categories = [
 ];
 
 export const CategoriesGrid = () => {
+  const router = useRouter();
   return (
     <div className="mt-5 grid grid-cols-4 gap-8">
       {categories.map((cat) => (
@@ -70,6 +73,7 @@ export const CategoriesGrid = () => {
                 height={45}
                 width={45}
                 alt={`${cat.name}-icon`}
+                onClick={() => router.push("/categories")}
                 className="relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6"
               />
             </div>

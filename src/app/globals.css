@@ -16,6 +16,7 @@
   --foreground: #313131;
 
   --gray-light: #e5e7eb;
+  --gray-dark: #636363;
 }
 
 html {
@@ -44,6 +45,7 @@ body {
   --color-foreground: var(--foreground);
 
   --color-gray-light: var(--gray-light);
+  --color-gray-dark: var(--gray-dark);
 }
 
 @layer utilities {
@@ -60,7 +62,7 @@ body {
 
 /* Custom scrollbar for Webkit browsers (Chrome, Safari, etc.) */
 ::-webkit-scrollbar {
-  width: 15px; /* Scrollbar width */
+  width: 13px; /* Scrollbar width */
   height: 10px;
 }
 
@@ -70,10 +72,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--primary); /* Thumb color */
+  background: var(--gray-dark); /* Thumb color */
   border-radius: 8px; /* Make thumb more rounded */
   border: 2px solid transparent; /* Add spacing */
+  transition: background-color 0.8s ease; /* transisi warna */
 }
+
 ::-webkit-scrollbar-thumb:hover {
   cursor: grab;
+  background: var(--foreground); /* Thumb color */
 }
