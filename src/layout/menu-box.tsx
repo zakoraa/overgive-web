@@ -10,7 +10,7 @@ const MenuBox = () => {
       {/* Toggle Button */}
       <button
         onClick={() => setMenuOpen(!menuOpen)}
-        className="bg-background flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 shadow-sm"
+        className="bg-card-background flex h-12 w-12 items-center justify-center rounded-2xl border border-zinc-300 shadow-sm"
       >
         {menuOpen ? (
           /* Close (X) Icon */
@@ -49,7 +49,7 @@ const MenuBox = () => {
 
       {/* Menu Box */}
       <div
-        className={`bg-background fixed left-1/2 z-40 mt-2 w-[90%] -translate-x-1/2 transform rounded-xl border border-zinc-300 px-6 py-4 shadow-sm transition-all duration-500 ease-in-out ${
+        className={`bg-card-background fixed left-1/2 z-40 mt-2 w-[90%] -translate-x-1/2 transform rounded-xl border border-zinc-300 px-6 py-4 shadow-sm transition-all duration-500 ease-in-out ${
           menuOpen
             ? "scale-100 opacity-100"
             : "pointer-events-none scale-95 opacity-0"

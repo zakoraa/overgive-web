@@ -21,7 +21,7 @@ const Navbar = () => {
     <nav className="fixed top-0 z-50 mx-auto flex w-full items-center justify-between gap-x-5 py-6 transition-all duration-300 md:left-1/2 md:w-auto md:-translate-x-1/2 md:justify-center md:px-0">
       <Card className="flex h-12 px-7">
         <Image
-          className="md:min-w-26"
+          className="md:min-w-32"
           src={"/images/overgive-logo.svg"}
           alt="overgive-logo"
           height={100}
