@@ -31,13 +31,34 @@ const Navbar = () => {
 
       <Dock className="bg-card-background text-foreground hidden flex-row items-center space-x-16 rounded-2xl border border-gray-300 px-12 text-sm font-semibold whitespace-nowrap md:flex">
         <DockIcon className="hover:text-primary">
-          <Link href="/">Beranda</Link>
+          <Link
+            href="/"
+            className={pathname === "/" ? "text-primary" : "hover:text-primary"}
+          >
+            Beranda
+          </Link>
         </DockIcon>
         <DockIcon className="hover:text-primary">
-          <Link href="/my-donations">Donasi Saya</Link>
+          <Link
+            href="/my-donations"
+            className={
+              pathname === "/my-donations"
+                ? "text-primary"
+                : "hover:text-primary"
+            }
+          >
+            Donasi Saya
+          </Link>
         </DockIcon>
         <DockIcon className="hover:text-primary">
-          <Link href="/about-us">Tentang Kami</Link>
+          <Link
+            href="/about-us"
+            className={
+              pathname === "/about-us" ? "text-primary" : "hover:text-primary"
+            }
+          >
+            Tentang Kami
+          </Link>
         </DockIcon>
       </Dock>
 
