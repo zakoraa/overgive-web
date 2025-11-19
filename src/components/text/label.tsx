@@ -20,7 +20,7 @@ export const Label: React.FC<LabelProps> = ({
   };
 
   return (
-    <h3 className={cn("text-center line-clamp-2", sizeStyles[size], className)} {...props}>
+    <h3 className={cn("text-start line-clamp-2", sizeStyles[size], className)} {...props}>
       {text}
     </h3>
   );

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { DockIcon, Dock } from "@/components/ui/dock";
 import Image from "next/image";
 import MenuBox from "./menu-box";
-import { LoginButton } from "@/modules/auth/login/components/login-button";
+import { LoginButton } from "@/modules/home/components/login-button";
 import { Card } from "@/components/ui/card";
 
 const allowedPages = ["/", "/my-donations", "/about-us"];

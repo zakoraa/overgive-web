@@ -8,7 +8,7 @@ interface SearchBarWithSortProps {
 }
 
 export const SearchBarWithSort = ({
-  placeholder = "Cari kampanye...",
+  placeholder = "Cari kampanye",
   onSearch,
   onSortClick,
 }: SearchBarWithSortProps) => {
