@@ -12,7 +12,7 @@ export const CampaignHorizontalCard = () => {
   return (
     <Card
       onClick={() => router.push("/campaign")}
-      className="hover:bg-hover flex h-28 cursor-pointer transition-colors duration-300"
+      className="hover:bg-hover flex h-30 cursor-pointer transition-colors duration-300"
     >
       <img
         src={
