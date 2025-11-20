@@ -5,7 +5,7 @@ import { Label } from "@/components/text/label";
 export const CurrentPriorityCard = () => {
   return (
     <Card className="w-full px-10 py-6">
-      <Card className="to-primary from-primary-dark w-fit rounded-lg border-none bg-linear-to-tr px-3 py-1">
+      <Card className="to-primary from-primary-dark w-fit! rounded-lg border-none bg-linear-to-tr px-3 py-1">
         <Label
           size="md"
           text="Prioritas Saat Ini"
