@@ -4,6 +4,7 @@ import { CampaignHeaderCard } from "./components/campaign-header-card";
 import { CampaignDonorsCard } from "./components/campaign_donors_card";
 import { CampaignLatestNewsCard } from "./components/campaign-latest-news-card";
 import { CampaignDetailsOfFundCard } from "./components/campaign-details-of-fund-card";
+import { DonationButton } from "./components/ui/donation-button";
 
 export const Campaign = () => {
   return (
@@ -13,6 +14,7 @@ export const Campaign = () => {
       <CampaignLatestNewsCard />
       <CampaignDetailsOfFundCard />
       <CampaignDonorsCard />
+      <DonationButton />
     </BasePage>
   );
 };
