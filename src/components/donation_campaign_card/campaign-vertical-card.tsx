@@ -1,11 +1,19 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Label } from "@/components/text/label";
 import { Card } from "@/components/ui/card";
 import { DonationProgressIndicator } from "@/components/ui/donation-progress-indicator";
 
 export const CampaignVerticalCard = () => {
+  const router = useRouter();
   const percentage = 65;
+
   return (
-    <Card className="hover:bg-hover mt-3 flex h-72 w-56 cursor-pointer flex-col transition-colors duration-300">
+    <Card
+      onClick={() => router.push("/campaign")}
+      className="hover:bg-hover mt-3 flex h-72 w-56 cursor-pointer flex-col transition-colors duration-300"
+    >
       <img
         src={
           "https://www.jagaindonesia.com/wp-content/uploads/2023/03/Papua.jpg"
@@ -24,9 +32,7 @@ export const CampaignVerticalCard = () => {
         <div className="space-y-1">
           <p className="text-[10px]">
             Terkumpul{"  "}
-            <span className="text-primary font-black">
-              Rp 200.000.000
-            </span>
+            <span className="text-primary font-black">Rp 200.000.000</span>
           </p>
           <DonationProgressIndicator percentage={percentage} />
           <p className="mt-3 text-end text-[10px]">
