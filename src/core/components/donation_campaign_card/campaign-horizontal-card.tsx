@@ -30,12 +30,14 @@ export const CampaignHorizontalCard = ({
   return (
     <Card
       onClick={() => router.push(`/campaign/${campaign.id}`)}
-      className="hover:bg-hover relative flex h-fit cursor-pointer transition-colors duration-300"
+      className="hover:bg-hover relative flex h-fit min-w-full! cursor-pointer transition-colors duration-300"
     >
       {/* Label sisa hari */}
-      <div className="bg-primary/90 text-white absolute top-2 left-2 z-10 rounded-md px-2 py-1 text-xs font-bold shadow-md">
-        {remainingDays} hari lagi
-      </div>
+      {campaign.ended_at !== null && (
+        <div className="bg-primary/90 absolute top-2 left-2 z-10 rounded-md px-2 py-1 text-[11px] font-bold text-white shadow-md">
+          {remainingDays} hari lagi
+        </div>
+      )}
 
       <img
         src={campaign.image_url}
@@ -54,12 +56,14 @@ export const CampaignHorizontalCard = ({
             </span>
           </p>
           <DonationProgressIndicator percentage={percentage} />
-          <p className="mt-3 text-end text-xs">
-            Target Donasi{" "}
-            <span className="font-black">
-              {formatRupiah(campaign.target_amount)}
-            </span>
-          </p>
+          {campaign.target_amount !== null && (
+            <p className="mt-3 text-end text-xs">
+              Target Donasi{" "}
+              <span className="font-black">
+                {formatRupiah(campaign.target_amount)}
+              </span>
+            </p>
+          )}
         </div>
       </div>
     </Card>

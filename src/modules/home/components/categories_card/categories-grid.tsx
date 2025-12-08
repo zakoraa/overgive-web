@@ -1,6 +1,7 @@
 "use client";
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
+import { CATEGORY_MAP } from "@/modules/categories/types/campaign-category";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -50,11 +51,14 @@ const categories = [
 export const CategoriesGrid = () => {
   const router = useRouter();
   return (
-    <div className="mt-5 grid grid-cols-4 md:gap-8 gap-6">
+    <div className="mt-5 grid grid-cols-4 gap-6 md:gap-8">
       {categories.map((cat) => (
         <div
           key={cat.name}
-          className="group flex cursor-pointer flex-col items-center justify-center"
+          onClick={() =>
+            router.push(`/categories?cat=${CATEGORY_MAP[cat.name]}`)
+          }
+          className="group flex cursor-pointer flex-col items-center"
         >
           <Card className="bg-muted flex flex-col items-center justify-center gap-2 rounded-full border-none">
             <div className="relative flex h-16 w-16 items-center justify-center">
@@ -78,7 +82,11 @@ export const CategoriesGrid = () => {
               />
             </div>
           </Card>
-          <Label size="sm" className="mt-1 text-center font-bold" text={cat.name} />
+          <Label
+            size="sm"
+            className="mt-1 text-center font-bold"
+            text={cat.name}
+          />
         </div>
       ))}
     </div>

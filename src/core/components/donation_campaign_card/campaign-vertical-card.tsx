@@ -21,11 +21,23 @@ export const CampaignVerticalCard = ({
     100,
   );
 
+  const now = new Date();
+  const endedAt = new Date(campaign.ended_at);
+  const diffTime = endedAt.getTime() - now.getTime();
+  const remainingDays =
+    diffTime > 0 ? Math.ceil(diffTime / (1000 * 60 * 60 * 24)) : 0;
+
   return (
     <Card
       onClick={() => router.push(`/campaign/${campaign.id}`)}
-      className="hover:bg-hover mt-3 flex h-[95%] max-w-52 cursor-pointer flex-col justify-between transition-colors duration-300"
+      className="hover:bg-hover relative mt-3 flex h-[95%] max-w-52 cursor-pointer flex-col justify-between transition-colors duration-300"
     >
+      {/* Label sisa hari */}
+      {campaign.ended_at !== null && (
+        <div className="bg-primary/90 absolute top-2 left-2 z-10 rounded-md px-2 py-1 text-[11px] font-bold text-white shadow-md">
+          {remainingDays} hari lagi
+        </div>
+      )}
       <div>
         <img
           src={campaign.image_url}
@@ -51,12 +63,14 @@ export const CampaignVerticalCard = ({
           </div>
         </div>
       </div>
-      <p className="text-end text-[11px] mx-3 mb-3">
-        Target Donasi{" "}
-        <span className="font-black">
-          {formatRupiah(campaign.target_amount)}
-        </span>
-      </p>
+      {campaign.target_amount !== null && (
+        <p className="mx-3 mb-3 text-end text-[11px]">
+          Target Donasi{" "}
+          <span className="font-black">
+            {formatRupiah(campaign.target_amount)}
+          </span>
+        </p>
+      )}
     </Card>
   );
 };

@@ -3,7 +3,7 @@ import { MyDonationCard } from "./components/my-donation-card";
 import { MarginTopNavbar } from "@/core/components/ui/margin-top-navbar";
 import { Title } from "@/core/components/text/title";
 import { Line } from "@/core/components/ui/line";
-import { SearchBarWithSort } from "@/core/components/ui/search-bar-with-sort";
+import { SearchBarWithSort } from "@/core/components/search_bar/search-bar-with-sort";
 
 export const MyDonations = () => {
   return (

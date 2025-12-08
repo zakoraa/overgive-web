@@ -1,22 +1,61 @@
+"use client";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CampaignHorizontalCard } from "@/core/components/donation_campaign_card/campaign-horizontal-card";
 import { Title } from "@/core/components/text/title";
-import { Card } from "@/core/components/ui/card";
 import { Line } from "@/core/components/ui/line";
-import { SearchBarWithSort } from "@/core/components/ui/search-bar-with-sort";
 import BasePage from "@/core/layout/base-page";
+import { useCampaignCategory } from "./providers/campaign-category-provider";
+import CircularLoading from "@/core/components/ui/circular-loading";
+import { SearchBar } from "@/core/components/search_bar/search-bar";
+import { CampaignCategory } from "@/core/types/campaign-category";
+import { CAMPAIGN_CATEGORY_LABEL } from "./types/campaign-category";
 
 export const Categories = () => {
+  const { campaigns, loading, error } = useCampaignCategory();
+
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const category = (searchParams.get("cat") as CampaignCategory) ?? "others";
+
+  const categoryLabel = CAMPAIGN_CATEGORY_LABEL[category] ?? "Lainnya";
+
+  const handleSearch = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set("q", value);
+    } else {
+      params.delete("q");
+    }
+
+    router.replace(`${pathname}?${params.toString()}`);
+  };
+
   return (
-    <BasePage className="container mx-auto flex flex-col items-center justify-center space-y-2 rounded-none px-7 pb-5 md:max-w-[550px]">
-      <div className="mt-3 flex w-full flex-col justify-start">
-        <Title text="Lingkungan" />
+    <BasePage className="container mx-auto flex flex-col space-y-2 px-7 pb-5 md:max-w-[550px]">
+      <div className="mt-3 w-full">
+        <Title text={`Kategori ${categoryLabel}`} />
         <Line />
-        <SearchBarWithSort />
+        <SearchBar onSearch={handleSearch} />
       </div>
 
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) => (
-        <CampaignHorizontalCard key={i} />
-      ))}
+      {loading && <CircularLoading />}
+
+      {error && <p className="text-sm text-red-500">{error}</p>}
+
+      {!loading && campaigns.length === 0 && (
+        <p className="mt-2 text-xs text-gray-500">Kampanye belum tersedia</p>
+      )}
+
+      {!loading && (
+        <div className="w-full space-y-3">
+          {campaigns.map((campaign) => (
+            <CampaignHorizontalCard key={campaign.id} campaign={campaign} />
+          ))}
+        </div>
+      )}
     </BasePage>
   );
 };

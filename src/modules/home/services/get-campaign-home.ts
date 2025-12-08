@@ -16,14 +16,26 @@ export const getCampaignHome = async ({
   const now = new Date().toISOString();
 
   let query = supabase
-    .from<"campaigns", CampaignHomeItem>("campaigns")
-    .select("id, title, created_at, collected_amount, target_amount, ended_at, image_url")
+    .from("campaigns")
+    .select(
+      "id, title, created_at, collected_amount, target_amount, ended_at, image_url"
+    )
+    .eq("status", "active")                // ✅ hanya campaign aktif
     .is("deleted_at", null)
+    // ✅ belum berakhir ATAU tanpa ended_at
+    .or(`ended_at.gte.${now},ended_at.is.null`)
     .limit(limit);
 
   if (type === "priority") {
-    query = query.gte("ended_at", now).order("ended_at", { ascending: true });
-  } else if (type === "current") {
+    // ✅ yang hampir berakhir tampil paling atas
+    // ✅ campaign tanpa batas waktu di bawah
+    query = query.order("ended_at", {
+      ascending: true,
+      nullsFirst: false,
+    });
+  }
+
+  if (type === "current") {
     query = query.order("created_at", { ascending: false });
   }
 
@@ -31,5 +43,5 @@ export const getCampaignHome = async ({
 
   if (error) throw new Error(error.message);
 
-  return data || [];
+  return (data ?? []) as CampaignHomeItem[];
 };
