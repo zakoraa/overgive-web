@@ -1,9 +1,9 @@
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/components/ui/card";
 import { MyDonationCard } from "./components/my-donation-card";
-import { MarginTopNavbar } from "@/components/ui/margin-top-navbar";
-import { Title } from "@/components/text/title";
-import { Line } from "@/components/ui/line";
-import { SearchBarWithSort } from "@/components/ui/search-bar-with-sort";
+import { MarginTopNavbar } from "@/core/components/ui/margin-top-navbar";
+import { Title } from "@/core/components/text/title";
+import { Line } from "@/core/components/ui/line";
+import { SearchBarWithSort } from "@/core/components/ui/search-bar-with-sort";
 
 export const MyDonations = () => {
   return (

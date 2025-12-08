@@ -1,5 +1,5 @@
-import { Title } from "@/components/text/title";
-import { Card } from "@/components/ui/card";
+import { Title } from "@/core/components/text/title";
+import { Card } from "@/core/components/ui/card";
 import Image from "next/image";
 
 interface CampaignTitleCardProps {

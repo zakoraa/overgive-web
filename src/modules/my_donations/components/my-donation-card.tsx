@@ -1,5 +1,5 @@
-import { Label } from "@/components/text/label";
-import { Card } from "@/components/ui/card";
+import { Label } from "@/core/components/text/label";
+import { Card } from "@/core/components/ui/card";
 
 export const MyDonationCard = () => {
   return (
@@ -13,7 +13,7 @@ export const MyDonationCard = () => {
         alt="campaign-image"
         className="h-full rounded-s-2xl object-cover"
       />
-      <div className="m-3 flex flex-col justify-between w-full">
+      <div className="m-3 flex w-full flex-col justify-between">
         <Label
           size="md"
           className="text-start"

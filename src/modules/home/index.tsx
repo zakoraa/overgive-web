@@ -1,4 +1,4 @@
-import { MarginTopNavbar } from "@/components/ui/margin-top-navbar";
+import { MarginTopNavbar } from "@/core/components/ui/margin-top-navbar";
 import { CategoriesCard } from "./components/categories_card";
 import { CurrentCampaignsCard } from "./components/current_campaigns_card";
 import { CurrentPriorityCard } from "./components/current_priority_card";

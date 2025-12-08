@@ -1,4 +1,4 @@
-import BasePage from "@/layout/base-page";
+import BasePage from "@/core/layout/base-page";
 import { CampaignBackgroundCard } from "./components/campaign-background-card";
 import { CampaignHeaderCard } from "./components/campaign-header-card";
 import { CampaignDonorsCard } from "./components/campaign_donors_card";

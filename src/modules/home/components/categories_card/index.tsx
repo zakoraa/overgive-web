@@ -1,6 +1,6 @@
-import { Title } from "@/components/text/title";
-import { Card } from "@/components/ui/card";
-import { CategoriesGrid } from "./categories_grid";
+import { Title } from "@/core/components/text/title";
+import { Card } from "@/core/components/ui/card";
+import { CategoriesGrid } from "./categories-grid";
 
 export const CategoriesCard = () => {
   return (

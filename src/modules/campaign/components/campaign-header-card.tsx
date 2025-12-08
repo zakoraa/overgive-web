@@ -1,8 +1,8 @@
-import { Title } from "@/components/text/title";
-import { Card } from "@/components/ui/card";
-import { DonationProgressIndicator } from "@/components/ui/donation-progress-indicator";
-import BasePage from "@/layout/base-page";
-import { cn } from "@/lib/utils";
+import { Title } from "@/core/components/text/title";
+import { Card } from "@/core/components/ui/card";
+import { DonationProgressIndicator } from "@/core/components/ui/donation-progress-indicator";
+import BasePage from "@/core/layout/base-page";
+import { cn } from "@/core/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -34,7 +34,7 @@ const items: (Item | null)[] = [
 
 export const CampaignHeaderCard = () => {
   return (
-    <Card className="items-start rounded-t-none w-full pb-5">
+    <Card className="w-full items-start rounded-t-none pb-5">
       <img
         src={
           "https://www.jagaindonesia.com/wp-content/uploads/2023/03/Papua.jpg"
@@ -44,7 +44,7 @@ export const CampaignHeaderCard = () => {
         alt="campaign-image"
         className="h-60 w-full object-cover"
       />
-      <div className="w-full px-5 mt-3">
+      <div className="mt-3 w-full px-5">
         <Title
           className="font-black"
           text="Bantuan Pembangunan Sekolah Di Papua"

@@ -1,6 +1,6 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
+import { Card } from "@/core/components/ui/card";
 import { DonorDonationCard } from "./donor-donation-card";
 import { CampaignTitleCard } from "../ui/campaign-title-card";
 

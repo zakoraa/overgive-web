@@ -1,5 +1,5 @@
-import { Label } from "@/components/text/label";
-import { Card } from "@/components/ui/card";
+import { Label } from "@/core/components/text/label";
+import { Card } from "@/core/components/ui/card";
 
 export const DonorDonationCard = () => {
   return (

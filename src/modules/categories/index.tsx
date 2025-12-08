@@ -1,9 +1,9 @@
-import { CampaignHorizontalCard } from "@/components/donation_campaign_card/campaign-horizontal-card";
-import { Title } from "@/components/text/title";
-import { Card } from "@/components/ui/card";
-import { Line } from "@/components/ui/line";
-import { SearchBarWithSort } from "@/components/ui/search-bar-with-sort";
-import BasePage from "@/layout/base-page";
+import { CampaignHorizontalCard } from "@/core/components/donation_campaign_card/campaign-horizontal-card";
+import { Title } from "@/core/components/text/title";
+import { Card } from "@/core/components/ui/card";
+import { Line } from "@/core/components/ui/line";
+import { SearchBarWithSort } from "@/core/components/ui/search-bar-with-sort";
+import BasePage from "@/core/layout/base-page";
 
 export const Categories = () => {
   return (

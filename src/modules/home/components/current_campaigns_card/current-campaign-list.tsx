@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { CampaignVerticalCard } from "../../../../components/donation_campaign_card/campaign-vertical-card";
+import { CampaignVerticalCard } from "../../../../core/components/donation_campaign_card/campaign-vertical-card";
 import { useHorizontalScroll } from "../../hooks/use-horizontal-scroll";
 
 export const CurrentCampaignList = () => {
