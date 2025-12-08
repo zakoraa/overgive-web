@@ -1,52 +1,65 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useGetCurrentUserContext } from "@/core/providers/use-get-current-user";
+import { ModalConfirm } from "@/core/components/modal/modal-confirm";
+import { useLogout } from "@/modules/auth/hooks/use-logout";
+import { ModalLoading } from "@/core/components/modal/modal-loading";
+import { LogInIcon, LogOutIcon } from "lucide-react";
 
 export const LoginButton = () => {
   const router = useRouter();
+  const { loading, user } = useGetCurrentUserContext();
+  const { logout, loading: logoutLoading } = useLogout();
+
+  const [openLogoutModal, setOpenLogoutModal] = useState(false);
+
+  if (loading) return null;
+
+  if (!user) {
+    return (
+      <button
+        onClick={() => router.push("/login")}
+        className="from-primary-dark to-primary text-background hover:from-primary hover:to-primary hidden h-12 cursor-pointer items-center space-x-2 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 md:flex"
+      >
+        <p className="text-sm font-medium">Login</p>
+
+        <LogInIcon className="h-4 w-4" />
+      </button>
+    );
+  }
 
   return (
-    <button
-      onClick={() => router.push("/login")}
-      className="from-primary-dark to-primary text-background hover:from-primary hover:to-primary mx-0 hidden h-12 cursor-pointer items-center justify-center space-x-1 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 transition-colors duration-300 md:flex"
-    >
-      <p className="text-sm font-medium">Login</p>
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+    <>
+      <ModalLoading isOpen={logoutLoading} />
+
+      <button
+        onClick={() => setOpenLogoutModal(true)}
+        className="hidden h-12 cursor-pointer items-center space-x-2 rounded-2xl border border-red-300 bg-red-500 px-7 text-white transition hover:opacity-80 md:flex"
       >
-        <path
-          d="M2 12H14.88"
-          stroke="#eaf4ff"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M12.6504 8.6499L16.0004 11.9999L12.6504 15.3499"
-          stroke="#eaf4ff"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M21.5002 13V15.26C21.5002 19.73 19.7102 21.52 15.2402 21.52H15.1102C11.0902 21.52 9.24016 20.07 8.91016 16.53"
-          stroke="#eaf4ff"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <path
-          d="M8.90039 7.55999C9.21039 3.95999 11.0604 2.48999 15.1104 2.48999H15.2404C19.7104 2.48999 21.5004 4.27999 21.5004 8.74999"
-          stroke="#eaf4ff"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </button>
+        <LogOutIcon className="h-4 w-4" />
+
+        <p className="text-sm font-medium">
+          {logoutLoading ? "Logout..." : "Logout"}
+        </p>
+      </button>
+
+      <ModalConfirm
+        isOpen={openLogoutModal}
+        onClose={() => setOpenLogoutModal(false)}
+        onConfirm={async () => {
+          setOpenLogoutModal(false);
+          await logout();
+          router.refresh();
+        }}
+        title="Logout"
+        description="Apakah kamu yakin ingin logout dari akun ini?"
+        confirmText="Logout"
+        cancelText="Batal"
+        confirmClassName="bg-red-500"
+        cancelClassName="bg-primary"
+      />
+    </>
   );
 };
