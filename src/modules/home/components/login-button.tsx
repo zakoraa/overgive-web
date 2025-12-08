@@ -36,11 +36,11 @@ export const LoginButton = () => {
 
       <button
         onClick={() => setOpenLogoutModal(true)}
-        className="hidden h-12 cursor-pointer items-center space-x-2 rounded-2xl border border-red-300 bg-red-500 px-7 text-white transition hover:opacity-80 md:flex"
+        className="hidden h-12 cursor-pointer items-center space-x-2 rounded-2xl border border-red-300 bg-red-400 px-7 text-white font-bold transition hover:opacity-80 md:flex"
       >
         <LogOutIcon className="h-4 w-4" />
 
-        <p className="text-sm font-medium">
+        <p className="text-sm">
           {logoutLoading ? "Logout..." : "Logout"}
         </p>
       </button>

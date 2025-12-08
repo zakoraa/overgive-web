@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { loginWithEmailPassword } from "../services/login-service";
+import { getCurrentUser } from "@/modules/auth/services/get-current-user";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,6 @@ export function useLogin() {
         setError(response.message); // simpan pesan dari service
         return null;
       }
-
       return response; // sukses
     } catch (err) {
       console.log("ERROR USE_LOGIN: ", err);
