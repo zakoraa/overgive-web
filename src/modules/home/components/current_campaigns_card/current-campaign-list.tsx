@@ -1,11 +1,21 @@
+"use client";
+
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { CampaignVerticalCard } from "../../../../core/components/donation_campaign_card/campaign-vertical-card";
 import { useHorizontalScroll } from "../../hooks/use-horizontal-scroll";
+import { useCampaignHome } from "../../hooks/use-campaign-home";
+import CircularLoading from "@/core/components/ui/circular-loading";
 
 export const CurrentCampaignList = () => {
   const { scrollRef, scroll } = useHorizontalScroll();
+  const { campaigns, loading, error } = useCampaignHome("current", 10);
+
+  if (loading) return <CircularLoading />;
+  if (error)
+    return <div className="py-4 text-center text-red-500">{error}</div>;
+
   return (
-    <>
+    <div className="relative">
       {/* Tombol kiri */}
       <button
         onClick={() => scroll("left")}
@@ -19,9 +29,9 @@ export const CurrentCampaignList = () => {
         ref={scrollRef}
         className="scrollbar-hide flex space-x-3 overflow-x-scroll scroll-smooth px-8"
       >
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-          <div key={i} className="mb-3 shrink-0">
-            <CampaignVerticalCard />
+        {campaigns.map((campaign) => (
+          <div key={campaign.id} className="mb-3 shrink-0">
+            <CampaignVerticalCard campaign={campaign} />
           </div>
         ))}
       </div>
@@ -33,6 +43,6 @@ export const CurrentCampaignList = () => {
       >
         <ChevronRight className="h-5 w-5 text-gray-700" />
       </button>
-    </>
+    </div>
   );
 };

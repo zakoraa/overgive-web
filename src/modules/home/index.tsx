@@ -10,6 +10,7 @@ export const Home = () => {
       <CategoriesCard />
       <CurrentPriorityCard />
       <CurrentCampaignsCard />
+      <div className="h-5"></div>
     </section>
   );
 };
