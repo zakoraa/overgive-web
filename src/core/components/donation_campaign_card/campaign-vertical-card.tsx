@@ -30,6 +30,7 @@ export const CampaignVerticalCard = ({
   return (
     <Card
       onClick={() => router.push(`/campaign/${campaign.id}`)}
+      // onClick={() => router.push(`/campaign`)}
       className="hover:bg-hover relative mt-3 flex h-[95%] max-w-52 cursor-pointer flex-col justify-between transition-colors duration-300"
     >
       {/* Label sisa hari */}

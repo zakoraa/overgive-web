@@ -5,16 +5,24 @@ import { CampaignDonorsCard } from "./components/campaign_donors_card";
 import { CampaignLatestNewsCard } from "./components/campaign-latest-news-card";
 import { CampaignDetailsOfFundCard } from "./components/campaign-details-of-fund-card";
 import { DonationButton } from "./components/ui/donation-button";
+import { Campaign as CampaignType } from "@/core/types/campaign";
+import { CampaignDetailProvider } from "./providers/campaign-detail-provider";
 
-export const Campaign = () => {
+interface CampaignProps {
+  initialCampaign: CampaignType;
+}
+
+export const Campaign = ({ initialCampaign }: CampaignProps) => {
   return (
     <BasePage className="border-none bg-transparent">
-      <CampaignHeaderCard />
-      <CampaignBackgroundCard />
-      <CampaignLatestNewsCard />
-      <CampaignDetailsOfFundCard />
-      <CampaignDonorsCard />
-      <DonationButton />
+      <CampaignDetailProvider initialCampaign={initialCampaign}>
+        <CampaignHeaderCard />
+        <CampaignBackgroundCard />
+        <CampaignLatestNewsCard />
+        <CampaignDetailsOfFundCard />
+        <CampaignDonorsCard />
+        <DonationButton />
+      </CampaignDetailProvider>
     </BasePage>
   );
 };

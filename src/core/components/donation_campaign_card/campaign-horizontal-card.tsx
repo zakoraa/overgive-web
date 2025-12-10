@@ -30,6 +30,7 @@ export const CampaignHorizontalCard = ({
   return (
     <Card
       onClick={() => router.push(`/campaign/${campaign.id}`)}
+      // onClick={() => router.push(`/campaign`)}
       className="hover:bg-hover relative flex h-fit min-w-full! cursor-pointer transition-colors duration-300"
     >
       {/* Label sisa hari */}

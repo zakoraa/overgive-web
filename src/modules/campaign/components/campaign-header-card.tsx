@@ -1,10 +1,18 @@
+"use client";
+
 import { Title } from "@/core/components/text/title";
 import { Card } from "@/core/components/ui/card";
 import { DonationProgressIndicator } from "@/core/components/ui/donation-progress-indicator";
-import BasePage from "@/core/layout/base-page";
 import { cn } from "@/core/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useCampaignDetailContext } from "../providers/campaign-detail-provider";
+import { Label } from "@/core/components/text/label";
+import { CampaignCategory } from "@/core/types/campaign-category";
+import { categoryDisplay, getCampaignStatusInfo } from "../utils/campaign-util";
+import { formatRupiah } from "@/core/utils/currency";
+import { getDonationPercentage } from "@/core/utils/util";
+import { formatDate } from "@/core/utils/date";
 
 interface Item {
   icon: string;
@@ -33,29 +41,65 @@ const items: (Item | null)[] = [
 ];
 
 export const CampaignHeaderCard = () => {
+  const { campaign } = useCampaignDetailContext();
   return (
     <Card className="w-full items-start rounded-t-none pb-5">
       <img
-        src={
-          "https://www.jagaindonesia.com/wp-content/uploads/2023/03/Papua.jpg"
-        }
+        src={campaign?.imageUrl}
         height={100}
         width={200}
         alt="campaign-image"
         className="h-60 w-full object-cover"
       />
       <div className="mt-3 w-full px-5">
-        <Title
-          className="font-black"
-          text="Bantuan Pembangunan Sekolah Di Papua"
+        <Title className="font-black" text={campaign?.title} />
+        <Label
+          className="font-normal"
+          text={`Kategori: ${categoryDisplay[campaign?.category as CampaignCategory]}`}
         />
-        <Title size="sm" text="Rp 20.000.000" className="text-primary mt-3" />
-        <DonationProgressIndicator percentage={20} className="mb-3" />
+        <div className="mt-3 flex gap-x-1">
+          {!campaign?.targetAmount && <Title size="sm" text="Terkumpul " />}
+          <Title
+            size="sm"
+            text={`${formatRupiah(campaign?.collectedAmount ?? 0)}`}
+            className="text-primary"
+          />
+        </div>
+        {campaign?.targetAmount && (
+          <DonationProgressIndicator
+            percentage={getDonationPercentage(
+              campaign?.collectedAmount ?? 0,
+              campaign?.targetAmount ?? 0,
+            )}
+            className="mb-3"
+          />
+        )}
         <div className="flex items-center justify-between">
-          <p className="text-sm">
-            Target donasi <span className="font-black">Rp 1.000.000.000</span>
-          </p>
-          <p className="text-xs">100 hari lagi</p>
+          {campaign?.targetAmount && (
+            <p className="text-sm">
+              Target donasi{" "}
+              <span className="font-black">
+                {formatRupiah(campaign?.targetAmount ?? 0)}
+              </span>
+            </p>
+          )}
+          {campaign?.endedAt && campaign?.status === "active" && (
+            <p className={"text-xs text-orange-400"}>
+              Selesai pada {formatDate(campaign?.endedAt)}
+            </p>
+          )}
+        </div>
+        <div className="mt-5 flex items-center justify-between text-xs">
+          <Card
+            className={cn(
+              "w-auto! px-3 py-1",
+              getCampaignStatusInfo(campaign?.status, campaign?.endedAt)
+                .colorClass,
+            )}
+          >
+            {getCampaignStatusInfo(campaign?.status, campaign?.endedAt).label}
+          </Card>
+          <p className="">Dibuat pada {formatDate(campaign?.createdAt)}</p>
         </div>
         <div className="mt-5 flex w-full items-center justify-between px-10">
           {items.map((item, index) => (
