@@ -10,10 +10,13 @@ import { AppButtonSm } from "@/core/components/button/app-button-sm";
 import { ModalInfo } from "@/core/components/modal/modal-info";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
 import { AppInput } from "@/core/components/input/app-input";
+import { useGetCurrentUserContext } from "@/core/providers/use-get-current-user";
 
 export const UpdatePasswordCard = () => {
   const { values, errors, submitting, onChange, handleSubmit } =
     useUpdatePasswordForm();
+
+  const { user, loading } = useGetCurrentUserContext();
 
   const { loading: updating, updatePassword } = useUpdatePassword();
   const [modalInfoOpen, setModalInfoOpen] = useState(false);
@@ -51,6 +54,8 @@ export const UpdatePasswordCard = () => {
       window.location.reload();
     }
   };
+
+  if (!user) return <></>;
 
   return (
     <Card className="space-y-2 p-5 text-start">

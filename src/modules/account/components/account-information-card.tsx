@@ -14,6 +14,8 @@ const ACCOUNT_INFO_ITEMS = [
 
 export const AccountInformationCard = () => {
   const { user, loading } = useGetCurrentUserContext();
+
+  if (!user) return <></>;
   return (
     <Card className="space-y-2 p-5 text-start">
       <Title text="Informasi Akun" className="text-start" />

@@ -24,7 +24,7 @@ export const LoginButton = () => {
         {/* Desktop */}
         <button
           onClick={() => router.push("/login")}
-          className="from-primary-dark to-primary text-background hover:from-primary hover:to-primary hidden h-12 items-center gap-2 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 md:flex"
+          className="from-primary-dark to-primary text-background hover:from-primary hover:to-primary hidden h-12 cursor-pointer items-center gap-2 rounded-2xl border border-gray-300 bg-linear-to-tl px-7 transition-all duration-300 md:flex"
         >
           <span className="text-sm font-medium">Login</span>
           <LogInIcon className="h-4 w-4" />
@@ -50,7 +50,7 @@ export const LoginButton = () => {
       {/* Desktop */}
       <button
         onClick={() => setOpenLogoutModal(true)}
-        className="hidden h-12 items-center gap-2 rounded-2xl border border-red-300 bg-red-400 px-7 font-bold text-white hover:opacity-80 md:flex"
+        className="hidden h-12 cursor-pointer items-center gap-2 rounded-2xl border border-red-300 bg-red-400 px-7 font-bold text-white transition-all duration-300 hover:opacity-80 md:flex"
       >
         <LogOutIcon className="h-4 w-4" />
         <span className="text-sm">
@@ -76,7 +76,7 @@ export const LoginButton = () => {
         onConfirm={async () => {
           setOpenLogoutModal(false);
           await logout();
-          router.refresh();
+          window.location.reload();
         }}
         title="Logout"
         description="Apakah kamu yakin ingin logout dari akun ini?"
