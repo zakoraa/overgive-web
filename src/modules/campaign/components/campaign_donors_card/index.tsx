@@ -9,7 +9,7 @@ export const CampaignDonorsCard = () => {
     <Card className="space-y-2 px-5 py-5 pb-20">
       <CampaignTitleCard count={1000} title="Donatur" onClick={() => {}} />
 
-      {[0, 1, 2].map((item, index) => (
+      {[0, 1, 2].map((_, index) => (
         <DonorDonationCard key={index} />
       ))}
     </Card>

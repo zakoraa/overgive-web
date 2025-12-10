@@ -2,9 +2,10 @@
 
 import { getCurrentUser } from "@/modules/auth/services/get-current-user";
 import { createContext, useContext, useEffect, useState } from "react";
+import { UserAuth } from "../types/user-auth";
 
 interface GetCurrentUserContextType {
-  user: any | null;
+  user: UserAuth | null;
   loading: boolean;
   reloadUser: () => Promise<void>;
 }
@@ -22,7 +23,7 @@ export function GetCurrentUserProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<UserAuth | null>(null);
   const [loading, setLoading] = useState(true);
 
   const loadUser = async () => {
