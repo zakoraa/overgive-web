@@ -7,7 +7,7 @@ import { useDonateForm } from "../providers/donate-form-provider";
 export const DonationMessageForm = () => {
   const { values, errors, setField } = useDonateForm();
   return (
-    <Card className="w-full items-start space-y-3 px-3 pt-4 pb-14">
+    <Card className="w-full items-start space-y-3 px-3 pt-4 pb-20">
       <DonationMessageInput
         value={values.message}
         onChange={(v) => setField("message", v)}
