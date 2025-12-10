@@ -3,6 +3,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/core/layout/navbar";
 import { AppProvider } from "@/core/providers/app-provider";
+import { MarginBottomBottomBar } from "@/core/components/ui/margin-bottom-bottom-bar";
 
 const nunito = Nunito({
   variable: "--font-nunito",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <AppProvider>
           <Navbar />
           {children}
+          <MarginBottomBottomBar />
         </AppProvider>
       </body>
     </html>

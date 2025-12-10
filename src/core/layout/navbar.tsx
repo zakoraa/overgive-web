@@ -4,11 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DockIcon, Dock } from "@/core/components/ui/dock";
 import Image from "next/image";
-import MenuBox from "./menu-box";
 import { LoginButton } from "@/modules/home/components/login-button";
 import { Card } from "@/core/components/ui/card";
+import BottomBar from "./bottom-bar";
 
-const allowedPages = ["/", "/my-donations", "/about-us"];
+const allowedPages = ["/", "/my-donations", "/my-profile"];
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -47,23 +47,23 @@ const Navbar = () => {
                 : "hover:text-primary"
             }
           >
-            Donasi Saya
+            Riwayat Donasi
           </Link>
         </DockIcon>
         <DockIcon className="hover:text-primary">
           <Link
-            href="/about-us"
+            href="/my-profile"
             className={
-              pathname === "/about-us" ? "text-primary" : "hover:text-primary"
+              pathname === "/my-profile" ? "text-primary" : "hover:text-primary"
             }
           >
-            Tentang Kami
+            Akun
           </Link>
         </DockIcon>
       </Dock>
 
       <LoginButton />
-      <MenuBox />
+      <BottomBar />
     </nav>
   );
 };

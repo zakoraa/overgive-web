@@ -16,7 +16,7 @@ export const SearchButton = () => {
         width={18}
         className="opacity-60"
       />
-      <p className="text-xs text-gray-500">Cari kampanye...</p>
+      <p className="text-sm text-gray-500">Cari kampanye...</p>
     </div>
   );
 };
