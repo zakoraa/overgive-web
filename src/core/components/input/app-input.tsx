@@ -136,7 +136,7 @@ export function AppInput({
             className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-600"
             onClick={() => setShowPassword((prev) => !prev)}
           >
-            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            {!showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         ) : suffix ? (
           <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-sm text-gray-600">

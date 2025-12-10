@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ModalInfo } from "@/core/components/modal/modal-info";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
-import { AppButton } from "@/core/components/ui/app-button";
-import { AppInput } from "@/core/components/ui/app-input";
 import Link from "next/link";
 import { useSignUp } from "../hooks/use-sign-up";
 import { useSignUpForm } from "../hooks/use-sign-up-form";
+import { AppButton } from "@/core/components/button/app-button";
+import { AppInput } from "@/core/components/input/app-input";
 
 export default function SignUpFormBody() {
   const { form, setForm, errors, validate } = useSignUpForm();
