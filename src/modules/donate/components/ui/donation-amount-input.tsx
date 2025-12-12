@@ -79,7 +79,6 @@ export const DonationAmountInput = ({
         <input
           type="text"
           inputMode="numeric"
-          pattern="[0-9]*"
           value={formatRupiah(value)}
           onChange={handleChange}
           placeholder={placeholder}

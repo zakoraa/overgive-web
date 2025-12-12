@@ -4,29 +4,28 @@ interface ModalInfoProps {
   isOpen: boolean;
   onClose: () => void;
 
-  title: string;
+  isSuccess: boolean; // true = success, false = error
   message: string;
-  imageUrl?: string; // gambar SVG via URL
 }
 
 export const ModalInfo: React.FC<ModalInfoProps> = ({
   isOpen,
   onClose,
-  title,
+  isSuccess,
   message,
-  imageUrl,
 }) => {
+  const title = isSuccess ? "Berhasil!" : "Gagal!";
+  const imageUrl = isSuccess ? "/svgs/success.svg" : "/svgs/failed.svg";
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="relative mx-auto flex max-w-sm flex-col items-center justify-center space-y-4 px-4 py-6 text-center">
         {/* SVG via Image */}
-        {imageUrl && (
-          <img
-            src={imageUrl}
-            alt="status"
-            className="mb-2 h-20 w-20 object-contain"
-          />
-        )}
+        <img
+          src={imageUrl}
+          alt={title}
+          className="mb-2 h-20 w-20 object-contain"
+        />
 
         {/* Title */}
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
