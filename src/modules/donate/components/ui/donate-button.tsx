@@ -30,8 +30,8 @@ export const DonateButton = () => {
     // Kalau result null tapi submitError null → ini cuma validasi gagal → jangan modal
     if (!result) return;
 
-    console.log("EXTERNAL ID: ", result.externalId);
-    router.push(`/payment/${result.externalId}`);
+    console.log("EXTERNAL ID: ", result.payment_request_id);
+    router.push(`/payment/${result.payment_request_id}`);
   };
 
   return (

@@ -1,64 +1,66 @@
-import { NextResponse } from "next/server";
-import { QrisService } from "@/core/lib/xendit/qris";
-import QRCode from "qrcode";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
+    const { amount } = body;
 
-    const {
-      amount,
-      name,
-      email,
-      message,
-      isAnonymous,
-    } = body;
-
-    console.log("body: ", body);
-
-    // Validate input
     if (!amount) {
       return NextResponse.json(
-        { message: "Amount required" },
+        { error: "amount dan order_id wajib" },
         { status: 400 }
       );
     }
 
-    // Generate order ID here
     const orderId = "donation_" + Date.now();
-    const externalId = `qris-${orderId}`;
 
-    const qris = await QrisService.createQris({
-      amount,
-      external_id: externalId,
-      metadata: {
-        order_id: orderId,
-        donor_name: name,
-        donor_email: email,
-        donor_message: message,
-        is_anonymous: isAnonymous,
+    const payload = {
+      reference_id: orderId,
+      type: "PAY",
+      country: "ID",
+      currency: "IDR",
+      request_amount: amount,
+      capture_method: "AUTOMATIC",
+      channel_code: "QRIS",
+      channel_properties: {
+        qr_string_type: "DYNAMIC",
       },
-    });
+      description: "QRIS Donation",
+      metadata: {
+        orderId,
+      },
+    };
 
-    console.log("qris: ", qris);
+    const res = await fetch(
+      "https://api.xendit.co/v3/payment_requests",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            process.env.XENDIT_API_KEY! + ":"
+          ).toString("base64")}`,
+          "Content-Type": "application/json",
+          "api-version": "2024-11-11",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
 
-    // Generate QR
-    const qrImageUrl = await QRCode.toDataURL(qris.qr_string);
+    const raw = await res.text();
+    console.log("CREATE PAYMENT RAW:", raw);
 
-    return NextResponse.json({
-      id: qris.id,
-      orderId,
-      externalId: qris.external_id,
-      qrString: qris.qr_string,
-      qrImageUrl,
-      callbackUrl: qris.callback_url,
-      status: qris.status,
-      metadata: qris.metadata,
-    });
-  } catch (error: any) {
-    console.log("ERROR: ", error);
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: raw },
+        { status: res.status }
+      );
+    }
+
+    return NextResponse.json(JSON.parse(raw));
+  } catch (err: any) {
+    console.error(err);
     return NextResponse.json(
-      { error: error.message ?? "Internal error" },
+      { error: err.message ?? "Internal server error" },
       { status: 500 }
     );
   }

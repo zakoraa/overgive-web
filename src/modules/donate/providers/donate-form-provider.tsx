@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import { useCreatePayment } from "../hooks/use-create-payment";
+import { PaymentRequestResponse } from "../types/create-payment-request";
 
 const MAX_AMOUNT = 999_999_999;
 
@@ -31,7 +32,7 @@ interface DonateFormContextValue {
     value: DonateFormValues[K],
   ) => void;
 
-  submit: () => Promise<any>;
+  submit: () => Promise<PaymentRequestResponse | null>;
 }
 
 const DonateFormContext = createContext<DonateFormContextValue | null>(null);
@@ -97,18 +98,15 @@ export const DonateFormProvider = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const submit = async () => {
+  const submit = async (): Promise<PaymentRequestResponse | null> => {
     setSubmitError(null);
 
-    // VALIDASI FORM → jangan isi submitError
     if (!validate()) return null;
-
-    const external_id = "donation_" + Date.now();
 
     const payload = {
       amount: values.amount,
-      external_id,
-      description: values.message || "Donation Payment",
+      reference_id: `donation_${Date.now()}`,
+      description: "QRIS Donation",
       metadata: {
         name: values.name,
         email: values.email,
@@ -120,14 +118,12 @@ export const DonateFormProvider = ({
     const res = await createPayment(payload);
 
     if (!res.success) {
-      // Hanya error dari createPayment
       setSubmitError("Gagal membuat pembayaran");
       return null;
     }
 
-    return res.data; // sukses
+    return res.data as PaymentRequestResponse;
   };
-
   return (
     <DonateFormContext.Provider
       value={{
