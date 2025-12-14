@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
 
@@ -25,14 +25,16 @@ export const Modal: React.FC<ModalProps> = ({
 
   // ESC to close
   useEffect(() => {
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && !disableClose) onClose();
-    };
+    if (typeof document !== "undefined") {
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key === "Escape" && !disableClose) onClose();
+      };
 
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
+      if (isOpen) {
+        document.addEventListener("keydown", handleEscape);
+      }
+      return () => document.removeEventListener("keydown", handleEscape);
     }
-    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose, disableClose]);
 
   // Disable body scroll

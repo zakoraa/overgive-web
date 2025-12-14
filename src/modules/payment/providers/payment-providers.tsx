@@ -2,10 +2,10 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { getPayment } from "../services/get-payment";
-import { PaymentData } from "../types/payment";
+import { PaymentRequest } from "../types/payment";
 
 interface PaymentContextType {
-  payment: PaymentData | null;
+  payment: PaymentRequest | null;
   loading: boolean;
   reload: () => Promise<void>;
 }
@@ -25,7 +25,7 @@ export function PaymentProvider({
   orderId: string;
   children: React.ReactNode;
 }) {
-  const [payment, setPayment] = useState<PaymentData | null>(null);
+  const [payment, setPayment] = useState<PaymentRequest | null>(null);
   const [loading, setLoading] = useState(true);
 
   const load = async () => {

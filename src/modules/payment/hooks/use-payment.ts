@@ -18,6 +18,7 @@ export function usePayment(paymentRequestId: string) {
       try {
         const data = await getPayment(paymentRequestId);
         setPayment(data);
+        console.log("PAYMENT SIMULATION DATA: ", data)
 
         // stop polling kalau sudah final
         if (

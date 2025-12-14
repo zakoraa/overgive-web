@@ -7,10 +7,11 @@ import { useDonateForm } from "../../providers/donate-form-provider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ModalInfo } from "@/core/components/modal/modal-info";
+import { ModalLoading } from "@/core/components/modal/modal-loading";
 
 export const DonateButton = () => {
   const router = useRouter();
-  const { submitError, submit, values } = useDonateForm();
+  const { submitError, submit, values, loading } = useDonateForm();
 
   // Modal States
   const [modalOpen, setModalOpen] = useState(false);
@@ -18,7 +19,6 @@ export const DonateButton = () => {
 
   const handleSubmit = async () => {
     const result = await submit();
-    console.log("RESULT EX: ", result)
 
     // Kalau result null dan submitError ada → modal muncul
     if (!result && submitError) {
@@ -37,6 +37,7 @@ export const DonateButton = () => {
   return (
     <>
       {/* Modal */}
+      <ModalLoading isOpen={loading}/>
       <ModalInfo
         isOpen={modalOpen}
         isSuccess={false}
@@ -58,6 +59,7 @@ export const DonateButton = () => {
 
           <AppButton
             onClick={handleSubmit}
+            disabled={loading}
             text="Lanjut pembayaran"
             className="bg-primary hover:bg-primary/80 h-12 w-[58%] rounded-xl! text-white"
           />

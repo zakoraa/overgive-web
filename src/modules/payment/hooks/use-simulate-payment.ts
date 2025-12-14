@@ -16,6 +16,8 @@ export function useSimulatePayment() {
       const res = await simulatePayment(paymentRequestId, amount);
       setData(res);
 
+      console.log("SIMULATE DATA: ", res)
+
       return res;
     } catch (err: any) {
       setError(err.message);

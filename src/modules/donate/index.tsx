@@ -11,7 +11,7 @@ export const Donate = ({ campaign }: DonateProps) => {
   return (
     <BasePage className="border-none bg-transparent">
       <CampaignDetailProvider initialCampaign={campaign}>
-        <DonateForm />
+        <DonateForm campaignId={campaign.id} />
       </CampaignDetailProvider>
     </BasePage>
   );

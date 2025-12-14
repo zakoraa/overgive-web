@@ -12,6 +12,7 @@ import { Card } from "@/core/components/ui/card";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
 import { ModalInfo } from "@/core/components/modal/modal-info";
 import BasePage from "@/core/layout/base-page";
+import { formatRupiah } from "@/core/utils/currency";
 
 export default function PaymentPage({ id }: { id: string }) {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function PaymentPage({ id }: { id: string }) {
   // ===============================
   useEffect(() => {
     if (payment?.status === "SUCCEEDED" && !hasShownSuccessModal) {
+      console.log("SUCCESED PAYMENT: ", payment);
       setShowSuccessModal(true);
       setHasShownSuccessModal(true);
     }
@@ -142,7 +144,7 @@ export default function PaymentPage({ id }: { id: string }) {
         <Card className="p-4 text-center shadow-sm">
           <p className="text-sm text-gray-500">Jumlah Pembayaran</p>
           <p className="text-primary text-2xl font-black">
-            Rp {payment.request_amount.toLocaleString("id-ID")}
+            {formatRupiah(payment.request_amount)}
           </p>
         </Card>
       </BasePage>

@@ -39,8 +39,12 @@ const DonateFormContext = createContext<DonateFormContextValue | null>(null);
 
 export const DonateFormProvider = ({
   children,
+  campaignId, // tambahkan campaignId sebagai prop
+  userId,
 }: {
   children: React.ReactNode;
+  campaignId: string;
+  userId?: string | null | undefined;
 }) => {
   const [values, setValues] = useState<DonateFormValues>({
     amount: 0,
@@ -108,10 +112,12 @@ export const DonateFormProvider = ({
       reference_id: `donation_${Date.now()}`,
       description: "QRIS Donation",
       metadata: {
-        name: values.name,
+        user_id: userId,
+        campaign_id: campaignId,
+        username: values.name,
         email: values.email,
         message: values.message,
-        isAnonymous: values.isAnonymous,
+        is_anonymous: values.isAnonymous,
       },
     };
 
@@ -124,6 +130,7 @@ export const DonateFormProvider = ({
 
     return res.data as PaymentRequestResponse;
   };
+
   return (
     <DonateFormContext.Provider
       value={{

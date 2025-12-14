@@ -11,7 +11,7 @@ export async function simulatePayment(
   paymentRequestId: string,
   amount?: number
 ): Promise<SimulatePaymentResponse> {
-    const url = await absoluteUrl("/api/payment/simulate");
+  const url = await absoluteUrl("/api/payment/simulate");
   const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

@@ -3,7 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { amount } = body;
+    const { amount, metadata: CreateQrisMetadataPayload } = body;
+    const { username, email, campaign_id, message, isAnonymous, user_id } = CreateQrisMetadataPayload;
 
     if (!amount) {
       return NextResponse.json(
@@ -27,7 +28,13 @@ export async function POST(req: NextRequest) {
       },
       description: "QRIS Donation",
       metadata: {
-        orderId,
+        user_id,
+        campaign_id, 
+        order_id: orderId,
+        username,
+        email, 
+        message, 
+        isAnonymous
       },
     };
 

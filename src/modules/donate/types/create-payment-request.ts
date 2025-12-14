@@ -2,7 +2,16 @@ export interface CreateQrisPayload {
   amount: number;
   // external_id: string;
   // description?: string;
-  // metadata?: Record<string, any>;  
+  metadata?: CreateQrisMetadataPayload;  
+}
+
+export interface CreateQrisMetadataPayload{
+  user_id: string | null | undefined;
+  campaign_id: string; 
+  username: string;
+  email: string;
+  message: string;
+  is_anonymous: boolean;
 }
 
 export interface PaymentRequestAction {

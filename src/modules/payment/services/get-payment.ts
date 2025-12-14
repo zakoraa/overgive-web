@@ -1,14 +1,11 @@
 import { PaymentRequest } from "../types/payment";
 
-export async function getPayment(
-  paymentRequestId: string,
-): Promise<PaymentRequest> {
-  const res = await fetch(`/api/payment/${paymentRequestId}`, {
-    cache: "no-store",
-  });
+export async function getPayment(paymentRequestId: string): Promise<PaymentRequest> {
+  const res = await fetch(`/api/payment/${paymentRequestId}`, { cache: "no-store" });
 
   if (!res.ok) {
-    throw new Error("Gagal mengambil status pembayaran");
+    const text = await res.text();
+    throw new Error(text || "Gagal mengambil status pembayaran");
   }
 
   return res.json();
