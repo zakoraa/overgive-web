@@ -36,8 +36,10 @@ export async function POST(req: Request) {
         { status: res.status }
       );
     }
-
-    return NextResponse.json(JSON.parse(raw));
+    const result = JSON.parse(raw);
+    
+    console.log("Result Simulate: ", result)
+    return NextResponse.json(result);
   } catch (err: any) {
     return NextResponse.json(
       { error: err.message ?? "Internal server error" },

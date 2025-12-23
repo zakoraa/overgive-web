@@ -1,0 +1,4 @@
+export const IPFS_GROUP = {
+  DONATIONS: process.env.PINATA_GROUP_DONATIONS,
+  CAMPAIGN_DELIVERIES: process.env.PINATA_GROUP_CAMPAIGN_DELIVERIES,
+} as const;

@@ -4,7 +4,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { amount, metadata: CreateQrisMetadataPayload } = body;
-    const { username, email, campaign_id, message, isAnonymous, user_id } = CreateQrisMetadataPayload;
+    const { username, email, campaign_id, message, is_anonymous, user_id } = CreateQrisMetadataPayload;
 
     if (!amount) {
       return NextResponse.json(
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
         username,
         email, 
         message, 
-        isAnonymous
+        is_anonymous: is_anonymous
       },
     };
 

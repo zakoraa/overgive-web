@@ -1,10 +1,10 @@
 import { ethers } from "ethers";
-import { DONATIONS_ABI } from "../lib/abi/donations/donation-abi";
+import { DONATIONS_ABI } from "@/core/lib/abi/donations/donation-abi";
 
 function toBytes32(str: string): string {
   const bytes = ethers.toUtf8Bytes(str);
   const padded = new Uint8Array(32);
-  padded.set(bytes.slice(0, 32)); // potong kalau lebih dari 32
+  padded.set(bytes.slice(0, 32));
   return ethers.hexlify(padded);
 }
 
@@ -16,38 +16,57 @@ export async function saveDonationToBlockchain(
   currency: string,
   donationHash: string,
   confirmedAt: number
-): Promise<string> {
-  try {
-    if (!process.env.CONTRACT_RPC || !process.env.CONTRACT_PRIVATE_KEY || !process.env.CONTRACT_ADDRESS) {
-      throw new Error("Missing environment variables for blockchain");
-    }
-
-    // provider dan wallet signer
-    const provider = new ethers.JsonRpcProvider(process.env.CONTRACT_RPC);
-    const wallet = new ethers.Wallet(process.env.CONTRACT_PRIVATE_KEY, provider);
-
-    // pastikan wallet sebagai signer
-    const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, DONATIONS_ABI, wallet);
-
-    // konversi donationHash ke bytes32
-    const donationHashBytes = toBytes32(donationHash);
-
-    // kirim transaksi
-    const tx = await contract.storeDonation(
-      donationId,
-      campaignId,
-      paymentRef,
-      BigInt(amount),
-      currency,
-      donationHashBytes,
-      BigInt(confirmedAt)
-    );
-
-    const receipt = await tx.wait();
-    console.log("Donation saved on blockchain, tx hash:", receipt.transactionHash);
-    return receipt.transactionHash;
-  } catch (err: any) {
-    console.error("Error saving donation to blockchain:", err.message || err);
-    throw err;
+): Promise<{
+  txHash: string;
+  blockNumber: number;
+  gasUsed: string;
+}> {
+  if (
+    !process.env.CONTRACT_RPC ||
+    !process.env.CONTRACT_PRIVATE_KEY ||
+    !process.env.CONTRACT_ADDRESS
+  ) {
+    throw new Error("Missing blockchain env variables");
   }
+
+  const provider = new ethers.JsonRpcProvider(process.env.CONTRACT_RPC);
+  const wallet = new ethers.Wallet(
+    process.env.CONTRACT_PRIVATE_KEY,
+    provider
+  );
+
+  const contract = new ethers.Contract(
+    process.env.CONTRACT_ADDRESS,
+    DONATIONS_ABI,
+    wallet
+  );
+
+  console.log("🚀 Sending storeDonation tx...");
+
+  const tx = await contract.storeDonation(
+    donationId,
+    campaignId,
+    paymentRef,
+    BigInt(amount),                 // ✅ sama kayak testing
+    currency,
+    toBytes32(donationHash),        // ✅ FIX UTAMA
+    BigInt(confirmedAt)
+  );
+
+  console.log("📨 TX SENT");
+  console.log("tx.hash =", tx.hash);
+
+  const receipt = await tx.wait();
+
+  console.log("✅ TX CONFIRMED");
+  console.log("receipt =", receipt);
+  console.log("status =", receipt.status);
+  console.log("blockNumber =", receipt.blockNumber);
+  console.log("gasUsed =", receipt.gasUsed.toString());
+
+  return {
+    txHash: receipt.hash,
+    blockNumber: receipt.blockNumber,
+    gasUsed: receipt.gasUsed.toString(),
+  };
 }

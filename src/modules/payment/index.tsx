@@ -1,66 +1,38 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import QRCode from "qrcode";
 
 import { usePayment } from "@/modules/payment/hooks/use-payment";
 import { useSimulatePayment } from "@/modules/payment/hooks/use-simulate-payment";
+import { usePaymentQR } from "@/modules/payment/hooks/use-payment-qr";
 
 import { Card } from "@/core/components/ui/card";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
 import { ModalInfo } from "@/core/components/modal/modal-info";
 import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
+import { useDonationFinalize } from "./hooks/use-donation-finalize";
+import { useState } from "react";
 
 export default function PaymentPage({ id }: { id: string }) {
   const router = useRouter();
+  const [hasSimulated, setHasSimulated] = useState(false);
 
   const { payment, loading } = usePayment(id);
+  const qrImage = usePaymentQR(payment);
+
+  const {
+    processing: finalizeProcessing,
+    success: finalizeSuccess,
+    error: finalizeError,
+  } = useDonationFinalize(payment);
 
   const {
     run: simulatePayment,
     loading: simulateLoading,
-    data: simulateData,
     error: simulateError,
   } = useSimulatePayment();
-
-  const [qrImage, setQrImage] = useState<string>("");
-
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [hasShownSuccessModal, setHasShownSuccessModal] = useState(false);
-
-  // ===============================
-  // Generate QR Image dari actions
-  // ===============================
-  useEffect(() => {
-    if (!payment?.actions) return;
-
-    const qrString = payment.actions.find(
-      (a) => a.type === "PRESENT_TO_CUSTOMER" && a.descriptor === "QR_STRING",
-    )?.value;
-
-    if (qrString) {
-      QRCode.toDataURL(qrString).then(setQrImage);
-    }
-  }, [payment]);
-
-  // ===============================
-  // Show success modal (once)
-  // ===============================
-  useEffect(() => {
-    if (payment?.status === "SUCCEEDED" && !hasShownSuccessModal) {
-      console.log("SUCCESED PAYMENT: ", payment);
-      setShowSuccessModal(true);
-      setHasShownSuccessModal(true);
-    }
-  }, [payment?.status, hasShownSuccessModal]);
-
-  const handleCloseSuccessModal = () => {
-    setShowSuccessModal(false);
-    router.replace("/");
-  };
 
   if (loading || !payment) {
     return <ModalLoading isOpen />;
@@ -68,13 +40,22 @@ export default function PaymentPage({ id }: { id: string }) {
 
   return (
     <>
-      <ModalLoading isOpen={simulateLoading} />
-      {/* MODAL SUCCESS */}
+      <ModalLoading
+        isOpen={(loading && payment) || simulateLoading || finalizeProcessing}
+      />
+
       <ModalInfo
-        isOpen={showSuccessModal}
-        onClose={handleCloseSuccessModal}
+        isOpen={finalizeSuccess}
         isSuccess
         message="Terima kasih 🙏<br/>Pembayaran donasi kamu berhasil diproses."
+        onClose={() => router.replace("/")}
+      />
+
+      <ModalInfo
+        isOpen={!!finalizeError || !!simulateError}
+        isSuccess={false}
+        message={finalizeError ?? simulateError ?? ""}
+        onClose={() => router.replace("/")}
       />
 
       <BasePage className="space-y-4 border-none bg-transparent p-4">
@@ -119,24 +100,20 @@ export default function PaymentPage({ id }: { id: string }) {
             </p>
           )}
 
-          {payment.status !== "SUCCEEDED" && (
+          {payment.status !== "SUCCEEDED" && !hasSimulated && (
             <button
               onClick={async () => {
+                setHasSimulated(true);
                 await simulatePayment(
                   payment.payment_request_id,
                   payment.request_amount,
                 );
               }}
               disabled={simulateLoading}
-              className="mt-3 cursor-pointer rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 disabled:opacity-50"
+              className="mt-3 cursor-pointer rounded bg-blue-400 px-4 py-2 text-white hover:bg-blue-500 disabled:opacity-50"
             >
               Simulasi Pembayaran
             </button>
-          )}
-
-          {/* ERROR */}
-          {simulateError && (
-            <p className="text-sm text-red-600">{simulateError}</p>
           )}
         </Card>
 

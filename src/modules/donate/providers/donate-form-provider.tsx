@@ -120,6 +120,7 @@ export const DonateFormProvider = ({
         is_anonymous: values.isAnonymous,
       },
     };
+    console.log("REQUEST PAYMENT PAYLOAD: ", payload);
 
     const res = await createPayment(payload);
 

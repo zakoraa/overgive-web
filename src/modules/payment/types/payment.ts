@@ -63,21 +63,36 @@ export interface PaymentAction {
 export interface PaymentRequest {
   payment_request_id: string;
   reference_id: string;
-  status:
-    | "ACCEPTING_PAYMENTS"
-    | "REQUIRES_ACTION"
-    | "AUTHORIZED"
-    | "SUCCEEDED"
-    | "FAILED"
-    | "EXPIRED"
-    | "CANCELED";
+  status:PaymentStatus;
 
   request_amount: number;
   currency: string;
   channel_code: string;
 
+  metadata: PaymentMetadata;
+
   actions?: PaymentAction[];
 
   created: string;
   updated: string;
+}
+
+
+export type PaymentStatus =
+  | "ACCEPTING_PAYMENTS"
+  | "REQUIRES_ACTION"
+  | "AUTHORIZED"
+  | "SUCCEEDED"
+  | "FAILED"
+  | "EXPIRED"
+  | "CANCELED";
+
+export interface PaymentMetadata {
+  campaign_id: string;
+  email: string;
+  message?: string;
+  order_id: string;
+  user_id: string;
+  username: string;
+  is_anonymous:boolean;
 }
