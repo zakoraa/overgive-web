@@ -1,0 +1,73 @@
+import { DonationIPFS } from "@/core/types/donation-ipfs";
+import { NextResponse } from "next/server";
+
+interface PinataRow {
+  ipfs_pin_hash: string;
+  date_pinned: string;
+  size: number;
+  data: DonationIPFS;
+}
+
+export async function GET(
+  _req: Request,
+  { params }: { params: { campaignId: string } }
+) {
+  const { campaignId } =await params;
+
+  const url = new URL("https://api.pinata.cloud/data/pinList");
+  url.searchParams.set("status", "pinned");
+ url.searchParams.set(
+    "metadata",
+    JSON.stringify({
+      keyvalues: {
+        campaign_id: campaignId
+      }
+    })
+  );
+
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      Authorization: `Bearer ${process.env.PINATA_JWT}`,
+    },
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    return NextResponse.json(
+      { success: false, error: text },
+      { status: res.status }
+    );
+  }
+
+  const data = await res.json();
+
+  const filteredRows = (data.rows as any[]).filter(
+  (row) => row.metadata?.keyvalues?.campaign_id === campaignId
+);
+
+  // 🔑 ambil isi JSON dari IPFS
+  const donations = await Promise.all(
+    (filteredRows as PinataRow[]).map(async (row) => {
+      const gatewayUrl = `https://gateway.pinata.cloud/ipfs/${row.ipfs_pin_hash}`;
+
+      const jsonRes = await fetch(gatewayUrl, { cache: "no-store" });
+      const jsonData = await jsonRes.json();
+
+      return jsonData as DonationIPFS
+    })
+  );
+
+  donations.forEach((d, i) => {
+  console.log(`Donation #${i}:`, JSON.stringify(d, null, 2));
+});
+
+
+  console.log("DONATIONS: ", donations)
+
+  return NextResponse.json({
+    success: true,
+    data: donations,
+  });
+}
