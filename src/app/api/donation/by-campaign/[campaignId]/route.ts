@@ -1,4 +1,4 @@
-import { DonationIPFS } from "@/core/types/donation-ipfs";
+import { DonationIPFS } from "@/modules/donation/types/donation-ipfs";
 import { NextResponse } from "next/server";
 
 interface PinataRow {

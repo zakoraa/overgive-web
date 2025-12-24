@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PaymentRequest } from "@/modules/payment/types/payment";
-import { saveDonationToIPFS } from "@/core/services/save-donation-to-ipfs";
-import { buildDonationIPFSPayload } from "@/core/services/build-donation-ipfs-payload";
+import { saveDonationToIPFS } from "@/modules/donation/services/save-donation-to-ipfs";
+import { buildDonationIPFSPayload } from "@/modules/donation/services/build-donation-ipfs-payload";
 import { IPFS_GROUP } from "@/core/types/ipfs-group";
 
 interface SaveDonationToIPFSRequest {

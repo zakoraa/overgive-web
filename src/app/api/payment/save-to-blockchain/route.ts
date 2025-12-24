@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-import { saveDonationToBlockchain } from "@/core/services/save-donation-to-blockchain";
+import { saveDonationToBlockchain } from "@/modules/donation/services/save-donation-to-blockchain";
 
 export async function POST(req: Request) {
   try {

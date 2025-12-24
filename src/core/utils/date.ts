@@ -12,6 +12,32 @@ export const formatDate = (timestamp: string | undefined): string => {
   return `${day} ${month} ${year}`;
 };
 
+export const formatDateTimeWIB = (
+  timestamp: string | undefined
+): string => {
+  if (!timestamp) return "";
+
+  const date = new Date(timestamp);
+
+  // konversi ke WIB (UTC+7)
+  const wib = new Date(date.getTime() + 7 * 60 * 60 * 1000);
+
+  const months = [
+    "Jan","Feb","Mar","Apr","Mei","Jun",
+    "Jul","Agu","Sep","Okt","Nov","Des"
+  ];
+
+  const day = wib.getUTCDate();
+  const month = months[wib.getUTCMonth()];
+  const year = wib.getUTCFullYear();
+
+  const hours = wib.getUTCHours().toString().padStart(2, "0");
+  const minutes = wib.getUTCMinutes().toString().padStart(2, "0");
+
+  return `${day} ${month} ${year}, ${hours}:${minutes} WIB`;
+};
+
+
 export function getRemainingDays(targetDateString: string | undefined): string {
   if (!targetDateString) return "";
 

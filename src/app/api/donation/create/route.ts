@@ -1,6 +1,6 @@
 import { generateDonationHash } from "@/core/lib/generate-donation-hash";
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
-import { saveDonationToBlockchain } from "@/core/services/save-donation-to-blockchain";
+import { saveDonationToBlockchain } from "@/modules/donation/services/save-donation-to-blockchain";
 import { NextResponse } from "next/server";
 
 interface CreateDonationRequest {

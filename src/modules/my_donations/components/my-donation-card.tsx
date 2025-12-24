@@ -1,14 +1,19 @@
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
-import { Donation } from "@/core/types/donation";
+import { Donation } from "@/modules/donation/types/donation";
 import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
+import { useRouter } from "next/navigation";
 
 export const MyDonationCard = ({ donation }: { donation: Donation }) => {
   const { campaign } = donation;
+  const router = useRouter();
 
   return (
-    <Card className="hover:bg-hover flex h-24 cursor-pointer transition-colors duration-300">
+    <Card
+      onClick={() => router.push(`/donation/${donation.id}`)}
+      className="hover:bg-hover flex h-24 cursor-pointer transition-colors duration-300"
+    >
       <img
         src={
           campaign.image_url ??

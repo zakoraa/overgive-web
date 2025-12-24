@@ -43,7 +43,7 @@ export function GetDonationsProvider({
     try {
       const data = await getDonations({ user_id, campaign_id });
       setDonations(data);
-      console.log("Donation DATA: ", data)
+      console.log("Donation DATA: ", data);
       setError(null);
     } catch (e: any) {
       setError(e.message ?? "Gagal mengambil donasi");

@@ -4,7 +4,7 @@ import { Card } from "@/core/components/ui/card";
 import { DonorDonationCard } from "./donor-donation-card";
 import { CampaignTitleCard } from "../ui/campaign-title-card";
 import CircularLoading from "@/core/components/ui/circular-loading";
-import { useGetDonationsContext } from "@/core/providers/get-donations-provider";
+import { useGetDonationsContext } from "@/modules/donation/providers/get-donations-provider";
 
 export const CampaignDonorsCard = () => {
   const { donations, loading, error } = useGetDonationsContext();

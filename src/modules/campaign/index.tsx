@@ -7,7 +7,7 @@ import { CampaignDetailsOfFundCard } from "./components/campaign-details-of-fund
 import { DonationButton } from "./components/ui/donation-button";
 import { Campaign as CampaignType } from "@/core/types/campaign";
 import { CampaignDetailProvider } from "./providers/campaign-detail-provider";
-import { GetDonationsProvider } from "@/core/providers/get-donations-provider";
+import { GetDonationsProvider } from "@/modules/donation/providers/get-donations-provider";
 
 interface CampaignProps {
   initialCampaign: CampaignType;

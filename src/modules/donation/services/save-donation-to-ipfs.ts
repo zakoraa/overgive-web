@@ -1,4 +1,4 @@
-import { pinata } from "../lib/pinata/config";
+import { pinata } from "../../../core/lib/pinata/config";
 
 export interface SaveToIPFSResult {
   cid: string;

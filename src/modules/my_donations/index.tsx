@@ -11,7 +11,7 @@ import { LoginRequired } from "@/core/components/ui/login-required";
 import {
   GetDonationsProvider,
   useGetDonationsContext,
-} from "@/core/providers/get-donations-provider";
+} from "@/modules/donation/providers/get-donations-provider";
 
 export const MyDonations = () => {
   const { user, loading } = useGetCurrentUserContext();

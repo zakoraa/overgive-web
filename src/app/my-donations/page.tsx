@@ -1,7 +1,7 @@
 "use client";
 
 import CircularLoading from "@/core/components/ui/circular-loading";
-import { GetDonationsProvider } from "@/core/providers/get-donations-provider";
+import { GetDonationsProvider } from "@/modules/donation/providers/get-donations-provider";
 import { useGetCurrentUserContext } from "@/core/providers/use-get-current-user";
 import { MyDonations } from "@/modules/my_donations";
 

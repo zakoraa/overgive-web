@@ -1,6 +1,6 @@
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
-import { Donation } from "@/core/types/donation";
+import { Donation } from "@/modules/donation/types/donation";
 import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
 
