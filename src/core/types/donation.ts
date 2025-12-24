@@ -1,0 +1,15 @@
+export interface Donation {
+  id?: string;
+  user_id?: string | null;
+  username?: string | null;
+  user_email?: string | null;
+  is_anonymous?: boolean;
+  campaign_id: string;
+  amount: number;
+  currency?: string;
+  xendit_reference_id?: string | null;
+  donation_message?: string | null;
+  donation_hash?: string | null;
+  blockchain_tx_hash?: string | null;
+  created_at?: string;
+}

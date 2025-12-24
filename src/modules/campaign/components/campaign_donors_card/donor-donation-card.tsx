@@ -1,28 +1,26 @@
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
-import { DonationIPFS } from "@/core/types/donation-ipfs";
+import { Donation } from "@/core/types/donation";
 import { formatRupiah } from "@/core/utils/currency";
+import { timeAgo } from "@/core/utils/date";
 
 interface DonorDonationCardProps {
-  donation: DonationIPFS;
+  donation: Donation;
 }
 
 export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
-  const isAnonymous = donation.donor?.is_anonymous;
+  const isAnonymous = donation.is_anonymous;
   const donorName = isAnonymous
     ? "Donatur Baik"
-    : (donation.donor?.username ?? "Donatur");
+    : (donation.username ?? "Donatur");
 
-  const amount = donation.donation.amount;
-  const createdAt = donation.donation.created_at;
-
-  const minutesAgo = Math.floor(
-    (Date.now() - new Date(createdAt).getTime()) / 60000,
-  );
+  const amount = donation.amount;
+  const createdAt = donation.created_at;
+  const message = donation.donation_message;
 
   return (
-    <Card className="flex h-22 flex-col p-3">
-      <Label size="md" className="text-start" text={donorName} />
+    <Card className="flex h-fit flex-col px-3 py-2">
+      <h3 className="text-start font-bold">{donorName}</h3>
 
       <div className="space-y-1">
         <p className="text-sm">
@@ -30,9 +28,8 @@ export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
           <span className="font-black">{formatRupiah(amount)}</span>
         </p>
 
-        <p className="text-end text-xs text-gray-500">
-          {minutesAgo <= 0 ? "Baru saja" : `${minutesAgo} menit lalu`}
-        </p>
+        <p className="line-clamp-2 text-xs text-gray-500">{message}</p>
+        <p className="text-end text-xs text-gray-500">{timeAgo(createdAt)}</p>
       </div>
     </Card>
   );

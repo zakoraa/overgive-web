@@ -21,7 +21,7 @@ export const Campaign = ({ initialCampaign }: CampaignProps) => {
         <CampaignBackgroundCard />
         <CampaignLatestNewsCard />
         <CampaignDetailsOfFundCard />
-        <GetDonationsProvider id={initialCampaign.id} by={"campaignId"}>
+        <GetDonationsProvider campaign_id={initialCampaign.id}>
           <CampaignDonorsCard />
         </GetDonationsProvider>
         <DonationButton />

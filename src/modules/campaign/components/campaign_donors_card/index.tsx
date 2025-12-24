@@ -3,11 +3,14 @@
 import { Card } from "@/core/components/ui/card";
 import { DonorDonationCard } from "./donor-donation-card";
 import { CampaignTitleCard } from "../ui/campaign-title-card";
-import { useDonationsContext } from "@/core/providers/get-donations-provider";
 import CircularLoading from "@/core/components/ui/circular-loading";
+import { useGetDonationsContext } from "@/core/providers/get-donations-provider";
 
 export const CampaignDonorsCard = () => {
-  const { donations, loading, error } = useDonationsContext();
+  const { donations, loading, error } = useGetDonationsContext();
+
+  // ambil 5 donasi terbaru saja
+  const topDonations = donations.slice(0, 5);
 
   return (
     <Card className="space-y-2 px-5 py-5 pb-20">
@@ -22,7 +25,7 @@ export const CampaignDonorsCard = () => {
       )}
       {!loading &&
         !error &&
-        donations.map((donation, index) => (
+        topDonations.map((donation, index) => (
           <DonorDonationCard key={index} donation={donation} />
         ))}
     </Card>

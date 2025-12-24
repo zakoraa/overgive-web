@@ -12,8 +12,8 @@ import { ModalLoading } from "@/core/components/modal/modal-loading";
 import { ModalInfo } from "@/core/components/modal/modal-info";
 import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
-import { useDonationFinalize } from "./hooks/use-donation-finalize";
 import { useState } from "react";
+import { useCreateDonation } from "./hooks/create-donation";
 
 export default function PaymentPage({ id }: { id: string }) {
   const router = useRouter();
@@ -23,10 +23,10 @@ export default function PaymentPage({ id }: { id: string }) {
   const qrImage = usePaymentQR(payment);
 
   const {
-    processing: finalizeProcessing,
-    success: finalizeSuccess,
-    error: finalizeError,
-  } = useDonationFinalize(payment);
+    processing: donationProcessing,
+    success: donationSuccess,
+    error: donationError,
+  } = useCreateDonation(payment);
 
   const {
     run: simulatePayment,
@@ -41,20 +41,20 @@ export default function PaymentPage({ id }: { id: string }) {
   return (
     <>
       <ModalLoading
-        isOpen={(loading && payment) || simulateLoading || finalizeProcessing}
+        isOpen={(loading && payment) || simulateLoading || donationProcessing}
       />
 
       <ModalInfo
-        isOpen={finalizeSuccess}
+        isOpen={donationSuccess}
         isSuccess
         message="Terima kasih 🙏<br/>Pembayaran donasi kamu berhasil diproses."
         onClose={() => router.replace("/")}
       />
 
       <ModalInfo
-        isOpen={!!finalizeError || !!simulateError}
+        isOpen={!!donationError || !!simulateError}
         isSuccess={false}
-        message={finalizeError ?? simulateError ?? ""}
+        message={donationError ?? simulateError ?? ""}
         onClose={() => router.replace("/")}
       />
 
