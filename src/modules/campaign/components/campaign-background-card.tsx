@@ -23,7 +23,7 @@ export const CampaignBackgroundCard = () => {
           "prose max-w-none overflow-hidden transition-all duration-300",
           !expanded && "max-h-40",
         )}
-        dangerouslySetInnerHTML={{ __html: campaign.backgroundHtml }}
+        dangerouslySetInnerHTML={{ __html: campaign.background_html }}
       />
 
       {/* Overlay + Read more */}
