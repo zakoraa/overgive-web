@@ -5,11 +5,14 @@ import { DonorDonationCard } from "./donor-donation-card";
 import { CampaignTitleCard } from "../ui/campaign-title-card";
 import CircularLoading from "@/core/components/ui/circular-loading";
 import { useGetDonationsContext } from "@/modules/donation/providers/get-donations-provider";
+import { useRouter } from "next/navigation";
+import { useCampaignDetailContext } from "../../providers/campaign-detail-provider";
 
 export const CampaignDonorsCard = () => {
+  const router = useRouter();
   const { donations, loading, error } = useGetDonationsContext();
+  const { campaign } = useCampaignDetailContext();
 
-  // ambil 5 donasi terbaru saja
   const topDonations = donations.slice(0, 5);
 
   return (
@@ -17,7 +20,7 @@ export const CampaignDonorsCard = () => {
       <CampaignTitleCard
         count={donations.length}
         title="Donatur"
-        onClick={() => {}}
+        onClick={() => router.push(`/campaign/${campaign?.id}/donations`)}
       />
       {loading && <CircularLoading />}
       {!loading && !error && donations.length === 0 && (

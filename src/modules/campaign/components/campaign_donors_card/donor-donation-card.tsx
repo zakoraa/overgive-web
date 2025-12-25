@@ -3,6 +3,7 @@ import { Card } from "@/core/components/ui/card";
 import { Donation } from "@/modules/donation/types/donation";
 import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
+import { useRouter } from "next/navigation";
 
 interface DonorDonationCardProps {
   donation: Donation;
@@ -17,9 +18,13 @@ export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
   const amount = donation.amount;
   const createdAt = donation.created_at;
   const message = donation.donation_message;
+  const router = useRouter();
 
   return (
-    <Card className="flex h-fit flex-col px-3 py-2">
+    <Card
+      onClick={() => router.push(`/donation/${donation.id}`)}
+      className="cursor-pointer hover:bg-hover transition-color duration-300 flex h-fit flex-col px-3 py-2"
+    >
       <h3 className="text-start font-bold">{donorName}</h3>
 
       <div className="space-y-1">

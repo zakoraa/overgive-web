@@ -8,10 +8,7 @@ import { Line } from "@/core/components/ui/line";
 import { useGetCurrentUserContext } from "@/core/providers/use-get-current-user";
 import CircularLoading from "@/core/components/ui/circular-loading";
 import { LoginRequired } from "@/core/components/ui/login-required";
-import {
-  GetDonationsProvider,
-  useGetDonationsContext,
-} from "@/modules/donation/providers/get-donations-provider";
+import { useGetDonationsContext } from "@/modules/donation/providers/get-donations-provider";
 
 export const MyDonations = () => {
   const { user, loading } = useGetCurrentUserContext();
