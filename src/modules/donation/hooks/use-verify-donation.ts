@@ -1,0 +1,55 @@
+import { useEffect, useState } from "react";
+import { generateDonationHash } from "@/core/lib/generate-donation-hash";
+import { DonationWithBlockchain } from "../services/get-donation-by-id";
+import { extractDonationHashFromInput } from "../utils/extract-donation-hash-from-input";
+
+export function useVerifyDonation(donation: DonationWithBlockchain | null) {
+  const [isValid, setIsValid] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!donation || !donation.blockchain_tx_hash) return;
+
+    const verify = async () => {
+      setLoading(true);
+
+      // 1️⃣ generate ulang hash dari data DB
+      const regeneratedHash = generateDonationHash({
+        user_id: donation.user_id,
+        username: donation.username,
+        user_email: donation.user_email,
+        campaign_id: donation.campaign_id,
+        amount: donation.amount,
+        currency: donation.currency,
+        donation_message: donation.donation_message,
+        xendit_reference_id: donation.xendit_reference_id,
+      });
+
+
+      if (!donation.blockchain) {
+        setIsValid(false);
+        setLoading(false);
+        return;
+      }
+
+      // 3️⃣ extract hash dari input tx
+      const blockchainHash = extractDonationHashFromInput(
+        donation.blockchain.input
+      );
+
+      console.log("regeneratedHash: ", regeneratedHash)
+      console.log("blockchainHash: ", blockchainHash)
+      console.log("donation.blockchain.input: ", donation.blockchain.input)
+      // 4️⃣ bandingkan
+      setIsValid(regeneratedHash === blockchainHash);
+      setLoading(false);
+    };
+
+    verify();
+  }, [donation]);
+
+  return {
+    isValid,
+    loading,
+  };
+}

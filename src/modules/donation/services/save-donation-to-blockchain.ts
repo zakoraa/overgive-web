@@ -1,13 +1,6 @@
 import { ethers } from "ethers";
 import { DONATIONS_ABI } from "@/core/lib/abi/donations/donation-abi";
 
-function toBytes32(str: string): string {
-  const bytes = ethers.toUtf8Bytes(str);
-  const padded = new Uint8Array(32);
-  padded.set(bytes.slice(0, 32));
-  return ethers.hexlify(padded);
-}
-
 export async function saveDonationToBlockchain(
   donationId: string,
   campaignId: string,
@@ -42,14 +35,15 @@ export async function saveDonationToBlockchain(
   );
 
   console.log("🚀 Sending storeDonation tx...");
+  const donationHashBytes32 = "0x" + donationHash;
 
   const tx = await contract.storeDonation(
     donationId,
     campaignId,
     paymentRef,
-    BigInt(amount),                 // ✅ sama kayak testing
+    BigInt(amount),               
     currency,
-    toBytes32(donationHash),        // ✅ FIX UTAMA
+    donationHashBytes32,       
     BigInt(confirmedAt)
   );
 

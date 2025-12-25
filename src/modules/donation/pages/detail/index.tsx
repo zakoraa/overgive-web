@@ -4,16 +4,20 @@ import BasePage from "@/core/layout/base-page";
 import { DonationWithBlockchain } from "../../services/get-donation-by-id";
 import { formatDateTimeWIB } from "@/core/utils/date";
 import { formatRupiah } from "@/core/utils/currency";
-import { addressLink, txLink } from "@/core/utils/amoy";
+import { txLink } from "@/core/utils/amoy";
 import { Line } from "@/core/components/ui/line";
 import { AppButtonSm } from "@/core/components/button/app-button-sm";
 import { useRouter } from "next/navigation";
+import { useVerifyDonation } from "../../hooks/use-verify-donation";
+import { CheckCircle, XCircle } from "lucide-react";
 
 interface DonationDetailProps {
   donation: DonationWithBlockchain;
 }
 
 export const DonationDetail = ({ donation }: DonationDetailProps) => {
+  const { isValid, loading } = useVerifyDonation(donation);
+
   const router = useRouter();
 
   return (
@@ -21,7 +25,7 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
       <Title text="Detail Transaksi" />
       <Line className="my-1!" />
 
-      <div className="mt-2 w-full space-y-2 text-sm mb-5">
+      <div className="mt-2 mb-5 w-full space-y-2 text-sm">
         <p>
           <b>Campaign:</b> {donation.campaign.title}
         </p>
@@ -62,6 +66,44 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
               donasi di blockchain.
             </span>
           </p>
+        )}
+
+        {!loading && donation.blockchain && (
+          <div
+            className={`mt-5 flex items-center gap-3 rounded-xl border p-4 text-sm ${
+              loading
+                ? "border-gray-300 bg-gray-50 text-gray-600"
+                : isValid
+                  ? "border-green-500 bg-green-50 text-green-700"
+                  : "border-red-500 bg-red-50 text-red-700"
+            } `}
+          >
+            {loading ? (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-400 border-t-transparent" />
+            ) : isValid ? (
+              <CheckCircle className="h-5 w-5 text-green-600" />
+            ) : (
+              <XCircle className="h-5 w-5 text-red-600" />
+            )}
+
+            <div className="flex flex-col">
+              <span className="font-semibold">
+                {loading
+                  ? "Memverifikasi Donasi..."
+                  : isValid
+                    ? "Donasi Terverifikasi"
+                    : "Donasi Tidak Terverifikasi"}
+              </span>
+
+              <span className="text-xs opacity-80">
+                {loading
+                  ? "Mencocokkan data donasi dengan catatan blockchain"
+                  : isValid
+                    ? "Data donasi cocok dengan hash yang tersimpan di blockchain"
+                    : "Data donasi tidak cocok dengan catatan blockchain"}
+              </span>
+            </div>
+          </div>
         )}
 
         {/* {donation.blockchain && (
