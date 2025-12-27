@@ -6,6 +6,7 @@ import { Card } from "@/core/components/ui/card";
 import { useCampaignDetailContext } from "../providers/campaign-detail-provider";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/core/lib/utils";
+import { Line } from "@/core/components/ui/line";
 
 export const CampaignBackgroundCard = () => {
   const { campaign } = useCampaignDetailContext();
@@ -16,7 +17,7 @@ export const CampaignBackgroundCard = () => {
   return (
     <Card className="relative space-y-3 px-5 py-5 text-sm">
       <Title text="Latar Belakang" />
-
+      <Line className="mt-0! mb-2!" />
       {/* Content */}
       <div
         className={cn(

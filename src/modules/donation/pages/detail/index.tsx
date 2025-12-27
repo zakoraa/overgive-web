@@ -154,7 +154,7 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
       <AppButtonSm
         className="w-full"
         text="Lihat Kabar Terbaru"
-        onClick={() => router.push(`/campaign/${donation.campaign_id}`)}
+        onClick={() => router.push(`/campaign/${donation.campaign_id}/delivery-history`)}
       />
     </BasePage>
   );
