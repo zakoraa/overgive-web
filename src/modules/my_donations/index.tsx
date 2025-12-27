@@ -23,6 +23,11 @@ export const MyDonations = () => {
         <Card className="w-full space-y-2 px-10 py-3">
           <Title text="Donasi Saya" />
           <Line className="mb-2!" />
+          {donations.length === 0 && (
+            <p className="text-center text-xs text-gray-500">
+              Anda belum berdonasi
+            </p>
+          )}
           {donations.map((donation) => (
             <MyDonationCard key={donation.id} donation={donation} />
           ))}

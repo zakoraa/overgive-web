@@ -1,5 +1,5 @@
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
-import { getTxByHash } from "@/modules/donation/services/get-donation-from-tx-hash";
+import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
 import { NextResponse } from "next/server";
 
 export async function GET(

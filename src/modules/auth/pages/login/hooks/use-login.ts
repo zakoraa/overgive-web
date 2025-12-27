@@ -1,7 +1,6 @@
 "use client"
 import { useState } from "react";
 import { loginWithEmailPassword } from "../services/login-service";
-import { getCurrentUser } from "@/modules/auth/services/get-current-user";
 
 export function useLogin() {
   const [loading, setLoading] = useState(false);

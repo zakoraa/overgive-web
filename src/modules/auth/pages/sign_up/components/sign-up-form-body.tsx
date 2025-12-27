@@ -16,10 +16,12 @@ export default function SignUpFormBody() {
   const router = useRouter();
 
   const [modalInfoOpen, setModalInfoOpen] = useState(false);
-  const [modalInfoData, setModalInfoData] = useState({
-    title: "",
+  const [modalInfo, setModalInfo] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    isSuccess: false,
     message: "",
-    imageUrl: "",
   });
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,27 +31,25 @@ export default function SignUpFormBody() {
 
     try {
       const newUser = await submit(form);
+
       if (newUser) {
-        setModalInfoData({
-          title: "Berhasil!",
+        setModalInfo({
+          isSuccess: true,
           message: "Akun Anda berhasil dibuat. Silakan login.",
-          imageUrl: "/svgs/success.svg",
         });
         setModalInfoOpen(true);
       } else {
-        setModalInfoData({
-          title: "Gagal!",
+        setModalInfo({
+          isSuccess: false,
           message: error || "Pendaftaran gagal. Silakan coba lagi.",
-          imageUrl: "/svgs/failed.svg",
         });
         setModalInfoOpen(true);
       }
     } catch (err) {
       console.error(err);
-      setModalInfoData({
-        title: "Gagal!",
+      setModalInfo({
+        isSuccess: false,
         message: "Terjadi kesalahan pada server.",
-        imageUrl: "/svgs/failed.svg",
       });
       setModalInfoOpen(true);
     }
@@ -109,13 +109,11 @@ export default function SignUpFormBody() {
             <Link href={"/login"}>Login</Link>{" "}
           </span>
         </p>
-
         <ModalInfo
           isOpen={modalInfoOpen}
           onClose={handleCloseInfoModal}
-          title={modalInfoData.title}
-          message={modalInfoData.message}
-          imageUrl={modalInfoData.imageUrl}
+          isSuccess={modalInfo.isSuccess}
+          message={modalInfo.message}
         />
       </form>
     </>

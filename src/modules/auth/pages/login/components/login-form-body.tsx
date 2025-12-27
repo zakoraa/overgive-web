@@ -14,40 +14,39 @@ export default function LoginFormBody() {
   const { form, setForm, errors, validate } = useLoginForm();
   const router = useRouter();
   const [modalInfoOpen, setModalInfoOpen] = useState(false);
-  const [modalInfoData, setModalInfoData] = useState({
-    title: "",
+  const [modalInfo, setModalInfo] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    isSuccess: false,
     message: "",
-    imageUrl: "",
   });
 
-  const { login, loading, error } = useLogin();
+  const { login, loading } = useLogin();
 
   const handleLoginWithEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validate()) return;
+
     try {
       const user = await login(form.email, form.password);
 
       if (user) {
-        router.push("/");
+        window.location.reload();
       } else {
-        console.log("LOGIN ERROR: ", error);
-        setModalInfoData({
-          title: "Gagal!",
+        setModalInfo({
+          isSuccess: false,
           message:
             "Login gagal. Silakan periksa kembali email dan kata sandi Anda.",
-          imageUrl: "/svgs/failed.svg",
         });
         setModalInfoOpen(true);
       }
     } catch (err) {
-      console.log("LOGIN ERROR: ", err);
-      setModalInfoData({
-        title: "Gagal!",
+      setModalInfo({
+        isSuccess: false,
         message:
           "Login gagal. Silakan periksa kembali email dan kata sandi Anda.",
-        imageUrl: "/svgs/failed.svg",
       });
       setModalInfoOpen(true);
     }
@@ -99,9 +98,8 @@ export default function LoginFormBody() {
         <ModalInfo
           isOpen={modalInfoOpen}
           onClose={handleCloseInfoModal}
-          title={modalInfoData.title}
-          message={modalInfoData.message}
-          imageUrl={modalInfoData.imageUrl}
+          isSuccess={modalInfo.isSuccess}
+          message={modalInfo.message}
         />
       </form>
     </>

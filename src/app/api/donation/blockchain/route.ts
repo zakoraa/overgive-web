@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getTxByHash } from "@/modules/donation/services/get-donation-from-tx-hash";
+import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
 
 export async function GET(req: Request) {
   try {

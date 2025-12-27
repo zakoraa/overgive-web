@@ -20,10 +20,12 @@ export const UpdatePasswordCard = () => {
 
   const { loading: updating, updatePassword } = useUpdatePassword();
   const [modalInfoOpen, setModalInfoOpen] = useState(false);
-  const [modalInfoData, setModalInfoData] = useState({
-    title: "",
+  const [modalInfo, setModalInfo] = useState<{
+    isSuccess: boolean;
+    message: string;
+  }>({
+    isSuccess: false,
     message: "",
-    imageUrl: "",
   });
 
   const onSubmit = async () => {
@@ -31,17 +33,15 @@ export const UpdatePasswordCard = () => {
       const result = await updatePassword(values);
 
       if (result.success) {
-        setModalInfoData({
-          title: "Berhasil!",
+        setModalInfo({
+          isSuccess: true,
           message: "Password berhasil diperbarui.",
-          imageUrl: "/svgs/success.svg",
         });
         setModalInfoOpen(true);
       } else {
-        setModalInfoData({
-          title: "Gagal!",
+        setModalInfo({
+          isSuccess: false,
           message: result.message ?? "Gagal memperbarui password.",
-          imageUrl: "/svgs/failed.svg",
         });
         setModalInfoOpen(true);
       }
@@ -50,7 +50,8 @@ export const UpdatePasswordCard = () => {
 
   const handleCloseInfoModal = () => {
     setModalInfoOpen(false);
-    if (modalInfoData.title === "Berhasil!") {
+
+    if (modalInfo.isSuccess) {
       window.location.reload();
     }
   };
@@ -117,9 +118,8 @@ export const UpdatePasswordCard = () => {
       <ModalInfo
         isOpen={modalInfoOpen}
         onClose={handleCloseInfoModal}
-        title={modalInfoData.title}
-        message={modalInfoData.message}
-        imageUrl={modalInfoData.imageUrl}
+        isSuccess={modalInfo.isSuccess}
+        message={modalInfo.message}
       />
 
       <ModalLoading isOpen={updating} />

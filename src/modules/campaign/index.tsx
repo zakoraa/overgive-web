@@ -19,7 +19,7 @@ export const Campaign = ({ initialCampaign }: CampaignProps) => {
       <CampaignDetailProvider initialCampaign={initialCampaign}>
         <CampaignHeaderCard />
         <CampaignBackgroundCard />
-        <CampaignLatestNewsCard />
+        <CampaignLatestNewsCard campaign={initialCampaign} />
         <CampaignDetailsOfFundCard />
         <GetDonationsProvider campaign_id={initialCampaign.id}>
           <CampaignDonorsCard />
