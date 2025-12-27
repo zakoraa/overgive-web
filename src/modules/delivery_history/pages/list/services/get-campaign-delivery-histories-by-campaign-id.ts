@@ -2,11 +2,19 @@
 
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
 import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
+import { maskEmail } from "@/core/utils/email";
 
 interface GetCampaignDeliveryHistoriesParams {
     campaign_id: string;
     search?: string;
 }
+
+type CreatedBy = {
+    id: string;
+    name: string;
+    email: string;
+};
+
 
 export async function getCampaignDeliveryHistories({
     campaign_id,
@@ -16,7 +24,18 @@ export async function getCampaignDeliveryHistories({
 
     let query = supabase
         .from("campaign_delivery_histories")
-        .select("id, title, note, created_at, blockchain_tx_hash")
+        .select(`
+            id,
+            title,
+            note,
+            created_at,
+            blockchain_tx_hash,
+            created_by:users (
+                id,
+                name,
+                email
+            )
+        `)
         .eq("campaign_id", campaign_id)
         .order("created_at", { ascending: false });
 
@@ -36,11 +55,18 @@ export async function getCampaignDeliveryHistories({
 
     const results = await Promise.all(
         data.map(async (item) => {
+            const createdBy = item.created_by as unknown as CreatedBy;
+
             const baseResult = {
                 id: item.id,
                 title: item.title,
                 note: item.note,
                 created_at: item.created_at,
+                created_by: {
+                    id: createdBy.id,
+                    name: createdBy.name,
+                    email: maskEmail(createdBy.email),
+                },
                 blockchain_tx_hash: item.blockchain_tx_hash ?? null,
                 blockchain_input: null as string | null,
             };

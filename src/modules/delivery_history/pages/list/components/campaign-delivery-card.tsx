@@ -46,6 +46,16 @@ export const CampaignDelivaryCard = () => {
               {formatDate(item.created_at)}
             </span>
           </p>
+          {item.created_by && (
+            <p className="mt-1 text-sm">
+              Dibuat Oleh:
+              <span className="font-semibold">
+              {" "}
+
+                {item.created_by.name} ({item.created_by.email})
+              </span>
+            </p>
+          )}
         </Card>
       ))}
     </>

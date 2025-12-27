@@ -104,8 +104,11 @@ export const DeliveryHistoryDetail = () => {
         <Title text={data.title} />
         <Line />
 
-        <p className="mb-3 text-sm text-gray-500">
+        <p className="mb-1 text-sm text-gray-500">
           Dibuat pada: {formatDate(data.created_at)}
+        </p>
+        <p className="mb-3 text-sm text-gray-500">
+          Dibuat Oleh: {data.created_by.name} ({data.created_by.email})
         </p>
         <div
           className="prose max-w-none text-sm text-gray-600"

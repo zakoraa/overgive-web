@@ -23,7 +23,7 @@ export function useVerifyCampaignDeliveryHistory(
                     campaign_id: history.campaign_id,
                     title: history.title,
                     note: history.note,
-                    created_by: history.created_by,
+                    created_by: history.created_by?.id,
                 });
             console.log("REGENREDD HASH: ", regeneratedHash);
             console.log("history.blockchain_input: ", history.blockchain_input);
