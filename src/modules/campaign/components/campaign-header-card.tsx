@@ -101,7 +101,7 @@ export const CampaignHeaderCard = () => {
           </Card>
           <p className="">Dibuat pada {formatDate(campaign?.created_at)}</p>
         </div>
-        <div className="mt-5 flex w-full items-center justify-between px-10">
+        {/* <div className="mt-5 flex w-full items-center justify-between px-10">
           {items.map((item, index) => (
             <div key={index}>
               {item === null ? (
@@ -127,7 +127,7 @@ export const CampaignHeaderCard = () => {
               )}
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </Card>
   );

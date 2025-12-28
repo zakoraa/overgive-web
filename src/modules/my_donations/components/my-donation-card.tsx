@@ -3,9 +3,8 @@ import { Card } from "@/core/components/ui/card";
 import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
 import { useRouter } from "next/navigation";
-import { useVerifyDonation } from "@/modules/donation/hooks/use-verify-donation";
 import { DonationWithBlockchain } from "@/modules/donation/services/get-donation-by-id";
-import { CheckCircle, XCircle } from "lucide-react";
+import { VerificationStatus } from "@/core/components/ui/verification-status";
 
 export const MyDonationCard = ({
   donation,
@@ -13,7 +12,6 @@ export const MyDonationCard = ({
   donation: DonationWithBlockchain;
 }) => {
   const { campaign } = donation;
-  const { isValid, loading } = useVerifyDonation(donation);
   const router = useRouter();
 
   return (
@@ -40,18 +38,7 @@ export const MyDonationCard = ({
             <span className="font-black">{formatRupiah(donation.amount)}</span>
           </p>
           <div className="mt-3 flex justify-between">
-            {loading ? (
-              <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
-            ) : isValid ? (
-              <div className="flex items-start space-x-2 text-xs text-green-500">
-                <CheckCircle className="h-4 w-4" /> <p>Terverifikasi</p>
-              </div>
-            ) : (
-              <div className="flex items-start space-x-2 text-xs text-red-500">
-                <XCircle className="h-4 w-4" />{" "}
-                <p>Data telah dimanipulasi (tidak sesuai blockchain)</p>
-              </div>
-            )}
+            <VerificationStatus donation={donation} />
             <p className="text-end text-xs text-gray-500">
               {timeAgo(donation.created_at)}
             </p>

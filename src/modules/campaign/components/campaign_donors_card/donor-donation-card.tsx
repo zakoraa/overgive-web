@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 import { DonationWithBlockchain } from "@/modules/donation/services/get-donation-by-id";
 import { useVerifyDonation } from "@/modules/donation/hooks/use-verify-donation";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useDonationBlockchain } from "@/modules/donation/hooks/use-donation-blockchain";
+import { VerificationStatus } from "@/core/components/ui/verification-status";
 
 interface DonorDonationCardProps {
   donation: DonationWithBlockchain;
 }
 
 export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
-  const { isValid, loading: isVerifying } = useVerifyDonation(donation);
-
   const isAnonymous = donation.is_anonymous;
   const donorName = isAnonymous
     ? "Donatur Baik"
@@ -38,18 +38,7 @@ export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
 
         <p className="line-clamp-2 text-xs text-gray-500">{message}</p>
         <div className="flex justify-between">
-          {isVerifying ? (
-            <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
-          ) : isValid ? (
-            <div className="flex items-start space-x-2 text-xs text-green-500">
-              <CheckCircle className="h-4 w-4" /> <p>Terverifikasi</p>
-            </div>
-          ) : (
-            <div className="flex items-start space-x-2 text-xs text-red-500">
-              <XCircle className="h-4 w-4" />{" "}
-              <p>Data telah dimanipulasi (tidak sesuai blockchain)</p>
-            </div>
-          )}
+          <VerificationStatus donation={donation} />
           <p className="text-end text-xs text-gray-500">{timeAgo(createdAt)}</p>
         </div>
       </div>

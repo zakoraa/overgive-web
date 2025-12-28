@@ -39,7 +39,6 @@ export async function GET(
       return NextResponse.json({ error: error?.message }, { status: 500 });
     }
 
-    // ⛓️ ambil data blockchain (opsional)
     let blockchain = null;
     if (donation.blockchain_tx_hash) {
       try {

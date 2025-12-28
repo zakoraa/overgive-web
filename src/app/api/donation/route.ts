@@ -1,7 +1,6 @@
 // app/api/donation/route.ts
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
 import { NextResponse } from "next/server";
-import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
 
 export async function GET(req: Request) {
   try {
@@ -37,43 +36,13 @@ export async function GET(req: Request) {
       ascending: false,
     });
 
-    if (error || !data) {
-      if (error?.code === "PGRST116") {
-        return NextResponse.json(
-          { error: "Donasi tidak ditemukan" },
-          { status: 404 }
-        );
-      }
-      return NextResponse.json({ error: error?.message }, { status: 500 });
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
     }
-
-    // ⛓️ ambil blockchain per donation
-    const results = await Promise.all(
-      data.map(async (donation) => {
-        let blockchain = null;
-
-        if (donation.blockchain_tx_hash) {
-          try {
-            const tx = await getTxByHash(donation.blockchain_tx_hash);
-            blockchain = {
-              hash: donation.blockchain_tx_hash,
-              input: tx.input ?? null,
-            };
-          } catch {
-            blockchain = null;
-          }
-        }
-
-        return {
-          ...donation,
-          blockchain,
-        };
-      })
-    );
 
     return NextResponse.json({
       success: true,
-      data: results,
+      data,
     });
   } catch (e: any) {
     return NextResponse.json({ error: e.message }, { status: 500 });

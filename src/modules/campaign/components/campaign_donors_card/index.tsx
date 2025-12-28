@@ -18,7 +18,7 @@ export const CampaignDonorsCard = () => {
   return (
     <Card className="space-y-2 px-5 py-5 pb-20">
       <CampaignTitleCard
-        count={donations.length}
+        count={topDonations.length}
         title="Donatur"
         onClick={() => router.push(`/campaign/${campaign?.id}/donations`)}
       />

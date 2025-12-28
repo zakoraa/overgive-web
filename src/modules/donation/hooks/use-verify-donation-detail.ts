@@ -3,15 +3,12 @@ import { generateDonationHash } from "@/core/lib/generate-donation-hash";
 import { DonationWithBlockchain } from "../services/get-donation-by-id";
 import { extractDonationHashFromInput } from "../utils/extract-donation-hash-from-input";
 
-export function useVerifyDonation(
-  donation: DonationWithBlockchain | null,
-  blockchainInput: string | null 
-) {
+export function useVerifyDonationDetail(donation: DonationWithBlockchain | null) {
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!donation || !donation.blockchain_tx_hash || !blockchainInput) return;
+    if (!donation || !donation.blockchain_tx_hash) return;
 
     const verify = async () => {
       setLoading(true);
@@ -27,25 +24,29 @@ export function useVerifyDonation(
         donation_message: donation.donation_message,
         xendit_reference_id: donation.xendit_reference_id,
       });
-    if(!blockchainInput){
-      setLoading(false);
-      setIsValid(false);
-      return;
-    }
-      // 2️⃣ extract hash dari input tx
-      const blockchainHash = extractDonationHashFromInput(blockchainInput);
 
-      console.log("regeneratedHash: ", regeneratedHash);
-      console.log("blockchainHash: ", blockchainHash);
-      console.log("blockchainInput: ", blockchainInput);
 
-      // 3️⃣ bandingkan
+      if (!donation.blockchain) {
+        setIsValid(false);
+        setLoading(false);
+        return;
+      }
+
+      // 3️⃣ extract hash dari input tx
+      const blockchainHash = extractDonationHashFromInput(
+        donation.blockchain.input
+      );
+
+      console.log("regeneratedHash: ", regeneratedHash)
+      console.log("blockchainHash: ", blockchainHash)
+      console.log("donation.blockchain.input: ", donation.blockchain.input)
+      // 4️⃣ bandingkan
       setIsValid(regeneratedHash === blockchainHash);
       setLoading(false);
     };
 
     verify();
-  }, [donation, blockchainInput]);
+  }, [donation]);
 
   return {
     isValid,

@@ -8,15 +8,15 @@ import { txLink } from "@/core/utils/amoy";
 import { Line } from "@/core/components/ui/line";
 import { AppButtonSm } from "@/core/components/button/app-button-sm";
 import { useRouter } from "next/navigation";
-import { useVerifyDonation } from "../../hooks/use-verify-donation";
 import { CheckCircle, XCircle } from "lucide-react";
+import { useVerifyDonationDetail } from "../../hooks/use-verify-donation-detail";
 
 interface DonationDetailProps {
   donation: DonationWithBlockchain;
 }
 
 export const DonationDetail = ({ donation }: DonationDetailProps) => {
-  const { isValid, loading } = useVerifyDonation(donation);
+  const { isValid, loading } = useVerifyDonationDetail(donation);
 
   const router = useRouter();
 
@@ -68,7 +68,7 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
           </p>
         )}
 
-        {!loading && donation.blockchain && (
+        {donation.blockchain && (
           <div
             className={`mt-5 flex items-center gap-3 rounded-xl border p-4 text-sm ${
               loading
