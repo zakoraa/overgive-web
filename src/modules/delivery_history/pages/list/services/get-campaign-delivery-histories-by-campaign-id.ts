@@ -28,6 +28,7 @@ export async function getCampaignDeliveryHistories({
             id,
             title,
             note,
+            campaign_id,
             created_at,
             blockchain_tx_hash,
             created_by:users (
@@ -62,6 +63,7 @@ export async function getCampaignDeliveryHistories({
                 title: item.title,
                 note: item.note,
                 created_at: item.created_at,
+                campaign_id: item.campaign_id,
                 created_by: {
                     id: createdBy.id,
                     name: createdBy.name,

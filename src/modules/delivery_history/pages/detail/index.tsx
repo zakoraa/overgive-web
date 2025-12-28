@@ -94,7 +94,7 @@ export const DeliveryHistoryDetail = () => {
                   ? "Mencocokkan data laporan dengan catatan blockchain"
                   : isValid
                     ? "Data laporan cocok dengan hash di blockchain"
-                    : "Data laporan tidak cocok dengan blockchain"}
+                    : "Data laporan tidak sesuai dengan catatan blockchain dan telah dimanipulasi"}
               </span>
             </div>
           </div>

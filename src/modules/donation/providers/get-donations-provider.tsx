@@ -8,7 +8,6 @@ import {
   ReactNode,
 } from "react";
 import { getDonations } from "../services/get-donations";
-import { Donation } from "../types/donation";
 import { DonationWithBlockchain } from "../services/get-donation-by-id";
 
 interface GetDonationsContextType {
