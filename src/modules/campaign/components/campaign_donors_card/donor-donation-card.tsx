@@ -39,7 +39,7 @@ export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
         <p className="line-clamp-2 text-xs text-gray-500">{message}</p>
         <div className="flex justify-between">
           {isVerifying ? (
-            <p>Sedang memverifikasi...</p>
+            <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
           ) : isValid ? (
             <div className="flex items-start space-x-2 text-xs text-green-500">
               <CheckCircle className="h-4 w-4" /> <p>Terverifikasi</p>

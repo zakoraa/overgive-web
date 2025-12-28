@@ -20,7 +20,6 @@ export function usePayment(paymentRequestId: string) {
         setPayment(data);
         console.log("PAYMENT SIMULATION DATA: ", data)
 
-        // stop polling kalau sudah final
         if (
           ["SUCCEEDED", "FAILED", "EXPIRED", "CANCELED"].includes(data.status)
         ) {
@@ -35,7 +34,7 @@ export function usePayment(paymentRequestId: string) {
 
     fetchPayment();
 
-    interval = setInterval(fetchPayment, 5000); // ⏱ polling 5 detik
+    interval = setInterval(fetchPayment, 2000);
 
     return () => clearInterval(interval);
   }, [paymentRequestId]);

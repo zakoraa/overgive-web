@@ -41,7 +41,7 @@ export const MyDonationCard = ({
           </p>
           <div className="mt-3 flex justify-between">
             {loading ? (
-              <p>Sedang memverifikasi...</p>
+              <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
             ) : isValid ? (
               <div className="flex items-start space-x-2 text-xs text-green-500">
                 <CheckCircle className="h-4 w-4" /> <p>Terverifikasi</p>

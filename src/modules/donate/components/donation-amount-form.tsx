@@ -22,9 +22,9 @@ export const DonationAmountForm = () => {
         helperText="Minimal donasi Rp 10.000"
       />
       <div className="mt-3 rounded-md bg-blue-100 p-3 text-sm">
-        Donasi yang kamu berikan sudah mencakup{" "}
-        <span className="font-bold">10%</span> untuk operasional Yayasan
-        Overgive
+        Total donasi yang terkumpul pada kampanye ini akan dipotong maksimal{" "}
+        <span className="font-bold">10%</span> untuk biaya operasional Yayasan
+        Overgive.
       </div>
     </Card>
   );

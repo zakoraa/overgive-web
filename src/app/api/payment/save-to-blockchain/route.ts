@@ -19,13 +19,13 @@ export async function POST(req: Request) {
 
     const paymentRequestId = payment.payment_request_id;
 
-    // 🔐 hash payment
+    //  hash payment
     const hashItem = crypto
       .createHash("sha256")
       .update(JSON.stringify(payment))
       .digest("hex");
 
-    // ⛓️ blockchain
+    //  blockchain
     const txResult =  await saveDonationToBlockchain(
       payment.reference_id,
       payment.campaign_id ?? "unknown",

@@ -14,6 +14,7 @@ import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
 import { useState } from "react";
 import { useCreateDonation } from "./hooks/create-donation";
+import { useProcessDonationSettlement } from "../donation-settlement/hooks/use-process-donation-settlement";
 
 export default function PaymentPage({ id }: { id: string }) {
   const router = useRouter();
@@ -26,7 +27,10 @@ export default function PaymentPage({ id }: { id: string }) {
     processing: donationProcessing,
     success: donationSuccess,
     error: donationError,
+    donationId,
   } = useCreateDonation(payment);
+
+  useProcessDonationSettlement(payment, donationId);
 
   const {
     run: simulatePayment,

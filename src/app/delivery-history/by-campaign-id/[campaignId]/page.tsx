@@ -14,7 +14,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <CampaignDeliveryHistoriesProvider campaignId={campaignId}>
-      <DeliveryList campaignId={campaignId} />;
+      <DeliveryList />;
     </CampaignDeliveryHistoriesProvider>
   );
 }
