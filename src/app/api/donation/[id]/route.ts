@@ -23,17 +23,7 @@ export async function GET(
         *,
         campaign:campaigns (
           id,
-          title,
-          image_url,
-          background_html,
-          category,
-          target_amount,
-          collected_amount,
-          status,
-          created_by,
-          ended_at,
-          created_at,
-          deleted_at
+          title
         )
       `)
       .eq("id", id)

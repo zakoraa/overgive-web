@@ -2,13 +2,14 @@
 
 import { absoluteUrl } from "@/core/lib/absolute-url";
 import { Donation } from "../types/donation";
+import { DonationWithBlockchain } from "./get-donation-by-id";
 
 interface GetDonationOptions {
   user_id?: string;
   campaign_id?: string;
 }
 
-export async function getDonations(options: GetDonationOptions): Promise<Donation[]> {
+export async function getDonations(options: GetDonationOptions): Promise<DonationWithBlockchain[]> {
   const url = new URL(await absoluteUrl("/api/donation"));
 
   if (options.user_id) url.searchParams.append("user_id", options.user_id);

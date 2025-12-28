@@ -100,7 +100,7 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
                   ? "Mencocokkan data donasi dengan catatan blockchain"
                   : isValid
                     ? "Data donasi cocok dengan hash yang tersimpan di blockchain"
-                    : "Data donasi tidak cocok dengan catatan blockchain"}
+                    : "Data donasi tidak sesuai dengan catatan blockchain dan telah dimanipulasi"}
               </span>
             </div>
           </div>
@@ -154,7 +154,9 @@ export const DonationDetail = ({ donation }: DonationDetailProps) => {
       <AppButtonSm
         className="w-full"
         text="Lihat Kabar Terbaru"
-        onClick={() => router.push(`/campaign/${donation.campaign_id}/delivery-history`)}
+        onClick={() =>
+          router.push(`/campaign/${donation.campaign_id}/delivery-history`)
+        }
       />
     </BasePage>
   );

@@ -20,7 +20,7 @@ export const MyDonations = () => {
       {(loading || gettingDonations) && <CircularLoading />}
       <LoginRequired />
       {!loading && !gettingDonations && user && (
-        <Card className="w-full space-y-2 px-10 py-3">
+        <Card className="w-full space-y-2 md:px-10 py-3 px-2">
           <Title text="Donasi Saya" />
           <Line className="mb-2!" />
           {donations.length === 0 && (

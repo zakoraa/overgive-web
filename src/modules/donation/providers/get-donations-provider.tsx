@@ -9,9 +9,10 @@ import {
 } from "react";
 import { getDonations } from "../services/get-donations";
 import { Donation } from "../types/donation";
+import { DonationWithBlockchain } from "../services/get-donation-by-id";
 
 interface GetDonationsContextType {
-  donations: Donation[];
+  donations: DonationWithBlockchain[];
   loading: boolean;
   error: string | null;
   refresh: () => void;
@@ -32,7 +33,7 @@ export function GetDonationsProvider({
   campaign_id,
   children,
 }: GetDonationsProviderProps) {
-  const [donations, setDonations] = useState<Donation[]>([]);
+  const [donations, setDonations] = useState<DonationWithBlockchain[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
