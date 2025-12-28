@@ -14,7 +14,7 @@ export const getLatestDonationSettlementMetaByCampaign = async (
     .eq("campaign_id", campaignId)
     .order("updated_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (error) throw error;
   return data;

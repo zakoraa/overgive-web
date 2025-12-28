@@ -20,6 +20,7 @@ export const CampaignLatestNewsCard = ({
   return (
     <Card className="space-y-2 px-5 py-5">
       <CampaignTitleCard
+        isShowAll={data?.count !== 0}
         count={loading ? 0 : (data?.count ?? 0)}
         onClick={() => router.push(`${campaign.id}/delivery-history`)}
         title="Kabar Terbaru"

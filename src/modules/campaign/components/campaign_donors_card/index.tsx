@@ -20,6 +20,7 @@ export const CampaignDonorsCard = () => {
       <CampaignTitleCard
         count={topDonations.length}
         title="Donatur"
+        isShowAll={topDonations.length !== 0}
         onClick={() => router.push(`/campaign/${campaign?.id}/donations`)}
       />
       {loading && <CircularLoading />}

@@ -23,7 +23,7 @@ export const CampaignDetailsOfFundCard = ({
 
   return (
     <Card className="space-y-2 px-5 py-5">
-      <CampaignTitleCard count={0} onClick={() => router.push(`${campaignId}/donation-settlement`)} title="Penggunaan Dana" />
+      <CampaignTitleCard isShowAll={!!latestMeta} count={0} onClick={() => router.push(`${campaignId}/donation-settlement`)} title="Penggunaan Dana" />
       {isLoading && <CircularLoading />}
       {error && <p className="text-sm text-red-500">Error: {error.message}</p>}
       {!isLoading && !error && !latestMeta && (
