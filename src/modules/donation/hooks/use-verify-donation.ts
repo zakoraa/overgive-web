@@ -16,7 +16,6 @@ export function useVerifyDonation(
     const verify = async () => {
       setLoading(true);
 
-      // 1️⃣ generate ulang hash dari data DB
       const regeneratedHash = generateDonationHash({
         user_id: donation.user_id,
         username: donation.username,
@@ -32,14 +31,8 @@ export function useVerifyDonation(
       setIsValid(false);
       return;
     }
-      // 2️⃣ extract hash dari input tx
       const blockchainHash = extractDonationHashFromInput(blockchainInput);
 
-      console.log("regeneratedHash: ", regeneratedHash);
-      console.log("blockchainHash: ", blockchainHash);
-      console.log("blockchainInput: ", blockchainInput);
-
-      // 3️⃣ bandingkan
       setIsValid(regeneratedHash === blockchainHash);
       setLoading(false);
     };

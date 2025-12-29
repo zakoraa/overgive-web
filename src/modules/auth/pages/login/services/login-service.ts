@@ -5,11 +5,9 @@ import { supabaseServer } from "@/core/lib/supabase/supabase-server";
 export async function loginWithEmailPassword(email: string, password: string) {
   const supabase = await supabaseServer();
 
-  // Login user
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    console.log("LOGIN ERROR :", error)
     let message = error.message;
     switch (message) {
       case "Invalid login credentials":

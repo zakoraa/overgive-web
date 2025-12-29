@@ -60,11 +60,7 @@ export async function GET(
   );
 
   donations.forEach((d, i) => {
-  console.log(`Donation #${i}:`, JSON.stringify(d, null, 2));
 });
-
-
-  console.log("DONATIONS: ", donations)
 
   return NextResponse.json({
     success: true,

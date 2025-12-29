@@ -13,6 +13,7 @@ export async function saveDonationToBlockchain(
   txHash: string;
   blockNumber: number;
   gasUsed: string;
+  gasPrice: string;
 }> {
   if (
     !process.env.CONTRACT_RPC ||
@@ -34,7 +35,7 @@ export async function saveDonationToBlockchain(
     wallet
   );
 
-  console.log("🚀 Sending storeDonation tx...");
+  // console.log("🚀 Sending storeDonation tx...");
   const donationHashBytes32 = "0x" + donationHash;
 
   const tx = await contract.storeDonation(
@@ -47,20 +48,21 @@ export async function saveDonationToBlockchain(
     BigInt(confirmedAt)
   );
 
-  console.log("📨 TX SENT");
-  console.log("tx.hash =", tx.hash);
+  // console.log("📨 TX SENT");
+  // console.log("tx.hash =", tx.hash);
 
   const receipt = await tx.wait();
 
-  console.log("✅ TX CONFIRMED");
-  console.log("receipt =", receipt);
-  console.log("status =", receipt.status);
-  console.log("blockNumber =", receipt.blockNumber);
-  console.log("gasUsed =", receipt.gasUsed.toString());
+  // console.log("✅ TX CONFIRMED");
+  // console.log("receipt =", receipt);
+  // console.log("status =", receipt.status);
+  // console.log("blockNumber =", receipt.blockNumber);
+  // console.log("gasUsed =", receipt.gasUsed.toString());
 
   return {
     txHash: receipt.hash,
     blockNumber: receipt.blockNumber,
     gasUsed: receipt.gasUsed.toString(),
+    gasPrice: receipt.gasPrice.toString(),
   };
 }

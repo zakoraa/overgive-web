@@ -27,16 +27,12 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // 🧱 build immutable snapshot
+   
     const payload = buildDonationIPFSPayload(
       payment,
       blockchainTxHash
     );
 
-    console.log("PAYLOAD IPFS: ", payload)
-
-    // 📦 save to IPFS
     const { cid, url } = await saveDonationToIPFS(payload, IPFS_GROUP.DONATIONS);
 
     return NextResponse.json({

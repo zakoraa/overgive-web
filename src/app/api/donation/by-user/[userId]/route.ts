@@ -46,7 +46,7 @@ export async function GET(
 
   const data = await res.json();
 
-  // 🔽 ambil isi JSON tiap CID
+
   const donations = await Promise.all(
     (data.rows as PinataRow[]).map(async (row) => {
       const gatewayUrl = `https://gateway.pinata.cloud/ipfs/${row.ipfs_pin_hash}`;
@@ -58,13 +58,11 @@ export async function GET(
         cid: row.ipfs_pin_hash,
         pinnedAt: row.date_pinned,
         size: row.size,
-        data: jsonData, // ⬅️ INI ISI JSON DONASINYA
+        data: jsonData, 
       };
     })
   );
   
-  console.log("DONATIONS: ", donations)
-
   return NextResponse.json({
     success: true,
     data: donations,

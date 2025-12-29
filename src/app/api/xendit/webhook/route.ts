@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const callbackToken = req.headers.get("x-callback-token");
 
-  // 1️⃣ Verifikasi token webhook
   if (callbackToken !== process.env.XENDIT_CALLBACK_TOKEN) {
     return NextResponse.json(
       { error: "Invalid webhook token" },
@@ -35,14 +34,13 @@ export async function POST(req: Request) {
     },
   } = payload;
 
-  console.log("XENDIT WEBHOOK:", {
-    event,
-    payment_request_id,
-    payment_id,
-    status,
-  });
+  // console.log("XENDIT WEBHOOK:", {
+  //   event,
+  //   payment_request_id,
+  //   payment_id,
+  //   status,
+  // });
 
-  // 2️⃣ Handle status penting
   switch (status) {
     case "SUCCEEDED":
       // TODO: update database → payment sukses
@@ -64,6 +62,5 @@ export async function POST(req: Request) {
       break;
   }
 
-  // 3️⃣ Wajib balas 200 supaya Xendit tidak retry
   return NextResponse.json({ received: true });
 }

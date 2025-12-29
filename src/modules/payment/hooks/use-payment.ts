@@ -18,7 +18,6 @@ export function usePayment(paymentRequestId: string) {
       try {
         const data = await getPayment(paymentRequestId);
         setPayment(data);
-        console.log("PAYMENT SIMULATION DATA: ", data)
 
         if (
           ["SUCCEEDED", "FAILED", "EXPIRED", "CANCELED"].includes(data.status)

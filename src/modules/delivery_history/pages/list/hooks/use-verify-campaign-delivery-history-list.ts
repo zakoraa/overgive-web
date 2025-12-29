@@ -17,7 +17,6 @@ export function useVerifyCampaignDeliveryHistoryList(
         const verify = async () => {
             setLoading(true);
 
-            // 1️⃣ regenerate hash dari DB
             const regeneratedHash =
                 generateCampaignDeliveryHash({
                     campaign_id: history.campaign_id,
@@ -25,20 +24,16 @@ export function useVerifyCampaignDeliveryHistoryList(
                     note: history.note,
                     created_by: history.created_by?.id,
                 });
-            console.log("REGENREDD HASH: ", regeneratedHash);
-            console.log("history.blockchain_input: ", history.blockchain_input);
+          
             if (!history.blockchain_input) {
                 setIsValid(false);
                 setLoading(false);
                 return;
             }
             
-            // 2️⃣ ambil hash dari blockchain input
             const blockchainHash =
             extractDeliveryHistoryHashFromInput(history.blockchain_input);
             
-            console.log("blockchainHash: ", blockchainHash);
-            // 3️⃣ bandingkan
             setIsValid(
                 blockchainHash !== null &&
                 regeneratedHash === blockchainHash

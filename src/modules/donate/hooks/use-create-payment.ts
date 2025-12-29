@@ -14,13 +14,10 @@ export function useCreatePayment() {
 
     try {
       const res = await createPaymentRequestAction(payload);
-      console.log("REs CRE: ", res)
-      console.log("PAYLOAD: ", payload)
       setLoading(false);
 
       if (!res?.success) {
         setServerError(res?.error || "Gagal memproses pembayaran");
-        console.log("ERROR CREATE: ", res.error)
         return { success: false };
       }
 
@@ -30,7 +27,6 @@ export function useCreatePayment() {
       };
     } catch (error: any) {
       setLoading(false);
-      console.log("ERROR CREATE: ", error)
       setServerError(error?.message || "Terjadi kesalahan server");
       return { success: false };
     }

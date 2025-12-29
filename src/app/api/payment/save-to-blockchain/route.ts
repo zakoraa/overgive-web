@@ -36,8 +36,6 @@ export async function POST(req: Request) {
       Math.floor(new Date(payment.updated).getTime() / 1000)
     );
 
-    console.log("TX RESULT BRO: ", txResult)
-
     return NextResponse.json({
       success: true,
       txHash: txResult.txHash,
@@ -45,7 +43,6 @@ export async function POST(req: Request) {
       gasUsed: txResult.gasUsed,
     });
   } catch (e: any) {
-    console.log("ERROR SAVE DONATION TO BC: ", e)
     return NextResponse.json(
       { error: e.message },
       { status: 500 }

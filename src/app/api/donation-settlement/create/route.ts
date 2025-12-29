@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
 import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
 import { convertGasFeeWeiToMatic, convertGasfeeToIDR } from "@/core/utils/convert-gas-fee-to-idr";
+import { calculateQrisFee } from "@/core/utils/calculate-qris-xendit";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +16,7 @@ export async function POST(req: Request) {
 
     const { data: donation } = await supabase
     .from("donations")
-    .select("id, campaign_id, amount, currency, blockchain_tx_hash")
+    .select("id, campaign_id, amount, currency, blockchain_tx_hash, blockchain_gas_used, blockchain_gas_price")
     .eq("id", donation_id)
     .single();
 
@@ -28,16 +29,16 @@ export async function POST(req: Request) {
 
     if (donation.blockchain_tx_hash) {
       try {
-        const tx = await getTxByHash(donation.blockchain_tx_hash);
 
-        if (tx?.gas && tx?.gasPrice) {
-          const gasLimit = BigInt(tx.gas);
-          const gasPrice = BigInt(tx.gasPrice);
+        if (donation?.blockchain_gas_used && donation?.blockchain_gas_price) {
+          const gasLimit = BigInt(donation?.blockchain_gas_used);
+          const gasPrice = BigInt(donation?.blockchain_gas_price);
 
           gasFeeWei = gasLimit * gasPrice;
         }
       } catch (e) {
         console.error("Error ambil TX:", e);
+        return NextResponse.json({ error: "Gagal melakukan donasi, mohon dicoba lagi!" }, { status: 500 });
       }
     }
 
@@ -45,7 +46,10 @@ export async function POST(req: Request) {
     const maticToIdr = await convertGasfeeToIDR();
     const gasFeeIdr = gasFeeMatic * maticToIdr;
 
-    const netAmount = donation.amount - gasFeeIdr;
+    const xenditFee = calculateQrisFee(donation.amount);
+
+    const netAmount =
+      donation.amount - gasFeeIdr - xenditFee;
 
     const { data: settlement, error: settlementError } = await supabase
       .from("donation_settlements")
@@ -55,6 +59,7 @@ export async function POST(req: Request) {
         gross_amount: donation.amount,
         gas_fee: gasFeeIdr,
         net_amount: netAmount,
+        xendit_fee: xenditFee,
         currency: "IDR"
      }])
       .select()
@@ -69,7 +74,8 @@ export async function POST(req: Request) {
       data: {
         ...settlement,
         gas_fee_matic: gasFeeMatic,
-        gas_fee_idr: gasFeeIdr
+        gas_fee_idr: gasFeeIdr,
+        xendit_fee: xenditFee,
       },
     });
   } catch (e: any) {

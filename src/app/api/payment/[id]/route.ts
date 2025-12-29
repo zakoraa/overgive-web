@@ -25,8 +25,6 @@ export async function GET(
 
   const payment = JSON.parse(raw);
 
-  console.log("GET PAYMENT: ", payment)
-
   return NextResponse.json(payment);
   // if (payment.status !== "SUCCEEDED") {
   //   return NextResponse.json(payment);

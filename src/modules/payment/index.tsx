@@ -30,7 +30,11 @@ export default function PaymentPage({ id }: { id: string }) {
     donationId,
   } = useCreateDonation(payment);
 
-  useProcessDonationSettlement(payment, donationId);
+  const {
+    success: settlementSuccess,
+    error: settlementError,
+    loading: settlementLoading,
+  } = useProcessDonationSettlement(payment, donationId);
 
   const {
     run: simulatePayment,
@@ -45,20 +49,25 @@ export default function PaymentPage({ id }: { id: string }) {
   return (
     <>
       <ModalLoading
-        isOpen={(loading && payment) || simulateLoading || donationProcessing}
+        isOpen={
+          (loading && payment) ||
+          simulateLoading ||
+          donationProcessing ||
+          settlementLoading
+        }
       />
 
       <ModalInfo
-        isOpen={donationSuccess}
+        isOpen={settlementSuccess}
         isSuccess
         message="Terima kasih 🙏<br/>Pembayaran donasi kamu berhasil diproses."
         onClose={() => router.replace("/")}
       />
 
       <ModalInfo
-        isOpen={!!donationError || !!simulateError}
+        isOpen={!!settlementError}
         isSuccess={false}
-        message={donationError ?? simulateError ?? ""}
+        message={settlementError ?? ""}
         onClose={() => router.replace("/")}
       />
 

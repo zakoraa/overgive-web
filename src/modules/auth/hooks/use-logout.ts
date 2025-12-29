@@ -15,7 +15,6 @@ export function useLogout() {
       await logoutUser();
 
     } catch (err: any) {
-      console.log("LOGOUT GAGAL: ", err.message)
       setError(err.message || "Logout gagal");
     } finally {
       setLoading(false);

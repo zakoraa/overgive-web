@@ -13,7 +13,7 @@ interface DonationSettlementProps {
 
 export const DonationSettlement = ({ summary }: DonationSettlementProps) => {
   return (
-    <BasePage className="mx-auto rounded-b-2xl p-4 md:max-w-md">
+    <BasePage className="mx-auto rounded-b-2xl p-4 md:max-w-lg">
       <Title text={`Penggunaan Dana Kampanye ${summary.campaign_title}`} />
       <Line className="mt-0! mb-4" />
       <p className="w-full text-start text-sm text-gray-500">

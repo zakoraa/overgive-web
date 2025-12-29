@@ -1,32 +1,46 @@
-const POLYGON_CMC_ID = "3890";
-
 export async function convertGasfeeToIDR() {
   try {
-    // 1️⃣ Ambil harga MATIC dalam USD
-    const priceRes = await fetch(
-      `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${POLYGON_CMC_ID}&convert=USD`,
-      {
-        headers: {
-          "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY as string,
-          Accept: "application/json",
-        },
-      }
-    );
+    const res = await fetch(`https://coinyep.com/api/v1/?from=MATIC&to=IDR`);
+    const data = await res.json();
 
-    const priceJson = await priceRes.json();
+    const priceIdr = data?.price ?? 0;
 
-    const priceUsd =
-      priceJson?.data?.[POLYGON_CMC_ID]?.quote?.USD?.price ?? 0;
-console.log("priceUsd: ", priceJson?.data?.[POLYGON_CMC_ID]?.quote)
-
-    const usdToIdr = await getUsdToIdrRate();
-console.log("Usd TO IDR: ", usdToIdr)
-    return priceUsd * usdToIdr;
+    return priceIdr;
   } catch (e) {
     console.error("Error convertGasfeeToIDR:", e);
     return 0;
   }
 }
+
+// const POLYGON_CMC_ID = "3890";
+
+// export async function convertGasfeeToIDR() {
+//   try {
+//     // 1️⃣ Ambil harga MATIC dalam USD
+//     const priceRes = await fetch(
+//       `https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=${POLYGON_CMC_ID}&convert=USD`,
+//       {
+//         headers: {
+//           "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY as string,
+//           Accept: "application/json",
+//         },
+//       }
+//     );
+
+//     const priceJson = await priceRes.json();
+
+//     const priceUsd =
+//       priceJson?.data?.[POLYGON_CMC_ID]?.quote?.USD?.price ?? 0;
+// console.log("priceUsd: ", priceJson?.data?.[POLYGON_CMC_ID]?.quote)
+
+//     const usdToIdr = await getUsdToIdrRate();
+// console.log("Usd TO IDR: ", usdToIdr)
+//     return priceUsd * usdToIdr;
+//   } catch (e) {
+//     console.error("Error convertGasfeeToIDR:", e);
+//     return 0;
+//   }
+// }
 
 export function convertGasFeeWeiToMatic(gasFeeWei: number | bigint) {
   return Number(gasFeeWei) / 1e18;
@@ -42,6 +56,5 @@ async function getUsdToIdrRate() {
   );
 
   const json = await res.json();
-  console.log("JDOSN CONVET: ", json)
   return json?.result ?? 0;
 }

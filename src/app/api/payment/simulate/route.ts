@@ -38,7 +38,6 @@ export async function POST(req: Request) {
     }
     const result = JSON.parse(raw);
     
-    console.log("Result Simulate: ", result)
     return NextResponse.json(result);
   } catch (err: any) {
     return NextResponse.json(

@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
     );
 
     const raw = await res.text();
-    console.log("CREATE PAYMENT RAW:", raw);
 
     if (!res.ok) {
       return NextResponse.json(

@@ -36,7 +36,7 @@ export async function GET() {
       wallet
     );
 
-    console.log("⏳ Sending storeDonation tx...");
+    // // console.log("⏳ Sending storeDonation tx...");
 
     const tx = await contract.storeDonation(
       "don1",
@@ -48,16 +48,16 @@ export async function GET() {
       BigInt(Math.floor(Date.now() / 1000))
     );
 
-    console.log("📨 TX SENT");
-    console.log("tx.hash =", tx.hash);
+    // console.log("📨 TX SENT");
+    // console.log("tx.hash =", tx.hash);
 
     // tunggu tx confirm
     const receipt = await tx.wait();
 
-    console.log("✅ TX CONFIRMED");
-    console.log("status =", receipt.status);
-    console.log("blockNumber =", receipt.blockNumber);
-    console.log("gasUsed =", receipt.gasUsed.toString());
+    // console.log("✅ TX CONFIRMED");
+    // console.log("status =", receipt.status);
+    // console.log("blockNumber =", receipt.blockNumber);
+    // console.log("gasUsed =", receipt.gasUsed.toString());
 
     // decode event DonationStored
     const iface = new ethers.Interface(DONATIONS_ABI);
@@ -78,7 +78,7 @@ const donationEvents: LogDescription[] = parsedLogs.filter(
 );
 
 
-    console.log("📢 DonationStored events:", donationEvents);
+    // console.log("📢 DonationStored events:", donationEvents);
 
    return NextResponse.json({
   txHash: receipt.transactionHash,
@@ -95,7 +95,7 @@ const donationEvents: LogDescription[] = parsedLogs.filter(
 });
 
   } catch (err: any) {
-    console.error("❌ StoreDonation error:", err);
+    // console.error("❌ StoreDonation error:", err);
     return NextResponse.json(
       { error: err.message || String(err) },
       { status: 500 }

@@ -13,24 +13,20 @@ export const DonateButton = () => {
   const router = useRouter();
   const { submitError, submit, values, loading } = useDonateForm();
 
-  // Modal States
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
 
   const handleSubmit = async () => {
     const result = await submit();
 
-    // Kalau result null dan submitError ada → modal muncul
     if (!result && submitError) {
       setModalMessage(submitError);
       setModalOpen(true);
       return;
     }
 
-    // Kalau result null tapi submitError null → ini cuma validasi gagal → jangan modal
     if (!result) return;
 
-    console.log("EXTERNAL ID: ", result.payment_request_id);
     router.push(`/payment/${result.payment_request_id}`);
   };
 

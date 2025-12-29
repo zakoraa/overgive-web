@@ -12,15 +12,13 @@ export function useLogin() {
 
     try {
       const response = await loginWithEmailPassword(email, password);
-      console.log("LOGIN response: ", response);
 
       if (!response.success) {
-        setError(response.message); // simpan pesan dari service
+        setError(response.message);
         return null;
       }
-      return response; // sukses
+      return response; 
     } catch (err) {
-      console.log("ERROR USE_LOGIN: ", err);
       setError("Login gagal. Terjadi kesalahan server.");
       return null;
     } finally {
