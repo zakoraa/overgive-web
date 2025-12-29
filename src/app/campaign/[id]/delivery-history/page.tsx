@@ -1,4 +1,3 @@
-"campaign/[id]"
 "use client";
 
 import { DeliveryList } from "@/modules/delivery_history/pages/list";
@@ -15,7 +14,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <CampaignDeliveryHistoriesProvider campaignId={id}>
-      <DeliveryList campaignId={id} />;
+      <DeliveryList/>;
     </CampaignDeliveryHistoriesProvider>
   );
 }

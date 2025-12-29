@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 interface PinataRow {
   ipfs_pin_hash: string;
@@ -10,8 +10,8 @@ interface PinataRow {
 }
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { userId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   const { userId } = await params;
 

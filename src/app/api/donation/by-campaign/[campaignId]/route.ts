@@ -1,5 +1,5 @@
 import { DonationIPFS } from "@/modules/donation/types/donation-ipfs";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 interface PinataRow {
   ipfs_pin_hash: string;
@@ -9,8 +9,8 @@ interface PinataRow {
 }
 
 export async function GET(
-  _req: Request,
-  { params }: { params: { campaignId: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ campaignId: string }> }
 ) {
   const { campaignId } =await params;
 

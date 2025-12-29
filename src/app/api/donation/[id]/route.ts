@@ -1,10 +1,10 @@
 import { supabaseServer } from "@/core/lib/supabase/supabase-server";
 import { getTxByHash } from "@/core/services/get-transactions-from-tx-hash";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = await supabaseServer();

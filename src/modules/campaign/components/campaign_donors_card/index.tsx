@@ -13,14 +13,14 @@ export const CampaignDonorsCard = () => {
   const { donations, loading, error } = useGetDonationsContext();
   const { campaign } = useCampaignDetailContext();
 
-  const topDonations = donations.slice(0, 5);
+  const topDonations = donations.slice(0, 3);
 
   return (
     <Card className="space-y-2 px-5 py-5 pb-20">
       <CampaignTitleCard
-        count={topDonations.length}
+        count={donations.length}
         title="Donatur"
-        isShowAll={topDonations.length !== 0}
+        isShowAll={donations.length !== 0}
         onClick={() => router.push(`/campaign/${campaign?.id}/donations`)}
       />
       {loading && <CircularLoading />}
