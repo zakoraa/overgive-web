@@ -37,7 +37,7 @@ export async function POST(req: Request) {
           gasFeeWei = gasLimit * gasPrice;
         }
       } catch (e) {
-        console.error("Error ambil TX:", e);
+        // console.error("Error ambil TX:", e);
         return NextResponse.json({ error: "Gagal melakukan donasi, mohon dicoba lagi!" }, { status: 500 });
       }
     }

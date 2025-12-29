@@ -39,7 +39,7 @@ export async function GET() {
       donations,
     });
   } catch (err: any) {
-    console.error("GetAllDonations error:", err);
+    // console.error("GetAllDonations error:", err);
     return NextResponse.json(
       { error: err.message || String(err) },
       { status: 500 }

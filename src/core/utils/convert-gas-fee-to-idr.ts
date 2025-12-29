@@ -7,7 +7,7 @@ export async function convertGasfeeToIDR() {
 
     return priceIdr;
   } catch (e) {
-    console.error("Error convertGasfeeToIDR:", e);
+    // console.error("Error convertGasfeeToIDR:", e);
     return 0;
   }
 }

@@ -42,7 +42,7 @@ export function CampaignCategoryProvider({
         const data = await getCampaignsByCategory({ category, search });
         setCampaigns(data);
       } catch (err: any) {
-        console.error(err);
+        // console.error(err);
         setError(err.message || "Gagal mengambil campaign");
       } finally {
         setLoading(false);

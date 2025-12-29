@@ -27,7 +27,7 @@ export function useProcessDonationSettlement(
         await createDonationSettlementAction({ donation_id: donationId });
         setSuccess(true); // tandai berhasil
       } catch (e: any) {
-        console.error("Gagal membuat settlement", e);
+        // console.error("Gagal membuat settlement", e);
         setError(e?.message || "Terjadi kesalahan saat settlement");
       } finally {
         setLoading(false);

@@ -16,7 +16,7 @@ export function useCampaignHome(type: CampaignListType, limit?: number) {
       const data = await getCampaignHome({ type, limit });
       setCampaigns(data);
     } catch (err: any) {
-      console.error("Failed to fetch campaigns:", err);
+      // console.error("Failed to fetch campaigns:", err);
       setError(err.message || "Terjadi kesalahan saat mengambil campaign");
     } finally {
       setLoading(false);

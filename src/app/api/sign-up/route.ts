@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
         if (fetchError && fetchError.code !== "PGRST116") {
             // PGRST116 = tidak ada record
-            console.error(fetchError);
+            // console.error(fetchError);
             return NextResponse.json({ message: "Gagal mengecek user" }, { status: 500 });
         }
 
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
                     .eq("id", existingUser.id);
 
                 if (updateDbError) {
-                    console.error(updateDbError);
+                    // console.error(updateDbError);
                     return NextResponse.json({ message: "Gagal mengupdate user" }, { status: 500 });
                 }
 
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
                 );
 
                 if (authUpdateError) {
-                    console.error(authUpdateError);
+                    // console.error(authUpdateError);
                     return NextResponse.json({ message: "Gagal update password Auth" }, { status: 500 });
                 }
 
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (authError || !authUser) {
-            console.error("Failed to register Auth user:", authError);
+            // console.error("Failed to register Auth user:", authError);
             return NextResponse.json({ message: "Gagal mendaftar user di Auth" }, { status: 500 });
         }
 
@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (confirmError) {
-            console.error(confirmError);
+            // console.error(confirmError);
             return NextResponse.json({ message: "Gagal konfirmasi email otomatis" }, { status: 500 });
         }
 
@@ -86,13 +86,13 @@ export async function POST(req: NextRequest) {
             .single();
 
         if (insertError || !inserted) {
-            console.error("Failed to insert user in DB:", insertError);
+            // console.error("Failed to insert user in DB:", insertError);
             return NextResponse.json({ message: "Gagal menyimpan user di DB" }, { status: 500 });
         }
 
         return NextResponse.json({ donor: inserted, password, reactivated: false }, { status: 201 });
     } catch (err: any) {
-        console.error("API Error:", err);
+        // console.error("API Error:", err);
         return NextResponse.json({ message: err.message || "Terjadi kesalahan pada server" }, { status: 500 });
     }
 }

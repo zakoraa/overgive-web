@@ -19,7 +19,7 @@ export async function signUp(fullName: string, email: string, password: string):
         const user: User = await res.json();
         return user;
     } catch (err) {
-        console.error("Fetch API error:", err);
+        // console.error("Fetch API error:", err);
         return null;
     }
 }
