@@ -4,7 +4,7 @@ import { createContext, useContext, useState } from "react";
 import { useCreatePayment } from "../hooks/use-create-payment";
 import { PaymentRequestResponse } from "../types/create-payment-request";
 
-const MAX_AMOUNT = 100_000_000;
+const MAX_AMOUNT = 99_999_999;
 
 interface DonateFormValues {
   amount: number;
@@ -67,7 +67,7 @@ export const DonateFormProvider = ({
         setValues((prev) => ({ ...prev, amount: 0 }));
         setErrors((prev) => ({
           ...prev,
-          amount: "Maksimal donasi Rp 100.000.000",
+          amount: "Maksimal donasi Rp 99.999.999",
         }));
         return;
       }

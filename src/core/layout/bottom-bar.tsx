@@ -13,7 +13,7 @@ const menus = [
   },
   {
     href: "/my-donations",
-    label: "Donasi",
+    label: "Riwayat Donasi",
     icon: HeartHandshake,
   },
   {
