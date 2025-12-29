@@ -25,8 +25,9 @@ export const getDonationSettlementSummaryByCampaign = async (
   // Ambil semua operational cost per item
   const { data: opsCosts, error: opsError } = await supabase
     .from("campaign_operational_costs")
-    .select("amount, note")
-    .eq("campaign_id", campaignId);
+    .select("id, amount, note")
+    .eq("campaign_id", campaignId)
+    .is("deleted_at", null);
 
   if (opsError) throw opsError;
 
