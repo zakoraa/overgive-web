@@ -15,9 +15,12 @@ import { formatRupiah } from "@/core/utils/currency";
 import { useState } from "react";
 import { useCreateDonation } from "./hooks/create-donation";
 import { useProcessDonationSettlement } from "../donation-settlement/hooks/use-process-donation-settlement";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function PaymentPage({ id }: { id: string }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const [hasSimulated, setHasSimulated] = useState(false);
 
   const { payment, loading } = usePayment(id);
@@ -61,7 +64,10 @@ export default function PaymentPage({ id }: { id: string }) {
         isOpen={settlementSuccess}
         isSuccess
         message="Terima kasih 🙏<br/>Pembayaran donasi kamu berhasil diproses."
-        onClose={() => router.replace("/")}
+        onClose={() => {
+          queryClient.invalidateQueries({ queryKey: ["campaign_home"] });
+          router.replace("/");
+        }}
       />
 
       <ModalInfo
