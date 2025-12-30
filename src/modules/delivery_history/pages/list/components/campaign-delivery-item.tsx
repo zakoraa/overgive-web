@@ -29,8 +29,8 @@ export const CampaignDeliveryItem = ({ item }: CampaignDeliveryItemProps) => {
           dangerouslySetInnerHTML={{ __html: item.note }}
         />
       )}
-      {isValidating ? (
-        <></>
+      {isValidating || isValid === null ? (
+        <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
       ) : isValid ? (
         <div className="my-2 flex items-start space-x-2 text-xs text-green-500">
           <CheckCircle className="h-4 w-4" /> <p>Terverifikasi</p>

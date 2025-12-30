@@ -50,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${nunito.variable} antialiased`}>
+        <div id="modal-root" />
         <AppProvider>
           <Navbar />
           {children}

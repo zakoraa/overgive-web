@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { generateDonationHash } from "@/core/lib/generate-donation-hash";
-import { DonationWithBlockchain } from "../services/get-donation-by-id";
-import { extractDonationHashFromInput } from "../utils/extract-donation-hash-from-input";
+import type { DonationWithBlockchain } from "../services/get-donation-by-id";
 
 export function useVerifyDonation(
   donation: DonationWithBlockchain | null,
@@ -10,34 +8,20 @@ export function useVerifyDonation(
   const [isValid, setIsValid] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (
-      !donation ||
-      !donation.blockchain_tx_hash ||
-      !blockchainInput ||
-      isValid !== null
-    ) {
-      return;
-    }
+    if (!donation || !blockchainInput) return;
 
-    const regeneratedHash = generateDonationHash({
-      user_id: donation.user_id,
-      username: donation.username,
-      user_email: donation.user_email,
-      campaign_id: donation.campaign_id,
-      amount: donation.amount,
-      currency: donation.currency,
-      donation_message: donation.donation_message,
-      xendit_reference_id: donation.xendit_reference_id,
-    });
+    // Next.js/Webpack style worker
+    const worker = new Worker(new URL("../utils/donation-worker.ts", import.meta.url));
 
-    const blockchainHash =
-      extractDonationHashFromInput(blockchainInput);
+    worker.postMessage({ donation, blockchainInput });
 
-    setIsValid(regeneratedHash === blockchainHash);
-  }, [donation?.id, blockchainInput]); 
+    worker.onmessage = (e) => {
+      setIsValid(e.data);
+      worker.terminate();
+    };
 
-  return {
-    isValid,
-    loading: isValid === null,
-  };
+    return () => worker.terminate();
+  }, [donation, blockchainInput]);
+
+  return { isValid, loading: isValid === null };
 }

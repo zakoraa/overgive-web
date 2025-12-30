@@ -1,51 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { generateCampaignDeliveryHash } from "../services/get-campaign-delivery-hash";
 import { CampaignDeliveryHistoryDetail } from "../types/get-delivery-history-detail";
 import { extractDeliveryHistoryHashFromInput } from "../utils/extract-delivery-history-hash-from-input";
 
 export function useVerifyCampaignDeliveryHistory(
-    history: CampaignDeliveryHistoryDetail | null
+  history: CampaignDeliveryHistoryDetail | null
 ) {
-    const [isValid, setIsValid] = useState<boolean | null>(null);
-    const [loading, setLoading] = useState(false);
+  const isValid = useMemo(() => {
+    if (!history || !history.blockchain_input) return null;
 
-    useEffect(() => {
-        if (!history || !history.blockchain_input) return;
+    const regeneratedHash = generateCampaignDeliveryHash({
+      campaign_id: history.campaign_id,
+      title: history.title,
+      note: history.note,
+      created_by: history.created_by?.id,
+    });
 
-        const verify = async () => {
-            setLoading(true);
+    const blockchainHash =
+      extractDeliveryHistoryHashFromInput(history.blockchain_input);
 
-            const regeneratedHash =
-                generateCampaignDeliveryHash({
-                    campaign_id: history.campaign_id,
-                    title: history.title,
-                    note: history.note,
-                    created_by: history.created_by?.id,
-                });
-            if (!history.blockchain_input) {
-                setIsValid(false);
-                setLoading(false);
-                return;
-            }
-            
-            const blockchainHash =
-            extractDeliveryHistoryHashFromInput(history.blockchain_input);
-            
-            setIsValid(
-                blockchainHash !== null &&
-                regeneratedHash === blockchainHash
-            );
+    if (!blockchainHash) return false;
 
-            setLoading(false);
-        };
+    return regeneratedHash === blockchainHash;
+  }, [history]);
 
-        verify();
-    }, [history]);
-
-    return {
-        isValid,
-        loading,
-    };
+  return {
+    isValid,
+    loading: false,
+  };
 }

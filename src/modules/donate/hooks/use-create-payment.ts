@@ -1,36 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { createPaymentRequestAction } from "../services/create-payment-request";
 import { CreateQrisPayload } from "../types/create-payment-request";
 
 export function useCreatePayment() {
-  const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
+  const mutation = useMutation({
+    mutationFn: (payload: CreateQrisPayload) =>
+      createPaymentRequestAction(payload),
 
-  const createPayment = async (payload: CreateQrisPayload) => {
-    setLoading(true);
-    setServerError(null);
+    onError: (error: any) => {
+      console.error(error);
+    },
+  });
 
-    try {
-      const res = await createPaymentRequestAction(payload);
-      setLoading(false);
-
-      if (!res?.success) {
-        setServerError(res?.error || "Gagal memproses pembayaran");
-        return { success: false };
-      }
-
-      return {
-        success: true,
-        data: res.data,
-      };
-    } catch (error: any) {
-      setLoading(false);
-      setServerError(error?.message || "Terjadi kesalahan server");
-      return { success: false };
-    }
+  return {
+    createPayment: mutation.mutateAsync,
+    loading: mutation.isPending,
+    serverError:
+      mutation.isError
+        ? mutation.error?.message ?? "Terjadi kesalahan server"
+        : null,
+    data: mutation.data,
+    success: mutation.data?.success === true,
   };
-
-  return { loading, serverError, createPayment };
 }
