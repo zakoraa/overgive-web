@@ -10,7 +10,6 @@ const nunito = Nunito({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: "Overgive – Transparent Blockchain Donation Platform",
   description:
@@ -33,7 +32,7 @@ export const metadata: Metadata = {
     siteName: "Overgive",
     images: [
       {
-        url: "/images/overgive-logo.png",
+        url: "/images/overgive-logo-bg-white.png",
         width: 1200,
         height: 630,
         alt: "Overgive Platform",
