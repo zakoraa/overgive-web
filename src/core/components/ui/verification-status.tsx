@@ -8,11 +8,13 @@ export const VerificationStatus = ({
 }: {
   donation: DonationWithBlockchain;
 }) => {
-  const { input, loading: loadingBlockchain } = useDonationBlockchain(
-    donation.blockchain_tx_hash,
+  const { data: input, isLoading: loadingBlockchain } = useDonationBlockchain(
+    donation.blockchain_tx_hash ?? undefined,
   );
+
   const { isValid, loading } = useVerifyDonation(donation, input);
-  if (loading || loadingBlockchain) {
+
+  if (loadingBlockchain || loading) {
     return <p className="text-xs text-orange-400">Sedang memverifikasi...</p>;
   }
 
@@ -28,7 +30,7 @@ export const VerificationStatus = ({
   return (
     <div className="flex items-start space-x-2 text-xs text-red-500">
       <XCircle className="h-4 w-4" />
-      <p>Data telah dimanipulasi (tidak sesuai blockchain)</p>
+      <p>Data telah dimanipulasi</p>
     </div>
   );
 };

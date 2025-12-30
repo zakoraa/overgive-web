@@ -1,28 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getCampaignDeliveryHistorySummary } from "../services/get-campaign-delivery-history-summary";
 import { CampaignDeliveryHistorySummary } from "../types/get-delivery-history-summary";
 
 export function useCampaignDeliveryHistorySummary(campaign_id: string) {
-    const [data, setData] = useState<CampaignDeliveryHistorySummary | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        if (!campaign_id) return;
-
-        setLoading(true);
-
-        getCampaignDeliveryHistorySummary({ campaign_id })
-            .then(setData)
-            .catch((err) => setError(err.message))
-            .finally(() => setLoading(false));
-    }, [campaign_id]);
-
-    return {
-        data,
-        loading,
-        error,
-    };
+  return useQuery<CampaignDeliveryHistorySummary | null>({
+    queryKey: ["campaign-delivery-history-summary", campaign_id],
+    queryFn: () => getCampaignDeliveryHistorySummary({ campaign_id }),
+    enabled: !!campaign_id,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 }

@@ -2,14 +2,15 @@
 
 import { notFound } from "next/navigation";
 import { useCampaignDetails } from "@/modules/campaign/hooks/use-campaign-detail";
+import { GetDonationsProvider } from "@/modules/donation/providers/get-donations-provider";
+import { CampaignDonations } from "../components/campaign-donations";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
-import { Donate } from "./components/donate";
 
 interface Props {
   campaignId: string;
 }
 
-export const DonatePage = ({ campaignId }: Props) => {
+export const CampaignDonationsPage = ({ campaignId }: Props) => {
   const { campaign, loading, isError } = useCampaignDetails(campaignId);
 
   if (loading) {
@@ -20,5 +21,9 @@ export const DonatePage = ({ campaignId }: Props) => {
     return notFound();
   }
 
-  return <Donate campaign={campaign} />;
+  return (
+    <GetDonationsProvider campaign_id={campaign.id}>
+      <CampaignDonations initialCampaign={campaign} />
+    </GetDonationsProvider>
+  );
 };

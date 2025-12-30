@@ -1,6 +1,4 @@
-import { DonationSettlement } from "@/modules/donation-settlement";
-import { getDonationSettlementSummaryByCampaign } from "@/modules/donation-settlement/services/get-donation-settlement-summary-by-campaign";
-import { notFound } from "next/navigation";
+import { DonationSettlementPage } from "@/modules/donation-settlement";
 
 interface DonationSettlementPageProps {
   params: { id: string };
@@ -9,15 +7,7 @@ interface DonationSettlementPageProps {
 export default async function Page({ params }: DonationSettlementPageProps) {
   const resolvedParams = await params;
   const { id: campaignId } = resolvedParams;
-  if (!campaignId) return notFound();
 
-  try {
-    const summary = await getDonationSettlementSummaryByCampaign(campaignId);
-
-    if (!summary) return notFound();
-
-    return <DonationSettlement summary={summary} />;
-  } catch {
-    return notFound();
-  }
+    return <DonationSettlementPage campaignId={campaignId} />;
+ 
 }

@@ -16,7 +16,7 @@ export const CampaignLatestNewsCard = ({
   campaign,
 }: CampaignLatestNewsCardProps) => {
   const router = useRouter();
-  const { data, loading } = useCampaignDeliveryHistorySummary(campaign.id);
+  const { data, isLoading: loading } = useCampaignDeliveryHistorySummary(campaign.id);
   return (
     <Card className="space-y-2 px-5 py-5">
       <CampaignTitleCard

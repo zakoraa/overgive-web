@@ -1,53 +1,39 @@
 "use client";
 
+import { createContext, useContext, ReactNode } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { getCurrentUser } from "@/modules/auth/services/get-current-user";
-import { createContext, useContext, useEffect, useState } from "react";
 import { UserAuth } from "../types/user-auth";
 
 interface GetCurrentUserContextType {
   user: UserAuth | null;
   loading: boolean;
-  reloadUser: () => Promise<void>;
+  reloadUser: () => void;
 }
 
 const GetCurrentUserContext = createContext<GetCurrentUserContextType>({
   user: null,
   loading: true,
-  reloadUser: async () => {},
+  reloadUser: () => {},
 });
 
 export const useGetCurrentUserContext = () => useContext(GetCurrentUserContext);
 
-export function GetCurrentUserProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [user, setUser] = useState<UserAuth | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const loadUser = async () => {
-    try {
-      setLoading(true);
-      const data = await getCurrentUser();
-      setUser(data);
-    } catch (err) {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadUser();
-  }, []);
+export function GetCurrentUserProvider({ children }: { children: ReactNode }) {
+  const query = useQuery<UserAuth | null>({
+    queryKey: ["current-user"],
+    queryFn: getCurrentUser,
+    staleTime: Infinity,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <GetCurrentUserContext.Provider
       value={{
-        user,
-        loading,
-        reloadUser: loadUser,
+        user: query.data ?? null,
+        loading: query.isLoading,
+        reloadUser: () => query.refetch(),
       }}
     >
       {children}

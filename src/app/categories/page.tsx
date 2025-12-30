@@ -1,23 +1,10 @@
-import { CampaignCategory } from "@/core/types/campaign-category";
 import { Categories } from "@/modules/categories";
-import { CampaignCategoryProvider } from "@/modules/categories/providers/campaign-category-provider";
+import { Suspense } from "react";
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    cat?: CampaignCategory;
-    q?: string;
-  }>;
-}) {
-  const params = await searchParams;
-
+export default function Page() {
   return (
-    <CampaignCategoryProvider
-      category={params.cat ?? "others"}
-      search={params.q}
-    >
+    <Suspense fallback={null}>
       <Categories />
-    </CampaignCategoryProvider>
+    </Suspense>
   );
 }

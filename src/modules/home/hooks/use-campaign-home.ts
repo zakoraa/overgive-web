@@ -1,31 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { CampaignListType, getCampaignHome } from "../services/get-campaign-home";
+import { useQuery } from "@tanstack/react-query";
+import { getCampaignHome } from "../services/get-campaign-home";
 import { CampaignHomeItem } from "../types/campaign-home-item";
+import { CampaignListType } from "../services/get-campaign-home";
 
 export function useCampaignHome(type: CampaignListType, limit?: number) {
-  const [campaigns, setCampaigns] = useState<CampaignHomeItem[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const query = useQuery<CampaignHomeItem[]>({
+    queryKey: ["campaign_home", type, limit],
+    queryFn: () => getCampaignHome({ type, limit }),
+    enabled: !!type,
 
-  const fetchCampaigns = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getCampaignHome({ type, limit });
-      setCampaigns(data);
-    } catch (err: any) {
-      // console.error("Failed to fetch campaigns:", err);
-      setError(err.message || "Terjadi kesalahan saat mengambil campaign");
-    } finally {
-      setLoading(false);
-    }
+    staleTime: 2 * 60 * 1000,     
+    gcTime: 5 * 60 * 1000,        
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
+
+  return {
+    campaigns: query.data ?? [],
+    loading: query.isLoading,
+    fetching: query.isFetching,
+    error: query.error
+      ? (query.error as Error).message
+      : null,
+    refetch: query.refetch,
   };
-
-  useEffect(() => {
-    fetchCampaigns();
-  }, [type, limit]);
-
-  return { campaigns, loading, error, refetch: fetchCampaigns };
 }

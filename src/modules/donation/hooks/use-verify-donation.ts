@@ -5,43 +5,39 @@ import { extractDonationHashFromInput } from "../utils/extract-donation-hash-fro
 
 export function useVerifyDonation(
   donation: DonationWithBlockchain | null,
-  blockchainInput: string | null 
+  blockchainInput?: string | null
 ) {
   const [isValid, setIsValid] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!donation || !donation.blockchain_tx_hash || !blockchainInput) return;
-
-    const verify = async () => {
-      setLoading(true);
-
-      const regeneratedHash = generateDonationHash({
-        user_id: donation.user_id,
-        username: donation.username,
-        user_email: donation.user_email,
-        campaign_id: donation.campaign_id,
-        amount: donation.amount,
-        currency: donation.currency,
-        donation_message: donation.donation_message,
-        xendit_reference_id: donation.xendit_reference_id,
-      });
-    if(!blockchainInput){
-      setLoading(false);
-      setIsValid(false);
+    if (
+      !donation ||
+      !donation.blockchain_tx_hash ||
+      !blockchainInput ||
+      isValid !== null
+    ) {
       return;
     }
-      const blockchainHash = extractDonationHashFromInput(blockchainInput);
 
-      setIsValid(regeneratedHash === blockchainHash);
-      setLoading(false);
-    };
+    const regeneratedHash = generateDonationHash({
+      user_id: donation.user_id,
+      username: donation.username,
+      user_email: donation.user_email,
+      campaign_id: donation.campaign_id,
+      amount: donation.amount,
+      currency: donation.currency,
+      donation_message: donation.donation_message,
+      xendit_reference_id: donation.xendit_reference_id,
+    });
 
-    verify();
-  }, [donation, blockchainInput]);
+    const blockchainHash =
+      extractDonationHashFromInput(blockchainInput);
+
+    setIsValid(regeneratedHash === blockchainHash);
+  }, [donation?.id, blockchainInput]); 
 
   return {
     isValid,
-    loading,
+    loading: isValid === null,
   };
 }

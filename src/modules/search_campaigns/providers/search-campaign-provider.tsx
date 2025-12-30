@@ -1,13 +1,8 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 import { CampaignHomeItem } from "@/modules/home/types/campaign-home-item";
 import { searchCampaigns } from "../services/search-campaigns";
 
@@ -23,32 +18,23 @@ const SearchCampaignContext = createContext<SearchCampaignContextValue | null>(
 
 export function SearchCampaignProvider({ children }: { children: ReactNode }) {
   const searchParams = useSearchParams();
-  const search = searchParams.get("q") ?? undefined;
+  const search = searchParams.get("q") ?? "";
 
-  const [campaigns, setCampaigns] = useState<CampaignHomeItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetch = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        const data = await searchCampaigns({ search });
-        setCampaigns(data);
-      } catch (err: any) {
-        setError(err.message || "Gagal mencari campaign");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetch();
-  }, [search]); // ✅ sekarang benar-benar reactive
+  const { data, isLoading, isError, error } = useQuery<CampaignHomeItem[]>({
+    queryKey: ["search-campaigns", search],
+    queryFn: () => searchCampaigns({ search }),
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   return (
-    <SearchCampaignContext.Provider value={{ campaigns, loading, error }}>
+    <SearchCampaignContext.Provider
+      value={{
+        campaigns: data ?? [],
+        loading: isLoading,
+        error: isError ? (error as Error).message : null,
+      }}
+    >
       {children}
     </SearchCampaignContext.Provider>
   );

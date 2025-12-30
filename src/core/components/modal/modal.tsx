@@ -22,19 +22,26 @@ export const Modal: React.FC<ModalProps> = ({
   disableClose = false,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(isOpen);
+
+  // handle mount & unmount animation
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+    } else {
+      const timer = setTimeout(() => setIsVisible(false), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
 
   // ESC to close
   useEffect(() => {
-    if (typeof document !== "undefined") {
-      const handleEscape = (event: KeyboardEvent) => {
-        if (event.key === "Escape" && !disableClose) onClose();
-      };
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && !disableClose) onClose();
+    };
 
-      if (isOpen) {
-        document.addEventListener("keydown", handleEscape);
-      }
-      return () => document.removeEventListener("keydown", handleEscape);
-    }
+    if (isOpen) document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
   }, [isOpen, onClose, disableClose]);
 
   // Disable body scroll
@@ -45,28 +52,26 @@ export const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  if (!isVisible) return null;
 
   const contentClasses = isFullscreen
     ? "w-full h-full rounded-none"
     : "w-full max-w-md rounded-2xl bg-white shadow-xl";
 
-  return createPortal(
+  const modalContent = (
     <div
-      className="animate-fadeIn fixed inset-0 z-9999 flex items-center justify-center bg-black/40"
-      onClick={() => {
-        if (!disableClose) onClose();
-      }}
+      className={`fixed inset-0 z-9999 flex items-center justify-center bg-black/40 transition-opacity duration-200 ${isOpen ? "opacity-100" : "opacity-0"} `}
+      onClick={() => !disableClose && onClose()}
     >
       <div
         ref={modalRef}
-        className={`animate-scaleIn relative p-0 ${contentClasses} ${className || ""} `}
+        className={`relative transform transition-all duration-200 ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"} ${contentClasses} ${className ?? ""} `}
         onClick={(e) => e.stopPropagation()}
       >
         {showCloseButton && !isFullscreen && !disableClose && (
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-gray-100 text-gray-500 shadow-sm transition hover:bg-gray-200 hover:text-gray-700"
+            className="absolute top-3 right-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-gray-500 shadow-sm hover:bg-gray-200"
           >
             <X size={18} />
           </button>
@@ -74,21 +79,11 @@ export const Modal: React.FC<ModalProps> = ({
 
         <div className="p-6">{children}</div>
       </div>
+    </div>
+  );
 
-      {/* Animations */}
-      <style>{`
-        @keyframes fadeIn {
-          0% { opacity: 0 }
-          100% { opacity: 1 }
-        }
-        @keyframes scaleIn {
-          0% { opacity: 0; transform: scale(0.95); }
-          100% { opacity: 1; transform: scale(1); }
-        }
-        .animate-fadeIn { animation: fadeIn .2s ease-out; }
-        .animate-scaleIn { animation: scaleIn .2s ease-out; }
-      `}</style>
-    </div>,
-    document.body,
+  return createPortal(
+    modalContent,
+    document.getElementById("modal-root") ?? document.body,
   );
 };

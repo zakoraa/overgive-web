@@ -3,9 +3,6 @@ import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
 import { useRouter } from "next/navigation";
 import { DonationWithBlockchain } from "@/modules/donation/services/get-donation-by-id";
-import { useVerifyDonation } from "@/modules/donation/hooks/use-verify-donation";
-import { CheckCircle, XCircle } from "lucide-react";
-import { useDonationBlockchain } from "@/modules/donation/hooks/use-donation-blockchain";
 import { VerificationStatus } from "@/core/components/ui/verification-status";
 
 interface DonorDonationCardProps {

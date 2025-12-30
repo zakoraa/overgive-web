@@ -3,7 +3,7 @@
 import CircularLoading from "@/core/components/ui/circular-loading";
 import BasePage from "@/core/layout/base-page";
 import { useGetDonationsContext } from "@/modules/donation/providers/get-donations-provider";
-import { DonorDonationCard } from "../components/campaign_donors_card/donor-donation-card";
+import { DonorDonationCard } from "./campaign_donors_card/donor-donation-card";
 import { Campaign as CampaignType } from "@/core/types/campaign";
 import { Title } from "@/core/components/text/title";
 import { Line } from "@/core/components/ui/line";

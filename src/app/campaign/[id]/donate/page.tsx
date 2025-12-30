@@ -1,6 +1,4 @@
-import { Donate } from "@/modules/donate";
-import { getCampaignDetails } from "@/modules/campaign/services/get-campaign-details";
-import { notFound } from "next/navigation";
+import { DonatePage } from "@/modules/donate";
 
 interface DonatePageProps {
   params: { id: string };
@@ -9,8 +7,5 @@ interface DonatePageProps {
 export default async function Page({ params }: DonatePageProps) {
   const { id } = await params;
 
-  const campaign = await getCampaignDetails(id);
-  if (!campaign) return notFound();
-
-  return <Donate campaign={campaign} />;
+  return <DonatePage campaignId={id} />;
 }
