@@ -12,6 +12,10 @@ export async function convertGasfeeToIDR() {
   }
 }
 
+export function convertGasFeeWeiToMatic(gasFeeWei: number | bigint) {
+  return Number(gasFeeWei) / 1e18;
+}
+
 // const POLYGON_CMC_ID = "3890";
 
 // export async function convertGasfeeToIDR() {
@@ -42,19 +46,15 @@ export async function convertGasfeeToIDR() {
 //   }
 // }
 
-export function convertGasFeeWeiToMatic(gasFeeWei: number | bigint) {
-  return Number(gasFeeWei) / 1e18;
-}
+// async function getUsdToIdrRate() {
+//   const headers = new Headers();
+//   headers.append("apikey", process.env.APILAYER_API_KEY as string);
 
-async function getUsdToIdrRate() {
-  const headers = new Headers();
-  headers.append("apikey", process.env.APILAYER_API_KEY as string);
+//   const res = await fetch(
+//     "https://api.apilayer.com/exchangerates_data/convert?from=USD&to=IDR&amount=1",
+//     { headers }
+//   );
 
-  const res = await fetch(
-    "https://api.apilayer.com/exchangerates_data/convert?from=USD&to=IDR&amount=1",
-    { headers }
-  );
-
-  const json = await res.json();
-  return json?.result ?? 0;
-}
+//   const json = await res.json();
+//   return json?.result ?? 0;
+// }
