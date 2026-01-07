@@ -41,8 +41,6 @@ export async function POST(req: Request) {
     );
 
     const blockchain_tx_hash = blockchainResult.txHash ?? null;
-    const blockchain_gas_used = blockchainResult.gasUsed ?? null;
-    const blockchain_gas_price = blockchainResult.gasPrice ?? null;
 
     // 3️⃣ simpan ke supabase
     const supabase = await supabaseServer();
@@ -62,8 +60,6 @@ export async function POST(req: Request) {
           donation_message: body.donation_message ?? null,
           donation_hash,
           blockchain_tx_hash,
-          blockchain_gas_used,
-          blockchain_gas_price,
         },
       ])
       .select()

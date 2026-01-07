@@ -19,8 +19,6 @@ export const getDonationSettlementSummaryByCampaign = async (
       amount,
       currency,
       blockchain_tx_hash,
-      blockchain_gas_used,
-      blockchain_gas_price,
       created_at,
       campaigns ( title )
     `)
@@ -44,14 +42,6 @@ export const getDonationSettlementSummaryByCampaign = async (
   for (const donation of donations) {
     totalGross += donation.amount;
 
-    let gasUsed: bigint;
-    let gasPrice: bigint;
-
-    if (donation.blockchain_gas_used && donation.blockchain_gas_price) {
-      gasUsed = BigInt(donation.blockchain_gas_used);
-      gasPrice = BigInt(donation.blockchain_gas_price);
-    } else {
-      
       await sleep(350);
 
       const receipt = await getTxReceiptByHash(
@@ -62,18 +52,8 @@ export const getDonationSettlementSummaryByCampaign = async (
         continue; 
       }
 
-      gasUsed = BigInt(receipt.gasUsed);
-      gasPrice = BigInt(receipt.effectiveGasPrice);
-
-      
-      await supabase
-        .from("donations")
-        .update({
-          blockchain_gas_used: receipt.gasUsed,
-          blockchain_gas_price: receipt.effectiveGasPrice,
-        })
-        .eq("id", donation.id);
-    }
+      const gasUsed = BigInt(receipt.gasUsed);
+      const gasPrice = BigInt(receipt.effectiveGasPrice);
 
     const gasFeeWei = gasUsed * gasPrice;
     const gasFeeMatic = convertGasFeeWeiToMatic(gasFeeWei);
