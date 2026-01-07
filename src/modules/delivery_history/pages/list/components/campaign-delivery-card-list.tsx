@@ -20,7 +20,7 @@ export const CampaignDelivaryCard = () => {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 flex flex-col">
       {data.map((item) => (
         <CampaignDeliveryItem key={item.id} item={item} />
       ))}
