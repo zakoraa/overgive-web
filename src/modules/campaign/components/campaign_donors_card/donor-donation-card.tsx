@@ -1,7 +1,6 @@
 import { Card } from "@/core/components/ui/card";
 import { formatRupiah } from "@/core/utils/currency";
 import { timeAgo } from "@/core/utils/date";
-import { useRouter } from "next/navigation";
 import { DonationWithBlockchain } from "@/modules/donation/services/get-donation-by-id";
 import { VerificationStatus } from "@/core/components/ui/verification-status";
 
@@ -18,11 +17,10 @@ export const DonorDonationCard = ({ donation }: DonorDonationCardProps) => {
   const amount = donation.amount;
   const createdAt = donation.created_at;
   const message = donation.donation_message;
-  const router = useRouter();
 
   return (
     <Card
-      onClick={() => router.push(`/donation/${donation.id}`)}
+      href={`/donation/${donation.id}`}
       className="hover:bg-hover transition-color flex h-fit cursor-pointer flex-col px-3 py-2 duration-300"
     >
       <h3 className="text-start font-bold">{donorName}</h3>

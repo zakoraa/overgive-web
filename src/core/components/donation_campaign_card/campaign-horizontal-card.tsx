@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
 import { DonationProgressIndicator } from "@/core/components/ui/donation-progress-indicator";
@@ -14,8 +13,6 @@ interface CampaignHorizontalCardProps {
 export const CampaignHorizontalCard = ({
   campaign,
 }: CampaignHorizontalCardProps) => {
-  const router = useRouter();
-
   const percentage = Math.min(
     Math.round((campaign.collected_amount / campaign.target_amount) * 100),
     100,
@@ -29,8 +26,7 @@ export const CampaignHorizontalCard = ({
 
   return (
     <Card
-      onClick={() => router.push(`/campaign/${campaign.id}`)}
-      // onClick={() => router.push(`/campaign`)}
+      href={`/campaign/${campaign.id}`}
       className="hover:bg-hover relative flex h-fit min-w-full! cursor-pointer transition-colors duration-300"
     >
       {/* Label sisa hari */}

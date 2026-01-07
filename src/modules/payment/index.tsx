@@ -14,7 +14,6 @@ import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
 import { useState } from "react";
 import { useCreateDonation } from "./hooks/create-donation";
-import { useProcessDonationSettlement } from "../donation-settlement/hooks/use-process-donation-settlement";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function PaymentPage({ id }: { id: string }) {
@@ -30,14 +29,7 @@ export default function PaymentPage({ id }: { id: string }) {
     processing: donationProcessing,
     success: donationSuccess,
     error: donationError,
-    donationId,
   } = useCreateDonation(payment);
-
-  const {
-    success: settlementSuccess,
-    error: settlementError,
-    loading: settlementLoading,
-  } = useProcessDonationSettlement(payment, donationId);
 
   const {
     run: simulatePayment,
@@ -52,28 +44,24 @@ export default function PaymentPage({ id }: { id: string }) {
   return (
     <>
       <ModalLoading
-        isOpen={
-          (loading && payment) ||
-          simulateLoading ||
-          donationProcessing ||
-          settlementLoading
-        }
+        isOpen={(loading && payment) || simulateLoading || donationProcessing}
       />
 
       <ModalInfo
-        isOpen={settlementSuccess}
+        isOpen={donationSuccess}
         isSuccess
         message="Terima kasih 🙏<br/>Pembayaran donasi kamu berhasil diproses."
         onClose={() => {
           queryClient.invalidateQueries({ queryKey: ["campaign_home"] });
+          queryClient.invalidateQueries({ queryKey: ["donations"] });          
           router.replace("/");
         }}
       />
 
       <ModalInfo
-        isOpen={!!settlementError}
+        isOpen={!!donationError || !!simulateError}
         isSuccess={false}
-        message={settlementError ?? ""}
+        message={(donationError || simulateError) ?? ""}
         onClose={() => router.replace("/")}
       />
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Label } from "@/core/components/text/label";
 import { Card } from "@/core/components/ui/card";
 import { DonationProgressIndicator } from "@/core/components/ui/donation-progress-indicator";
@@ -14,7 +13,6 @@ interface CampaignVerticalCardProps {
 export const CampaignVerticalCard = ({
   campaign,
 }: CampaignVerticalCardProps) => {
-  const router = useRouter();
 
   const percentage = Math.min(
     Math.round((campaign.collected_amount / campaign.target_amount) * 100),
@@ -29,8 +27,7 @@ export const CampaignVerticalCard = ({
 
   return (
     <Card
-      onClick={() => router.push(`/campaign/${campaign.id}`)}
-      // onClick={() => router.push(`/campaign`)}
+      href={`/campaign/${campaign.id}`}
       className="hover:bg-hover relative mt-3 flex h-[95%] max-w-52 cursor-pointer flex-col justify-between transition-colors duration-300"
     >
       {/* Label sisa hari */}

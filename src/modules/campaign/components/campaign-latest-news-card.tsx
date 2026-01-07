@@ -1,8 +1,5 @@
-"use client";
-
 import { Card } from "@/core/components/ui/card";
 import { CampaignTitleCard } from "./ui/campaign-title-card";
-import { useRouter } from "next/navigation";
 import { Campaign } from "@/core/types/campaign";
 import { useCampaignDeliveryHistorySummary } from "../hooks/use-campaign-delivery-history-summary";
 import CircularLoading from "@/core/components/ui/circular-loading";
@@ -15,14 +12,15 @@ interface CampaignLatestNewsCardProps {
 export const CampaignLatestNewsCard = ({
   campaign,
 }: CampaignLatestNewsCardProps) => {
-  const router = useRouter();
-  const { data, isLoading: loading } = useCampaignDeliveryHistorySummary(campaign.id);
+  const { data, isLoading: loading } = useCampaignDeliveryHistorySummary(
+    campaign.id,
+  );
   return (
     <Card className="space-y-2 px-5 py-5">
       <CampaignTitleCard
         isShowAll={data?.count !== 0}
         count={loading ? 0 : (data?.count ?? 0)}
-        onClick={() => router.push(`${campaign.id}/delivery-history`)}
+        href={`${campaign.id}/delivery-history`}
         title="Kabar Terbaru"
       />
       {loading ? (

@@ -4,7 +4,6 @@ import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
 import { Title } from "@/core/components/text/title";
 import { Line } from "@/core/components/ui/line";
-import { formatDate } from "@/core/utils/date";
 import { DonationSettlementSummary } from "../types/donation-settlement";
 
 interface DonationSettlementProps {
@@ -16,9 +15,9 @@ export const DonationSettlement = ({ summary }: DonationSettlementProps) => {
     <BasePage className="mx-auto rounded-b-2xl p-4 md:max-w-lg">
       <Title text={`Penggunaan Dana Kampanye ${summary.campaign_title}`} />
       <Line className="mt-0! mb-4" />
-      <p className="w-full text-start text-sm text-gray-500">
+      {/* <p className="w-full text-start text-sm text-gray-500">
         Terakhir update — {formatDate(summary.updated_at)}
-      </p>
+      </p> */}
 
       <div className="mt-3 w-full overflow-hidden rounded-lg border border-gray-200 bg-white">
         <table className="min-w-full divide-y divide-gray-200">

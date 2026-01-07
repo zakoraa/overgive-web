@@ -1,11 +1,7 @@
-"use client";
-
 import { Card } from "@/core/components/ui/card";
 import { CampaignTitleCard } from "./ui/campaign-title-card";
-import { formatDate } from "@/core/utils/date";
-import { useGetLatestDonationSettlementMetaByCampaign } from "@/modules/donation-settlement/hooks/use-get-latest-donation-settlement-meta-by-campaign";
+import { useGetDonationsContext } from "@/modules/donation/providers/get-donations-provider";
 import CircularLoading from "@/core/components/ui/circular-loading";
-import { useRouter } from "next/navigation";
 
 interface CampaignDetailsOfFundCardProps {
   campaignId: string;
@@ -14,25 +10,24 @@ interface CampaignDetailsOfFundCardProps {
 export const CampaignDetailsOfFundCard = ({
   campaignId,
 }: CampaignDetailsOfFundCardProps) => {
-  const router = useRouter();
-  const {
-    data: latestMeta,
-    isLoading,
-    error,
-  } = useGetLatestDonationSettlementMetaByCampaign(campaignId);
+  const { donations, loading } = useGetDonationsContext();
 
   return (
     <Card className="space-y-2 px-5 py-5">
-      <CampaignTitleCard isShowAll={!!latestMeta} count={0} onClick={() => router.push(`${campaignId}/donation-settlement`)} title="Penggunaan Dana" />
-      {isLoading && <CircularLoading />}
-      {error && <p className="text-sm text-red-500">Error: {error.message}</p>}
-      {!isLoading && !error && !latestMeta && (
-        <p className="text-xs text-gray-500 text-center">Belum ada data terbaru</p>
-      )}
-      {!isLoading && !error && latestMeta && (
-        <p className="text-sm">
-          Terakhir update — {formatDate(latestMeta.updated_at)}
-        </p>
+      <CampaignTitleCard
+        count={0}
+        isShowAll={donations.length !== 0}
+        href={`${campaignId}/donation-settlement`}
+        title="Penggunaan Dana"
+      />
+      {loading ? (
+        <CircularLoading />
+      ) : (
+        (!donations || donations.length === 0) && (
+          <p className="text-center text-xs text-gray-500">
+            Belum ada data
+          </p>
+        )
       )}
     </Card>
   );

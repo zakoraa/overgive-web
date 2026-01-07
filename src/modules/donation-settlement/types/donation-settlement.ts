@@ -35,6 +35,6 @@ export interface DonationSettlementSummary {
   total_operational: number;
   final_net: number;
   currency: string;
-  updated_at: string;
+  // updated_at: string;
 }
 
