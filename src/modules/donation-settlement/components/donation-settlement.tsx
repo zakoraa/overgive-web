@@ -4,13 +4,33 @@ import BasePage from "@/core/layout/base-page";
 import { formatRupiah } from "@/core/utils/currency";
 import { Title } from "@/core/components/text/title";
 import { Line } from "@/core/components/ui/line";
-import { DonationSettlementSummary } from "../types/donation-settlement";
+import { ModalLoading } from "@/core/components/modal/modal-loading";
+import { useGetDonationSettlementSummaryByCampaign } from "../hooks/use-get-donation-settlements-by-campaign";
 
-interface DonationSettlementProps {
-  summary: DonationSettlementSummary;
+interface Props {
+  campaignId: string;
 }
 
-export const DonationSettlement = ({ summary }: DonationSettlementProps) => {
+export const DonationSettlement = ({ campaignId }: Props) => {
+  const {
+    data: summary,
+    isLoading,
+    isFetching,
+    isError,
+  } = useGetDonationSettlementSummaryByCampaign(campaignId);
+
+  const loading = isFetching || isLoading;
+  const hasData = !!summary && !isError;
+
+  if (loading) return <ModalLoading isOpen />;
+
+  if (!hasData) {
+    return (
+      <BasePage className="mx-auto rounded-b-2xl p-4 md:max-w-lg">
+        <p className="text-center text-xs text-gray-500">Belum ada data</p>
+      </BasePage>
+    );
+  }
   return (
     <BasePage className="mx-auto rounded-b-2xl p-4 md:max-w-lg">
       <Title text={`Penggunaan Dana Kampanye ${summary.campaign_title}`} />

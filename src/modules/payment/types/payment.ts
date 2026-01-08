@@ -71,6 +71,8 @@ export interface PaymentRequest {
 
   metadata: PaymentMetadata;
 
+  channel_properties: PaymentRequestChannelProperties;
+
   actions?: PaymentAction[];
 
   created: string;

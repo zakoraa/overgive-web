@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { PaymentRequest } from "@/modules/payment/types/payment";
 import { saveDonationToBlockchainAction } from "../services/save-donation-to-blockchain";
 import { saveDonationToIPFSAction } from "../services/save-donation-to-ipfs";
-import { updateCollectedAmountAction } from "../services/update-collected-amount-campaign";
 
 interface UseDonationFinalizeResult {
   processing: boolean;
@@ -65,14 +64,6 @@ export function useDonationFinalize(
           throw new Error("campaign_id tidak ditemukan");
         }
 
-        const updateResult = await updateCollectedAmountAction(
-          campaignId,
-          payment.request_amount,
-        );
-
-        if (!updateResult.success) {
-          throw new Error(updateResult.error);
-        }
 
         setSuccess(true);
       } catch (e: any) {

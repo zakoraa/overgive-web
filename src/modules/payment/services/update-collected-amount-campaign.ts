@@ -1,32 +1,29 @@
 "use server";
 
-import { absoluteUrl } from "@/core/lib/absolute-url";
-
-export async function updateCollectedAmountAction(
+export async function increaseCollectedAmount(
+  supabase: any,
   campaignId: string,
   amount: number
 ) {
-  const url = await absoluteUrl(
-    "/api/campaign/update-collected-amount"
-  );
+  const { data: campaign, error } = await supabase
+    .from("campaigns")
+    .select("collected_amount")
+    .eq("id", campaignId)
+    .single();
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      campaign_id: campaignId,
-      amount,
-    }),
-    cache: "no-store",
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.error ?? "Gagal update campaign");
+  if (error || !campaign) {
+    throw new Error("Campaign tidak ditemukan");
   }
 
-  return data;
+  const newAmount =
+    Number(campaign.collected_amount ?? 0) + amount;
+
+  const { error: updateError } = await supabase
+    .from("campaigns")
+    .update({ collected_amount: newAmount })
+    .eq("id", campaignId);
+
+  if (updateError) {
+    throw updateError;
+  }
 }

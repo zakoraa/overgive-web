@@ -1,170 +1,234 @@
+import { supabaseServer } from "@/core/lib/supabase/supabase-server";
+import { convertGasfeeToIDR } from "@/core/utils/convert-gas-fee-to-idr";
+import { convertGasFeeWeiToMatic } from "@/core/utils/convert-gas-fee-to-idr";
+import { calculateQrisFee } from "@/core/utils/calculate-qris-xendit";
+import { getTxReceiptByHash } from "@/core/services/get-transactions-from-tx-hash";
+import { sleep } from "@/core/utils/sleep";
+import { getDonationSettlementSummaryByCampaign } from "@/modules/donation-settlement/services/get-donation-settlement-summary-by-campaign";
 
-import { supabaseServer } from '@/core/lib/supabase/supabase-server'
-import { getDonationSettlementSummaryByCampaign } from '@/modules/donation-settlement/services/get-donation-settlement-summary-by-campaign'
+/* =========================
+   MOCK DEPENDENCIES
+========================= */
+jest.mock("@/core/lib/supabase/supabase-server");
+jest.mock("@/core/utils/convert-gas-fee-to-idr");
+jest.mock("@/core/utils/calculate-qris-xendit");
+jest.mock("@/core/services/get-transactions-from-tx-hash");
+jest.mock("@/core/utils/sleep", () => ({
+  sleep: jest.fn(() => Promise.resolve()),
+}));
 
-jest.mock('@/core/lib/supabase/supabase-server')
+/* =========================
+   SUPABASE MOCK HELPER
+========================= */
+const mockSupabase = {
+  from: jest.fn(),
+};
 
-describe('getDonationSettlementSummaryByCampaign', () => {
-  const mockFrom = jest.fn()
-  const mockSelect = jest.fn()
-  const mockEq = jest.fn()
-  const mockIs = jest.fn()
+const mockQuery = {
+  select: jest.fn(),
+  eq: jest.fn(),
+  not: jest.fn(),
+  is: jest.fn(),
+};
 
+beforeEach(() => {
+  jest.clearAllMocks();
+
+  (supabaseServer as jest.Mock).mockResolvedValue(mockSupabase);
+  mockSupabase.from.mockReturnValue(mockQuery);
+
+  // semua chainable return mockQuery
+  mockQuery.select.mockReturnValue(mockQuery);
+  mockQuery.eq.mockReturnValue(mockQuery);
+  mockQuery.not.mockReturnValue(mockQuery);
+  mockQuery.is.mockReturnValue(mockQuery);
+});
+
+
+function setupSupabaseMock({
+  donations,
+  opsCosts = [],
+  donationError = null,
+}: {
+  donations: any;
+  opsCosts?: any[];
+  donationError?: any;
+}) {
+  // buat chainable object baru untuk donations
+  const donationsQuery = {
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    not: jest.fn().mockReturnThis(),
+    is: jest.fn().mockReturnThis(),
+    then: jest.fn((onResolve) => onResolve({ data: donations, error: donationError })),
+  };
+
+  // buat chainable object baru untuk operational costs
+  const opsQuery = {
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    is: jest.fn().mockReturnThis(),
+    then: jest.fn((onResolve) => onResolve({ data: opsCosts, error: null })),
+  };
+
+  mockSupabase.from.mockImplementation((table) => {
+    if (table === "donations") return donationsQuery;
+    if (table === "campaign_operational_costs") return opsQuery;
+    return mockQuery; // fallback
+  });
+
+  (supabaseServer as jest.Mock).mockResolvedValue(mockSupabase);
+}
+
+/* =========================
+   DUMMY DATA
+========================= */
+const donationsMock = [
+  {
+    id: "1",
+    amount: 100_000,
+    currency: "IDR",
+    blockchain_tx_hash: "0xabc",
+    created_at: new Date().toISOString(),
+    campaigns: {
+      title: "Campaign Test",
+    },
+  },
+];
+
+const receiptMock = {
+  gasUsed: "21000",
+  effectiveGasPrice: "1000000000",
+};
+
+/* =========================
+   TEST SUITE
+========================= */
+describe("getDonationSettlementSummaryByCampaign", () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    jest.clearAllMocks();
+  });
 
-    ;(supabaseServer as jest.Mock).mockResolvedValue({
-      from: mockFrom,
-    })
-  })
+  /* =========================
+     ✅ HAPPY PATH
+  ========================= */
+  it("berhasil menghitung settlement summary", async () => {
+    setupSupabaseMock({ donations: donationsMock });
 
-  it('throw error jika settlement kosong', async () => {
-    mockFrom.mockReturnValueOnce({
-      select: () => ({
-        eq: () => ({
-          data: [],
-          error: null,
-        }),
-      }),
-    })
+    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+    (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
+    (calculateQrisFee as jest.Mock).mockReturnValue(700);
+    (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
+
+    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+    expect(result.campaign_title).toBe("Campaign Test");
+    expect(result.total_gross).toBe(100000);
+    expect(result.total_xendit_fee).toBe(700);
+    expect(result.total_gas_fee).toBeGreaterThan(0);
+    expect(result.total_fee).toBeGreaterThan(0);
+    expect(result.final_net).toBeLessThan(result.total_gross);
+    expect(result.currency).toBe("IDR");
+  });
+
+  /* =========================
+     ❌ DONATION KOSONG
+  ========================= */
+  it("throw error jika tidak ada settlement", async () => {
+    setupSupabaseMock({ donations: [] });
 
     await expect(
-      getDonationSettlementSummaryByCampaign('cmp-1')
-    ).rejects.toThrow('No settlements found')
-  })
+      getDonationSettlementSummaryByCampaign("campaign-x")
+    ).rejects.toThrow("No settlements found");
+  });
 
-  it('berhasil menghitung summary tanpa operational cost', async () => {
-    mockFrom
-      // donation_settlements
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            data: [
-              {
-                gross_amount: 100000,
-                gas_fee: 1000,
-                xendit_fee: 2000,
-                total_fee: 3000,
-                net_amount: 97000,
-                currency: 'IDR',
-                updated_at: '2024-01-01T10:00:00Z',
-                campaigns: { title: 'Campaign A' },
-              },
-            ],
-            error: null,
-          }),
-        }),
-      })
-      // campaign_operational_costs
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            is: () => ({
-              data: [],
-              error: null,
-            }),
-          }),
-        }),
-      })
+  /* =========================
+     ❌ SUPABASE ERROR
+  ========================= */
+  it("throw error jika supabase error", async () => {
+    setupSupabaseMock({
+      donations: null,
+      donationError: new Error("Supabase error"),
+    });
 
-    const result = await getDonationSettlementSummaryByCampaign('cmp-1')
+    await expect(
+      getDonationSettlementSummaryByCampaign("campaign-x")
+    ).rejects.toThrow();
+  });
 
-    expect(result.campaign_title).toBe('Campaign A')
-    expect(result.total_gross).toBe(100000)
-    expect(result.total_net).toBe(97000)
-    expect(result.total_operational).toBe(0)
-    expect(result.final_net).toBe(97000)
-    expect(result.currency).toBe('IDR')
-  })
+  /* =========================
+     ⚠️ RECEIPT TIDAK VALID (gas kosong)
+  ========================= */
+  it("skip gas fee jika receipt tidak valid", async () => {
+    setupSupabaseMock({ donations: donationsMock });
 
-  it('berhasil menghitung summary dengan operational cost', async () => {
-    mockFrom
-      // donation_settlements
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            data: [
-              {
-                gross_amount: 200000,
-                gas_fee: 2000,
-                xendit_fee: 3000,
-                total_fee: 5000,
-                net_amount: 195000,
-                currency: 'IDR',
-                updated_at: '2024-01-02T10:00:00Z',
-                campaigns: { title: 'Campaign B' },
-              },
-            ],
-            error: null,
-          }),
-        }),
-      })
-      // campaign_operational_costs
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            is: () => ({
-              data: [
-                { id: '1', amount: 10000, note: 'Transport' },
-                { id: '2', amount: 5000, note: 'Logistik' },
-              ],
-              error: null,
-            }),
-          }),
-        }),
-      })
+    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+    (calculateQrisFee as jest.Mock).mockReturnValue(700);
+    (getTxReceiptByHash as jest.Mock).mockResolvedValue({
+      gasUsed: null,
+      effectiveGasPrice: null,
+    });
 
-    const result = await getDonationSettlementSummaryByCampaign('cmp-2')
+    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
 
-    expect(result.total_operational).toBe(15000)
-    expect(result.final_net).toBe(180000)
-    expect(result.operational_fees.length).toBe(2)
-  })
+    expect(result.total_gas_fee).toBe(0);
+    expect(result.total_xendit_fee).toBe(700);
+  });
 
-  it('mengambil updated_at terbaru dari settlements', async () => {
-    mockFrom
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            data: [
-              {
-                gross_amount: 100000,
-                gas_fee: 1000,
-                xendit_fee: 1000,
-                total_fee: 2000,
-                net_amount: 98000,
-                currency: 'IDR',
-                updated_at: '2024-01-01T10:00:00Z',
-                campaigns: { title: 'Campaign C' },
-              },
-              {
-                gross_amount: 50000,
-                gas_fee: 500,
-                xendit_fee: 500,
-                total_fee: 1000,
-                net_amount: 49000,
-                currency: 'IDR',
-                updated_at: '2024-01-03T10:00:00Z',
-                campaigns: { title: 'Campaign C' },
-              },
-            ],
-            error: null,
-          }),
-        }),
-      })
-      .mockReturnValueOnce({
-        select: () => ({
-          eq: () => ({
-            is: () => ({
-              data: [],
-              error: null,
-            }),
-          }),
-        }),
-      })
+  /* =========================
+     ⚠️ BLOCKCHAIN RECEIPT ERROR
+  ========================= */
+  it("tetap lanjut meskipun getTxReceiptByHash gagal", async () => {
+    setupSupabaseMock({ donations: donationsMock });
 
-    const result = await getDonationSettlementSummaryByCampaign('cmp-3')
+    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+    (calculateQrisFee as jest.Mock).mockReturnValue(700);
+    (getTxReceiptByHash as jest.Mock).mockRejectedValue(
+      new Error("RPC error")
+    );
 
-    expect(result.updated_at).toBe('2024-01-03T10:00:00.000Z')
-  })
-})
+    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+    expect(result.total_gas_fee).toBe(0);
+    expect(result.total_xendit_fee).toBe(700);
+  });
+
+  /* =========================
+     ⚠️ ADA OPERATIONAL COST
+  ========================= */
+  it("mengurangi operational cost dari final net", async () => {
+    setupSupabaseMock({
+      donations: donationsMock,
+      opsCosts: [
+        { amount: 10_000, note: "Admin fee" },
+        { amount: 5_000, note: "Ops" },
+      ],
+    });
+
+    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+    (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
+    (calculateQrisFee as jest.Mock).mockReturnValue(700);
+    (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
+
+    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+    expect(result.total_operational).toBe(15000);
+    expect(result.final_net).toBeLessThan(result.total_net);
+  });
+
+  /* =========================
+     💤 SLEEP DIPANGGIL
+  ========================= */
+  it("memanggil sleep untuk setiap donation", async () => {
+    setupSupabaseMock({ donations: donationsMock });
+
+    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+    (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
+    (calculateQrisFee as jest.Mock).mockReturnValue(700);
+    (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
+
+    await getDonationSettlementSummaryByCampaign("campaign-1");
+
+    expect(sleep).toHaveBeenCalled();
+  });
+});
