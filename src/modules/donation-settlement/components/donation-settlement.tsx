@@ -6,6 +6,7 @@ import { Title } from "@/core/components/text/title";
 import { Line } from "@/core/components/ui/line";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
 import { useGetDonationSettlementSummaryByCampaign } from "../hooks/use-get-donation-settlements-by-campaign";
+import { ViewImageButton } from "./view-image-button";
 
 interface Props {
   campaignId: string;
@@ -50,9 +51,19 @@ export const DonationSettlement = ({ campaignId }: Props) => {
               </td>
             </tr>
             <tr>
-              <td className="px-4 py-2">Biaya Transaksi (Gas)</td>
+              <td className="px-4 py-2 text-left">
+                Biaya Transaksi Donasi (Gas Fee)
+              </td>
               <td className="px-4 py-2 text-right">
-                {formatRupiah(summary.total_gas_fee)}
+                {formatRupiah(summary.total_donation_gas_fee)}
+              </td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2 text-left">
+                Biaya Transaksi Penyaluran Donasi (Gas Fee)
+              </td>
+              <td className="px-4 py-2 text-right">
+                {formatRupiah(summary.total_delivery_gas_fee)}
               </td>
             </tr>
             <tr className="bg-gray-50">
@@ -82,8 +93,9 @@ export const DonationSettlement = ({ campaignId }: Props) => {
                 <td className="px-4 py-2">
                   • {op.note || "Biaya Operasional"}
                 </td>
-                <td className="px-4 py-2 text-right">
-                  {formatRupiah(op.amount)}
+                <td className="flex items-center justify-center space-x-2 px-4 py-2 text-right">
+                  <span>{formatRupiah(op.amount)}</span>
+                  <ViewImageButton imageUrl={op.receipt_image_url} />
                 </td>
               </tr>
             ))}
