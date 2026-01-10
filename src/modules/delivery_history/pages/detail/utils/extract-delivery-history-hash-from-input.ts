@@ -10,11 +10,11 @@ export function extractDeliveryHistoryHashFromInput(
     const iface = new ethers.Interface(CAMPAIGN_DELIVERY_ABI);
     const decoded = iface.parseTransaction({ data: input });
 
-    if (!decoded?.args || decoded.args.length < 4) {
+    if (!decoded?.args || decoded.args.length < 2) {
       return null;
     }
 
-    const hashBytes32 = decoded.args[3];
+    const hashBytes32 = decoded.args[1];
 
     if (typeof hashBytes32 !== "string") return null;
 
