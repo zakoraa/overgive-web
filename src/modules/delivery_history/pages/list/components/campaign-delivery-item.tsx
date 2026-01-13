@@ -6,6 +6,7 @@ import { formatDate } from "@/core/utils/date";
 import { CampaignDeliveryHistoryList } from "../types/campaign-delivery-history";
 import { useVerifyCampaignDeliveryHistoryList } from "../hooks/use-verify-campaign-delivery-history-list";
 import { CheckCircle, XCircle } from "lucide-react";
+import { RichTextViewer } from "@/core/components/input/app-rich-text-editor/components/Editor/rich-text-viewer";
 
 interface CampaignDeliveryItemProps {
   item: CampaignDeliveryHistoryList;
@@ -22,10 +23,9 @@ export const CampaignDeliveryItem = ({ item }: CampaignDeliveryItemProps) => {
       <Title size="sm" text={item.title} />
 
       {item.note && (
-        <div
-          className="prose prose-sm line-clamp-2 max-w-none text-xs font-light text-gray-500"
-          dangerouslySetInnerHTML={{ __html: item.note }}
-        />
+         <div className="prose prose-sm line-clamp-2 max-w-none">
+          <RichTextViewer content={item.note} />
+        </div>
       )}
       {isValidating || isValid === null ? (
         <p className="text-xs text-orange-400">Sedang memverifikasi...</p>

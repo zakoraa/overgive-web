@@ -11,6 +11,7 @@ import { useVerifyCampaignDeliveryHistory } from "./hooks/use-verify-campaign-de
 import { CheckCircle, XCircle } from "lucide-react";
 import { txLink } from "@/core/utils/amoy";
 import { ModalLoading } from "@/core/components/modal/modal-loading";
+import { RichTextViewer } from "@/core/components/input/app-rich-text-editor/components/Editor/rich-text-viewer";
 
 export const DeliveryHistoryDetail = () => {
   const { data, loading, error } = useCampaignDeliveryHistoryDetailContext();
@@ -110,12 +111,7 @@ export const DeliveryHistoryDetail = () => {
         <p className="mb-3 text-sm text-gray-500">
           Dibuat Oleh: {data.created_by.name} ({data.created_by.email})
         </p>
-        <div
-          className="prose max-w-none text-sm text-gray-600"
-          dangerouslySetInnerHTML={{
-            __html: data.note ?? "",
-          }}
-        />
+        <RichTextViewer content={data.note ?? ""} />
       </Card>
     </div>
   );
