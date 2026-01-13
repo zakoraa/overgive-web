@@ -82,3 +82,92 @@ body {
   cursor: grab;
   background: var(--foreground); /* Thumb color */
 }
+
+.ProseMirror img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror p.is-empty:first-child::before {
+  color: #aaa;
+  content: attr(data-placeholder);
+}
+
+.rich-text-viewer p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+.rich-text-viewer table {
+  border-collapse: collapse;
+  width: 100%;
+}
+.rich-text-viewer th, .rich-text-viewer td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.ProseMirror {
+  user-select: text;
+}
+.rich-text-viewer .ProseMirror {
+  padding: 0 !important;
+  min-height: unset !important;
+}
+
+/* viewer tidak perlu focus style */
+.rich-text-viewer .ProseMirror-focused {
+  outline: none !important;
+}
+
+.rich-text-viewer {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #111;
+}
+
+/* HEADING */
+.rich-text-viewer h1 {
+  font-size: 24px;
+  font-weight: 700;
+}
+.rich-text-viewer h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* PARAGRAPH */
+.rich-text-viewer p {
+  margin: 0.75rem 0;
+}
+
+/* TABLE (INI KUNCI UTAMA) */
+.rich-text-viewer table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.rich-text-viewer th,
+.rich-text-viewer td {
+  border: 1px solid #000;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.rich-text-viewer th {
+  background: #f5f5f5;
+  font-weight: 600;
+}
+
+/* IMAGE */
+.rich-text-viewer img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
