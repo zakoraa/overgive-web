@@ -7,6 +7,7 @@ import { useCampaignDetailContext } from "../providers/campaign-detail-provider"
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/core/lib/utils";
 import { Line } from "@/core/components/ui/line";
+import { RichTextViewer } from "@/core/components/input/app-rich-text-editor/components/Editor/rich-text-viewer";
 
 export const CampaignBackgroundCard = () => {
   const { campaign } = useCampaignDetailContext();
@@ -21,11 +22,12 @@ export const CampaignBackgroundCard = () => {
       {/* Content */}
       <div
         className={cn(
-          "prose max-w-none overflow-hidden transition-all duration-300",
+          "relative overflow-hidden transition-all duration-300",
           !expanded && "max-h-40",
         )}
-        dangerouslySetInnerHTML={{ __html: campaign.background_html }}
-      />
+      >
+        <RichTextViewer content={campaign.background_html} />
+      </div>
 
       {/* Overlay + Read more */}
       {!expanded && (
