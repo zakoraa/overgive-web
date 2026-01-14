@@ -13,11 +13,15 @@ interface CampaignVerticalCardProps {
 export const CampaignVerticalCard = ({
   campaign,
 }: CampaignVerticalCardProps) => {
-
-  const percentage = Math.min(
-    Math.round((campaign.collected_amount / campaign.target_amount) * 100),
-    100,
-  );
+  const percentage =
+    campaign.target_amount === null
+      ? 50
+      : Math.min(
+          Math.round(
+            (campaign.collected_amount / campaign.target_amount) * 100,
+          ),
+          100,
+        );
 
   const now = new Date();
   const endedAt = new Date(campaign.ended_at);

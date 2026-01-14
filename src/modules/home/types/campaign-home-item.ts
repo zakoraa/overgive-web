@@ -3,7 +3,7 @@ export interface CampaignHomeItem {
   title: string;
   created_at: string;
   collected_amount: number;
-  target_amount: number;
+  target_amount: number | null;
   ended_at: string;
   image_url: string;
 }
