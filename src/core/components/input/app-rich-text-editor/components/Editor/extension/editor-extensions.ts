@@ -25,7 +25,6 @@ import {
 } from "reactjs-tiptap-editor/bulletlist";
 import { Clear, RichTextClear } from "reactjs-tiptap-editor/clear";
 import { Code, RichTextCode } from "reactjs-tiptap-editor/code";
-import { CodeBlock, RichTextCodeBlock } from "reactjs-tiptap-editor/codeblock";
 import { CodeView, RichTextCodeView } from "reactjs-tiptap-editor/codeview";
 import { Color, RichTextColor } from "reactjs-tiptap-editor/color";
 import {
@@ -108,9 +107,7 @@ import {
     SlashCommandList,
 } from "reactjs-tiptap-editor/slashcommand";
 
-
 import { EMOJI_LIST } from "../emojis";
-
 
 const DocumentColumn = /* @__PURE__ */ Document.extend({
     content: '(block|columns)+',
@@ -219,7 +216,7 @@ export const richTextExtensions = (LIMIT = 2505) => [
     Blockquote,
     HorizontalRule,
     Code,
-    CodeBlock,
+    // CodeBlock,
 
     Column,
     ColumnNode,

@@ -7,6 +7,7 @@ import { CampaignDeliveryHistoryList } from "../types/campaign-delivery-history"
 import { useVerifyCampaignDeliveryHistoryList } from "../hooks/use-verify-campaign-delivery-history-list";
 import { CheckCircle, XCircle } from "lucide-react";
 import { RichTextViewer } from "@/core/components/input/app-rich-text-editor/components/Editor/rich-text-viewer";
+import { Line } from "@/core/components/ui/line";
 
 interface CampaignDeliveryItemProps {
   item: CampaignDeliveryHistoryList;
@@ -21,12 +22,15 @@ export const CampaignDeliveryItem = ({ item }: CampaignDeliveryItemProps) => {
       className="hover:bg-hover cursor-pointer rounded-lg p-3 transition-colors duration-300 md:rounded-2xl"
     >
       <Title size="sm" text={item.title} />
+      <Line className="mb-0!" />
 
       {item.note && (
-         <div className="prose prose-sm line-clamp-2 max-w-none">
+        <div className="prose prose-sm line-clamp-2 max-w-none">
           <RichTextViewer content={item.note} />
         </div>
       )}
+      <Line className="mb-0!" />
+      
       {isValidating || isValid === null ? (
         <p className="text-xs text-orange-400">Sedang memverifikasi...</p>
       ) : isValid ? (

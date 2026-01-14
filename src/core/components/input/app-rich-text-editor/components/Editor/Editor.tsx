@@ -32,7 +32,6 @@ import {
 } from "reactjs-tiptap-editor/bulletlist";
 import { Clear, RichTextClear } from "reactjs-tiptap-editor/clear";
 import { Code, RichTextCode } from "reactjs-tiptap-editor/code";
-import { CodeBlock, RichTextCodeBlock } from "reactjs-tiptap-editor/codeblock";
 import { CodeView, RichTextCodeView } from "reactjs-tiptap-editor/codeview";
 import { Color, RichTextColor } from "reactjs-tiptap-editor/color";
 import {
