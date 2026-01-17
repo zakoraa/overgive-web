@@ -75,7 +75,7 @@ export default function PaymentPage({ id }: { id: string }) {
 
       <BasePage className="relative min-h-screen! items-start justify-between space-y-1 rounded-t-3xl! border-none pt-0! shadow-sm">
         <div className="flex w-full flex-col items-center justify-center">
-          <div className="absolute top-5 right-5 left-5 flex justify-between">
+          <div className="absolute top-5 right-5 left-5 flex flex-col gap-3 md:flex-row justify-between">
             {payment.channel_properties.expires_at && (
               <>
                 <div className="flex flex-col">

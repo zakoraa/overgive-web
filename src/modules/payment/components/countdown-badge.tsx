@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function CountdownBadge({ expiresAt }: Props) {
-  const { minutes, seconds, isExpired } = useCountdown(expiresAt);
+  const { hours, minutes, seconds, isExpired } = useCountdown(expiresAt);
 
   if (isExpired) {
     return (
@@ -18,14 +18,20 @@ export function CountdownBadge({ expiresAt }: Props) {
     );
   }
 
+  const hh = String(hours).padStart(2, "0");
   const mm = String(minutes).padStart(2, "0");
   const ss = String(seconds).padStart(2, "0");
 
   return (
     <div className="flex items-center gap-1">
+      <CountdownDigit value={hh[0]} />
+      <CountdownDigit value={hh[1]} />
+      <span className="mx-1 font-bold">:</span>
+
       <CountdownDigit value={mm[0]} />
       <CountdownDigit value={mm[1]} />
-      <span className="mx-1 text-lg font-bold text-gray-700">:</span>
+      <span className="mx-1 font-bold">:</span>
+
       <CountdownDigit value={ss[0]} />
       <CountdownDigit value={ss[1]} />
     </div>
