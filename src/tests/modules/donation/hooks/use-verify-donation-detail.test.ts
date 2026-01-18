@@ -9,22 +9,23 @@ import { extractDonationHashFromInput } from '@/modules/donation/utils/extract-d
 
 jest.mock('@/core/lib/generate-donation-hash')
 jest.mock('@/modules/donation/utils/extract-donation-hash-from-input')
+// ================= SKRIPSI =================
 
-describe('useVerifyDonationDetail', () => {
+describe('Unit Test useVerifyDonationDetail', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  it('isValid = null jika donation null', () => {
-    const { result } = renderHook(() =>
-      useVerifyDonationDetail(null)
-    )
+  // =================== ALTERNATIVE PATH ===================
+  it('Alternative Path: donation null → isValid = null, loading = false', () => {
+    const { result } = renderHook(() => useVerifyDonationDetail(null))
 
     expect(result.current.isValid).toBeNull()
     expect(result.current.loading).toBe(false)
   })
 
-  it('isValid = false jika blockchain data tidak ada', async () => {
+  // =================== ERROR PATH ===================
+  it('Error Path: blockchain data tidak ada → isValid = false', async () => {
     ;(generateDonationHash as jest.Mock).mockReturnValue('hash123')
 
     const donation: any = {
@@ -40,9 +41,7 @@ describe('useVerifyDonationDetail', () => {
       blockchain: null,
     }
 
-    const { result } = renderHook(() =>
-      useVerifyDonationDetail(donation)
-    )
+    const { result } = renderHook(() => useVerifyDonationDetail(donation))
 
     await waitFor(() => {
       expect(result.current.loading).toBe(false)
@@ -51,7 +50,8 @@ describe('useVerifyDonationDetail', () => {
     expect(result.current.isValid).toBe(false)
   })
 
-  it('isValid = true jika hash cocok', async () => {
+  // =================== HAPPY PATH ===================
+  it('Happy Path: hash cocok → isValid = true', async () => {
     ;(generateDonationHash as jest.Mock).mockReturnValue('hash123')
     ;(extractDonationHashFromInput as jest.Mock).mockReturnValue('hash123')
 
@@ -70,9 +70,7 @@ describe('useVerifyDonationDetail', () => {
       },
     }
 
-    const { result } = renderHook(() =>
-      useVerifyDonationDetail(donation)
-    )
+    const { result } = renderHook(() => useVerifyDonationDetail(donation))
 
     await waitFor(() => {
       expect(result.current.isValid).toBe(true)
@@ -81,7 +79,8 @@ describe('useVerifyDonationDetail', () => {
     expect(result.current.loading).toBe(false)
   })
 
-  it('isValid = false jika hash tidak cocok', async () => {
+  // =================== ERROR PATH ===================
+  it('Error Path: hash tidak cocok → isValid = false', async () => {
     ;(generateDonationHash as jest.Mock).mockReturnValue('hash123')
     ;(extractDonationHashFromInput as jest.Mock).mockReturnValue('hash999')
 
@@ -100,9 +99,7 @@ describe('useVerifyDonationDetail', () => {
       },
     }
 
-    const { result } = renderHook(() =>
-      useVerifyDonationDetail(donation)
-    )
+    const { result } = renderHook(() => useVerifyDonationDetail(donation))
 
     await waitFor(() => {
       expect(result.current.isValid).toBe(false)
