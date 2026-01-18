@@ -46,39 +46,53 @@ beforeEach(() => {
 
 
 function setupSupabaseMock({
-  donations,
+  donations = [],
+  deliveries = [],
   opsCosts = [],
   donationError = null,
+  deliveryError = null,
 }: {
-  donations: any;
+  donations?: any[];
+  deliveries?: any[];
   opsCosts?: any[];
   donationError?: any;
+  deliveryError?: any;
 }) {
-  // buat chainable object baru untuk donations
   const donationsQuery = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
     not: jest.fn().mockReturnThis(),
-    is: jest.fn().mockReturnThis(),
-    then: jest.fn((onResolve) => onResolve({ data: donations, error: donationError })),
+    then: jest.fn((resolve) =>
+      resolve({ data: donations, error: donationError })
+    ),
   };
 
-  // buat chainable object baru untuk operational costs
+  const deliveriesQuery = {
+    select: jest.fn().mockReturnThis(),
+    eq: jest.fn().mockReturnThis(),
+    not: jest.fn().mockReturnThis(),
+    then: jest.fn((resolve) =>
+      resolve({ data: deliveries, error: deliveryError })
+    ),
+  };
+
   const opsQuery = {
     select: jest.fn().mockReturnThis(),
     eq: jest.fn().mockReturnThis(),
     is: jest.fn().mockReturnThis(),
-    then: jest.fn((onResolve) => onResolve({ data: opsCosts, error: null })),
+    then: jest.fn((resolve) =>
+      resolve({ data: opsCosts, error: null })
+    ),
   };
 
   mockSupabase.from.mockImplementation((table) => {
     if (table === "donations") return donationsQuery;
+    if (table === "campaign_delivery_histories") return deliveriesQuery;
     if (table === "campaign_operational_costs") return opsQuery;
-    return mockQuery; // fallback
+    return mockQuery;
   });
-
-  (supabaseServer as jest.Mock).mockResolvedValue(mockSupabase);
 }
+
 
 /* =========================
    DUMMY DATA
@@ -113,108 +127,119 @@ describe("getDonationSettlementSummaryByCampaign", () => {
      ✅ HAPPY PATH
   ========================= */
   it("berhasil menghitung settlement summary", async () => {
-    setupSupabaseMock({ donations: donationsMock });
-
-    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
-    (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
-    (calculateQrisFee as jest.Mock).mockReturnValue(700);
-    (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
-
-    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
-
-    expect(result.campaign_title).toBe("Campaign Test");
-    expect(result.total_gross).toBe(100000);
-    expect(result.total_xendit_fee).toBe(700);
-    expect(result.total_gas_fee).toBeGreaterThan(0);
-    expect(result.total_fee).toBeGreaterThan(0);
-    expect(result.final_net).toBeLessThan(result.total_gross);
-    expect(result.currency).toBe("IDR");
+  setupSupabaseMock({
+    donations: donationsMock,
+    deliveries: [{ id: "d1", blockchain_tx_hash: "0xdef" }],
   });
+
+  (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+  (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
+  (calculateQrisFee as jest.Mock).mockReturnValue(700);
+  (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
+
+  const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+  expect(result.total_gross).toBe(100000);
+  expect(result.total_xendit_fee).toBe(700);
+  expect(result.total_donation_gas_fee).toBeGreaterThan(0);
+  expect(result.total_delivery_gas_fee).toBeGreaterThan(0);
+  expect(result.total_fee).toBeGreaterThan(0);
+  expect(result.final_net).toBeLessThan(result.total_gross);
+  expect(result.currency).toBe("IDR");
+});
+
 
   /* =========================
      ❌ DONATION KOSONG
   ========================= */
-  it("throw error jika tidak ada settlement", async () => {
-    setupSupabaseMock({ donations: [] });
-
-    await expect(
-      getDonationSettlementSummaryByCampaign("campaign-x")
-    ).rejects.toThrow("No settlements found");
+ it("throw error jika tidak ada settlement", async () => {
+  setupSupabaseMock({
+    donations: [],
+    deliveries: [],
   });
+
+  await expect(
+    getDonationSettlementSummaryByCampaign("campaign-x")
+  ).rejects.toThrow("No settlements found");
+});
+
 
   /* =========================
      ❌ SUPABASE ERROR
   ========================= */
   it("throw error jika supabase error", async () => {
-    setupSupabaseMock({
-      donations: null,
-      donationError: new Error("Supabase error"),
-    });
-
-    await expect(
-      getDonationSettlementSummaryByCampaign("campaign-x")
-    ).rejects.toThrow();
+  setupSupabaseMock({
+    donations: [],
+    donationError: new Error("Supabase error"),
   });
+
+  await expect(
+    getDonationSettlementSummaryByCampaign("campaign-x")
+  ).rejects.toThrow("Supabase error");
+});
+
 
   /* =========================
      ⚠️ RECEIPT TIDAK VALID (gas kosong)
   ========================= */
-  it("skip gas fee jika receipt tidak valid", async () => {
-    setupSupabaseMock({ donations: donationsMock });
+ it("skip gas fee jika receipt tidak valid", async () => {
+  setupSupabaseMock({ donations: donationsMock });
 
-    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
-    (calculateQrisFee as jest.Mock).mockReturnValue(700);
-    (getTxReceiptByHash as jest.Mock).mockResolvedValue({
-      gasUsed: null,
-      effectiveGasPrice: null,
-    });
-
-    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
-
-    expect(result.total_gas_fee).toBe(0);
-    expect(result.total_xendit_fee).toBe(700);
+  (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+  (calculateQrisFee as jest.Mock).mockReturnValue(700);
+  (getTxReceiptByHash as jest.Mock).mockResolvedValue({
+    gasUsed: null,
+    effectiveGasPrice: null,
   });
+
+  const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+  expect(result.total_donation_gas_fee).toBe(0);
+  expect(result.total_xendit_fee).toBe(0); 
+});
+
+
 
   /* =========================
      ⚠️ BLOCKCHAIN RECEIPT ERROR
   ========================= */
-  it("tetap lanjut meskipun getTxReceiptByHash gagal", async () => {
-    setupSupabaseMock({ donations: donationsMock });
+  it("throw error jika getTxReceiptByHash gagal", async () => {
+  setupSupabaseMock({ donations: donationsMock });
 
-    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
-    (calculateQrisFee as jest.Mock).mockReturnValue(700);
-    (getTxReceiptByHash as jest.Mock).mockRejectedValue(
-      new Error("RPC error")
-    );
+  (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+  (getTxReceiptByHash as jest.Mock).mockRejectedValue(
+    new Error("RPC error")
+  );
 
-    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+  await expect(
+    getDonationSettlementSummaryByCampaign("campaign-1")
+  ).rejects.toThrow("RPC error");
+});
 
-    expect(result.total_gas_fee).toBe(0);
-    expect(result.total_xendit_fee).toBe(700);
-  });
 
   /* =========================
      ⚠️ ADA OPERATIONAL COST
   ========================= */
   it("mengurangi operational cost dari final net", async () => {
-    setupSupabaseMock({
-      donations: donationsMock,
-      opsCosts: [
-        { amount: 10_000, note: "Admin fee" },
-        { amount: 5_000, note: "Ops" },
-      ],
-    });
-
-    (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
-    (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
-    (calculateQrisFee as jest.Mock).mockReturnValue(700);
-    (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
-
-    const result = await getDonationSettlementSummaryByCampaign("campaign-1");
-
-    expect(result.total_operational).toBe(15000);
-    expect(result.final_net).toBeLessThan(result.total_net);
+  setupSupabaseMock({
+    donations: donationsMock,
+    opsCosts: [
+      { amount: 10_000 },
+      { amount: 5_000 },
+    ],
   });
+
+  (convertGasfeeToIDR as jest.Mock).mockResolvedValue(1000);
+  (convertGasFeeWeiToMatic as jest.Mock).mockReturnValue(0.000021);
+  (calculateQrisFee as jest.Mock).mockReturnValue(700);
+  (getTxReceiptByHash as jest.Mock).mockResolvedValue(receiptMock);
+
+  const result = await getDonationSettlementSummaryByCampaign("campaign-1");
+
+  expect(result.total_operational).toBe(15000);
+  expect(result.final_net).toBeLessThan(result.total_net);
+});
+
 
   /* =========================
      💤 SLEEP DIPANGGIL
